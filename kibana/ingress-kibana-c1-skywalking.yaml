@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: xwz
+  labels:
+    app: kibana
+  name: kibana-c1-admin-skywalking
+  namespace: biz
+spec:
+  rules:
+  - host: kibana-c1-admin-skywalking.biz.com
+    http:
+      paths:
+      - backend:
+          serviceName: kibana-kibana
+          servicePort: 5601
+        path: /
