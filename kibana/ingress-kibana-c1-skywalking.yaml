@@ -4,7 +4,7 @@ metadata:
   annotations:
     #nginx.ingress.kubernetes.io/ssl-redirect: "false"
     #nginx.ingress.kubernetes.io/rewrite-target: /
-    kubernetes.io/ingress.class: xwz
+    kubernetes.io/ingress.class: biz
   labels:
     app: kibana
   name: kibana-c1-admin-skywalking
