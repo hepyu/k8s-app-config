@@ -10,14 +10,14 @@ metadata:
   namespace: biz
 spec:
   rules:
-  - host: es-c1-admin-skywalking.biz.com
+  - host: es-c1-skywalking-admin
     http:
       paths:
       - backend:
           serviceName: elasticsearch-master
           servicePort: 9200
         path: /
-  - host: es-c1-skywalking.biz.com
+  - host: es-c1-skywalking
     http:
       paths:
       - backend:

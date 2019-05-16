@@ -7,7 +7,7 @@ spec:
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   storageClassName: "es-c1-skywalking-data"
   persistentVolumeReclaimPolicy: Retain
   nfs:
@@ -24,7 +24,7 @@ spec:
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   storageClassName: "es-c1-skywalking-data"
   persistentVolumeReclaimPolicy: Retain
   nfs:
@@ -41,7 +41,7 @@ spec:
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   storageClassName: "es-c1-skywalking-data"
   persistentVolumeReclaimPolicy: Retain
   nfs:
