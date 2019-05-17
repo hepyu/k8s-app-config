@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: biz
+  labels:
+    app: es-c1-skywalking
+  name: es-c1-skywalking
+  namespace: elasticsearch
+spec:
+  rules:
+  - host: es-c1-skywalking-admin
+    http:
+      paths:
+      - backend:
+          serviceName: elasticsearch-master
+          servicePort: 9200
+        path: /
+  - host: es-c1-skywalking
+    http:
+      paths:
+      - backend:
+          serviceName: elasticsearch-master
+          servicePort: 9300
+        path: /

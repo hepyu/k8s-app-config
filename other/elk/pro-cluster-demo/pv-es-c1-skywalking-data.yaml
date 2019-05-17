@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es-c1-skywalking-data0
+  namespace: elasticsearch
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "es-c1-skywalking-data"
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /es-c1-skywalking-data0
+    server: xxx.com
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es-c1-skywalking-data1
+  namespace: elasticsearch
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "es-c1-skywalking-data"
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /es-c1-skywalking-data1
+    server: xxx.com
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es-c1-skywalking-data2
+  namespace: elasticsearch
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "es-c1-skywalking-data"
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /es-c1-skywalking-data2
+    server: xxx.com
