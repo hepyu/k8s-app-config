@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: xwz
+  labels:
+    app: elasticsearch
+  name: es-min-c0
+  namespace: elasticsearch
+spec:
+  rules:
+  - host: es-min-c0-admin.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: es-min-c0-ingest
+          servicePort: 9200
+        path: /
+  - host: es-min-c0.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: es-min-c0-ingest
+          servicePort: 9300
+        path: /

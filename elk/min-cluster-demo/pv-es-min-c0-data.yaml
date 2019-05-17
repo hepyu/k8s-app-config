@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-es-min-c0-data0
+  namespace: elasticsearch
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "pv-es-min-c0-data"
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /es/es-min-c0/pv-es-min-c0-data0
+    server: xx.nas.aliyuncs.com

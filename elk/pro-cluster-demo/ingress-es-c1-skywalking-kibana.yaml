@@ -8,7 +8,7 @@ metadata:
   labels:
     app: kibana
   name: kibana-c1-admin-skywalking
-  namespace: biz
+  namespace: elasticsearch
 spec:
   rules:
   - host: kibana-c1-admin-skywalking.biz.com

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    service.beta.kubernetes.io/alicloud-loadbalancer-force-override-listeners: "true"
+    service.beta.kubernetes.io/alicloud-loadbalancer-backend-label: "app=es-min-c0-ingest"
+  labels:
+    app: es-min-c0-loadbalance
+  name: es-min-c0-loadbalance
+  namespace: elasticsearch
+spec:
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  - name: transport
+    port: 9300
+    targetPort: 9300
+    protocol: TCP
+  selector:
+    app: es-min-c0-ingest
+  sessionAffinity: None
+  type: LoadBalancer
