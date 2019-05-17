@@ -16,7 +16,7 @@ helm install --name es-min-c0-ingest --namespace elasticsearch elastic/elasticse
 helm install --name es-min-c0-data --namespace elasticsearch elastic/elasticsearch --version 6.4.3 --set masterService=es-min-c0-master,nodeGroup=data,clusterName=es-min-c0,roles.master=false,roles.ingest=false,volumeClaimTemplate.resources.requests.storage=1Gi,volumeClaimTemplate.storageClassName=pv-local-es-min-c0-data,volumeClaimTemplate.accessModes[0]=ReadWriteOnce,replicas=1,minimumMasterNodes=1
 
 4.kibana
-helm install --name kibana-es-min-c0 elastic/kibana --namespace kibana --version 6.4.3 --set elasticsearchHosts=http://es-min-c0-ingest.elasticsearch:9200,elasticsearchURL=http://es-min-c0-ingest.elasticsearch:9200
+helm install --name es-min-c0 elastic/kibana --namespace kibana --version 6.4.3 --set elasticsearchHosts=http://es-min-c0-ingest.elasticsearch:9200,elasticsearchURL=http://es-min-c0-ingest.elasticsearch:9200
 
 (2).QA:
 QA1:直译意思是节点有了污点无法容忍，执行 kubectl get no -o yaml | grep taint -A 5 之后发现该节点是不可调度的。
