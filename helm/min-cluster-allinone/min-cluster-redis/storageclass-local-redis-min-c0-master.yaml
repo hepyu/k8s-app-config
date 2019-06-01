@@ -1,0 +1,6 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: pv-local-redis-min-c0-master
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer

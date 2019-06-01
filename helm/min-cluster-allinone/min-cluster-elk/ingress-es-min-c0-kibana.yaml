@@ -11,11 +11,11 @@ metadata:
   namespace: kibana
 spec:
   rules:
-  #- host: es-min-c0.kibana.future.com
-  - host: es-min-c0-kibana
+  - host: es-min-c0-kibana.future.coohua.com
+  #- host: es-min-c0-kibana
     http:
       paths:
       - backend:
-          serviceName: es-min-c0-kibana-kibana
+          serviceName: es-min-c0-kibana
           servicePort: 5601
         path: /
