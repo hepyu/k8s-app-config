@@ -14,6 +14,9 @@ spec:
     targetPort: mysql
   selector:
     app: mysql-min
+  #目前sessionAffinity可以提供"None"與"ClientIP"两种设定:
+  #None: 以round robin的方式轮询下面的Pods。
+  #ClientIP: 以client ip的方式固定request到同一台机器。
   sessionAffinity: None
   type: ClusterIP
 #status:
