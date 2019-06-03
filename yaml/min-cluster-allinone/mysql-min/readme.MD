@@ -1,4 +1,8 @@
-# exec order
+# (1).前述
+
+实际生产环境中，为了稳定和高可用(晚上睡觉踏实)，我们并不会把mysql装在k8s集群中，一般是用阿里云的RDS或者自己在高性能机器上搭建mysql。
+
+# (2).exec order
 
 ```
 kubectl apply -f mysql-min-storageclass-local.yaml
