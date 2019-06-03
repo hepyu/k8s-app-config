@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-local-mysql-min
+  name: mysql-min-pv-local
   namespace: mysql
 spec:
   capacity:
@@ -9,10 +9,10 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  storageClassName: "pv-local-mysql-min"
+  storageClassName: "mysql-min-storageclass-local"
   persistentVolumeReclaimPolicy: Retain
   local:
-    path: /datavip/k8s-data/pv-local-mysql-min
+    path: /datavip/k8s-data/mysql-min-pv-local
   nodeAffinity:
     required:
       nodeSelectorTerms:
