@@ -1,4 +1,5 @@
-(1).exec order:
+# exec order
+
 kubectl apply -f mysql-min-storageclass-local.yaml
 kubectl apply -f mysql-min-pv-local.yaml
 kubectl apply -f mysql-min-pvc.yaml
