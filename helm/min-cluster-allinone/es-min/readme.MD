@@ -56,6 +56,9 @@ Events:
 
 这是因为kubernetes出于安全考虑默认情况下无法在master节点上部署pod，于是用下面方法解决：
 kubectl taint nodes --all node-role.kubernetes.io/master-
-打印：
-node/future untainted
+输出与如下类似：
+node "test-01" untainted
+taint "node-role.kubernetes.io/master:" not found
+taint "node-role.kubernetes.io/master:" not found
+这将从拥有 node-role.kubernetes.io/master 污点的任何节点（包括主节点）上删除该污点，这意味着调度程序能够将 Pod 调度到任意节点执行。
 ```
