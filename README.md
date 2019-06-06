@@ -17,3 +17,23 @@ Events:
   Warning  Evicted           4m6s                   kubelet, future    The node was low on resource: ephemeral-storage. Container kibana was using 66732Ki, which exceeds its request of 0.
   Normal   Killing           4m6s                   kubelet, future    Killing container with id docker://kibana:Need to kill Pod
 ```
+
+pod被驱逐(Evicted);节点加了污点导致pod被驱逐;ephemeral-storage超过限制被驱逐
+
+EmptyDir 的使用量超过了他的 SizeLimit，那么这个 pod 将会被驱逐;
+
+Container 的使用量（log，如果没有 overlay 分区，则包括 imagefs）超过了他的 limit，则这个 pod 会被驱逐;
+
+Pod 对本地临时存储总的使用量（所有 emptydir 和 container）超过了 pod 中所有container 的 limit 之和，则 pod 被驱逐
+ephemeral-storage是一个pod用的临时存储.
+
+```
+resources:
+       requests: 
+           ephemeral-storage: "2Gi"
+       limits:
+           ephemeral-storage: "3Gi"
+节点被驱逐后通过get po还是能看到,用describe命令,可以看到被驱逐的历史原因
+
+Message: The node was low on resource: ephemeral-storage. Container codis-proxy was using 10619440Ki, which exceeds its request of 0.
+```
