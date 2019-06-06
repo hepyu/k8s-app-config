@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  generation: 1
+  labels:
+    app: es-min-master
+    release: es-min-master
+  name: es-min-master
+  namespace: es-min
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: es-min-master
+  serviceName: es-min-master-headless
+  template:
+    metadata:
+      labels:
+        app: es-min-master
+        release: es-min-master
+      name: es-min-master
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - es-min-master
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - env:
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: discovery.zen.ping.unicast.hosts
+          value: es-min-master-headless
+        - name: cluster.name
+          value: es-min
+        - name: discovery.zen.minimum_master_nodes
+          value: "1"
+        - name: network.host
+          value: 0.0.0.0
+        - name: ES_JAVA_OPTS
+          value: -Xmx1g -Xms1g
+        - name: node.master
+          value: "true"
+        - name: node.data
+          value: "false"
+        - name: node.ingest
+          value: "false"
+        image: hpy253215039/elasticsearch:6.4.3
+        imagePullPolicy: IfNotPresent
+        name: elasticsearch
+        ports:
+        - containerPort: 9200
+          name: http
+          protocol: TCP
+        - containerPort: 9300
+          name: transport
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - |
+              #!/usr/bin/env bash -e
+              # If the node is starting up wait for the cluster to be green
+              # Once it has started only check that the node itself is responding
+              START_FILE=/tmp/.es_start_file
+
+              http () {
+                  local path="${1}"
+                  if [ -n "${ELASTIC_USERNAME}" ] && [ -n "${ELASTIC_PASSWORD}" ]; then
+                    BASIC_AUTH="-u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"
+                  else
+                    BASIC_AUTH=''
+                  fi
+                  curl -XGET -s -k --fail ${BASIC_AUTH} http://127.0.0.1:9200${path}
+              }
+
+              if [ -f "${START_FILE}" ]; then
+                  echo 'Elasticsearch is already running, lets check the node is healthy'
+                  http "/"
+              else
+                  echo 'Waiting for elasticsearch cluster to become green'
+                  if http "/_cluster/health?wait_for_status=green&timeout=1s" ; then
+                      touch ${START_FILE}
+                      exit 0
+                  else
+                      echo 'Cluster is not yet green'
+                      exit 1
+                  fi
+              fi
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 3
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2Gi
+          requests:
+            cpu: 100m
+            memory: 2Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: es-min-master
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        image: hpy253215039/elasticsearch:6.4.3
+        imagePullPolicy: IfNotPresent
+        name: configure-sysctl
+        resources: {}
+        securityContext:
+          privileged: true
+          procMount: Default
+          runAsUser: 0
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 120
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      name: es-min-master
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: es-min-master-pv-local
+      volumeMode: Filesystem

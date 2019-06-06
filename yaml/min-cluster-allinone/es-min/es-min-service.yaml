@@ -1,0 +1,137 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-min-master
+  namespace: es-min
+spec:
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  - name: transport
+    port: 9300
+    protocol: TCP
+    targetPort: 9300
+  selector:
+    app: es-min-master
+    release: es-min-master
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    #表示即使不存在可用的pod，依然返回ip
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app: es-min-master
+    release: es-min-master
+  name: es-min-master-headless
+  namespace: es-min
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  selector:
+    app: es-min-master
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-min-ingest
+  namespace: es-min
+spec:
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  - name: transport
+    port: 9300
+    protocol: TCP
+    targetPort: 9300
+  selector:
+    app: es-min-ingest
+    release: es-min-ingest
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    #表示即使不存在可用的pod，依然返回ip
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app: es-min-ingest
+    release: es-min-ingest
+  name: es-min-ingest-headless
+  namespace: es-min
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  selector:
+    app: es-min-ingest
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-min-data
+  namespace: es-min
+spec:
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  - name: transport
+    port: 9300
+    protocol: TCP
+    targetPort: 9300
+  selector:
+    app: es-min-data
+    release: es-min-data
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    #表示即使不存在可用的pod，依然返回ip
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  labels:
+    app: es-min-data
+    release: es-min-data
+  name: es-min-data-headless
+  namespace: es-min
+spec:
+  clusterIP: None
+  ports:
+  - name: http
+    port: 9200
+    protocol: TCP
+    targetPort: 9200
+  selector:
+    app: es-min-data
+  sessionAffinity: None
+  type: ClusterIP

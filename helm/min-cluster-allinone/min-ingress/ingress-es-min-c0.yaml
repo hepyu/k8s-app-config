@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: elasticsearch
+  name: es-min-c0
+  namespace: elasticsearch
+spec:
+  rules:
+  - host: es-min-c0-admin.future.coohua.com
+    http:
+      paths:
+      - backend:
+          serviceName: es-min-c0-ingest
+          servicePort: 9200
+        path: /
+
+  - host: es-min-c0.future.coohua.com
+    transport:
+      paths:
+      - backend:
+          serviceName: es-min-c0-ingest
+          servicePort: 9300
+        path: /

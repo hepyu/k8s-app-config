@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  #当启用PVC 保护 alpha 功能时，如果用户删除了一个 pod 正在使用的 PVC，则该 PVC 不会被立即删除。PVC 的删除将被推迟，直到 PVC 不再被任何 pod 使用。
+  #可以看到，当 PVC 的状态为 Teminatiing 时，PVC 受到保护，Finalizers 列表中包含 kubernetes.io/pvc-protection：
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: es-min-data
+  name: es-min-data-es-min-data-0
+  namespace: es-min
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: es-min-data-pv-local
+  volumeMode: Filesystem
+  volumeName: es-min-data0-pv-local
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: es-min-ingest
+  name: es-min-ingest-es-min-ingest-0
+  namespace: es-min
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: es-min-ingest-pv-local
+  volumeMode: Filesystem
+  volumeName: es-min-ingest0-pv-local
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: es-min-master
+  name: es-min-master-es-min-master-0
+  namespace: es-min
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: es-min-master-pv-local
+  volumeMode: Filesystem
+  volumeName: es-min-master0-pv-local
