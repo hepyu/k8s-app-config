@@ -1,0 +1,43 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: prometheus
+      component: alertmanager
+      release: prometheus-min
+    name: prometheus-min-alertmanager
+    namespace: prometheus-min
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: prometheus-min-alertmanager-storageclass-local
+    volumeMode: Filesystem
+    volumeName: prometheus-min-alertmanager-pv-local
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: prometheus
+      component: server
+      release: prometheus-min
+    name: prometheus-min-server
+    namespace: prometheus-min
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: prometheus-min-server-storageclass-local
+    volumeMode: Filesystem
+    volumeName: prometheus-min-server-pv-local
+kind: List

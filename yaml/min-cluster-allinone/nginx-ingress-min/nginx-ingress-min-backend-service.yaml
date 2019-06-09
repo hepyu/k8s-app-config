@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx-ingress
+    component: default-backend
+    release: nginx-ingress-min
+  name: nginx-ingress-min-default-backend
+  namespace: nginx-ingress-min
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: nginx-ingress
+    component: default-backend
+    release: nginx-ingress-min
+  sessionAffinity: None
+  type: ClusterIP

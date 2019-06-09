@@ -1,0 +1,116 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: prometheus
+      component: alertmanager
+      release: prometheus-min
+    name: prometheus-min-alertmanager
+    namespace: prometheus-min
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 9093
+    selector:
+      app: prometheus
+      component: alertmanager
+      release: prometheus-min
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/scrape: "true"
+    labels:
+      app: prometheus
+      component: kube-state-metrics
+      release: prometheus-min
+    name: prometheus-min-kube-state-metrics
+    namespace: prometheus-min
+  spec:
+    clusterIP: None
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: prometheus
+      component: kube-state-metrics
+      release: prometheus-min
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/scrape: "true"
+    labels:
+      app: prometheus
+      component: node-exporter
+      release: prometheus-min
+    name: prometheus-min-node-exporter
+    namespace: prometheus-min
+  spec:
+    clusterIP: None
+    ports:
+    - name: metrics
+      port: 9100
+      protocol: TCP
+      targetPort: 9100
+    selector:
+      app: prometheus
+      component: node-exporter
+      release: prometheus-min
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/probe: pushgateway
+    labels:
+      app: prometheus
+      component: pushgateway
+      release: prometheus-min
+    name: prometheus-min-pushgateway
+    namespace: prometheus-min
+  spec:
+    ports:
+    - name: http
+      port: 9091
+      protocol: TCP
+      targetPort: 9091
+    selector:
+      app: prometheus
+      component: pushgateway
+      release: prometheus-min
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: prometheus
+      component: server
+      release: prometheus-min
+    name: prometheus-min-server
+    namespace: prometheus-min
+  spec:
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 9090
+    selector:
+      app: prometheus
+      component: server
+      release: prometheus-min
+    sessionAffinity: None
+    type: ClusterIP
+kind: List

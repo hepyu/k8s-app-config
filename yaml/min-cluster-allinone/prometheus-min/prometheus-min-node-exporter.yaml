@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    deprecated.daemonset.template.generation: "1"
+  creationTimestamp: "2019-06-07T07:37:51Z"
+  generation: 1
+  labels:
+    app: prometheus
+    chart: prometheus-8.10.0
+    component: node-exporter
+    heritage: Tiller
+    release: dusty-kiwi
+  name: dusty-kiwi-prometheus-node-exporter
+  namespace: prometheus-min
+  resourceVersion: "2001963"
+  selfLink: /apis/apps/v1/namespaces/prometheus-min/daemonsets/dusty-kiwi-prometheus-node-exporter
+  uid: 2779725e-88f7-11e9-8122-00163e0266b8
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: prometheus
+      component: node-exporter
+      release: dusty-kiwi
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prometheus
+        chart: prometheus-8.10.0
+        component: node-exporter
+        heritage: Tiller
+        release: dusty-kiwi
+    spec:
+      containers:
+      - args:
+        - --path.procfs=/host/proc
+        - --path.sysfs=/host/sys
+        image: prom/node-exporter:v0.17.0
+        imagePullPolicy: IfNotPresent
+        name: prometheus-node-exporter
+        ports:
+        - containerPort: 9100
+          hostPort: 9100
+          name: metrics
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /host/proc
+          name: proc
+          readOnly: true
+        - mountPath: /host/sys
+          name: sys
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      hostPID: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: dusty-kiwi-prometheus-node-exporter
+      serviceAccountName: dusty-kiwi-prometheus-node-exporter
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /proc
+          type: ""
+        name: proc
+      - hostPath:
+          path: /sys
+          type: ""
+        name: sys
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 1
+  desiredNumberScheduled: 1
+  numberAvailable: 1
+  numberMisscheduled: 0
+  numberReady: 1
+  observedGeneration: 1
+  updatedNumberScheduled: 1

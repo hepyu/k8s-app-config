@@ -1,0 +1,19 @@
+apiVersion: v1
+items:
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    labels:
+      app: nginx-ingress
+      release: nginx-ingress-min
+    name: nginx-ingress-min
+    namespace: nginx-ingress-min
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: nginx-ingress-min
+  subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-min
+    namespace: nginx-ingress-min
+kind: List
