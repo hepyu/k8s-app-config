@@ -40,7 +40,7 @@ spec:
         - name: MYSQL_USER
           value: apollo
         - name: MYSQL_DATABASE
-        image: mysql:5.7.14
+        image: mysql:5.6.41
         imagePullPolicy: IfNotPresent
         #kubelet 使用 liveness probe（存活探针）来确定何时重启容器。例如，当应用程序处于运行状态但无法做进一步操作，liveness 探针将捕获到 deadlock，重启处于该状态下的容器，使应用程序在存在 bug 的情况下依然能够继续运行下去
         livenessProbe:
