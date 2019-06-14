@@ -1,3 +1,5 @@
+kubectl create namespace es-min
+
 kubectl apply -f es-min-data-storageclass-local.yaml
 kubectl apply -f es-min-ingest-storageclass-local.yaml
 kubectl apply -f es-min-master-storageclass-local.yaml
