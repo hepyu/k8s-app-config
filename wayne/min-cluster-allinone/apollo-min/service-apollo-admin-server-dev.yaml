@@ -4,8 +4,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: apollo-min
-  name: configmap-apollo-admin-server-dev
+  namespace: dev
+  name: apollo-min-adminserver
 data:
   application-github.properties: |
     spring.datasource.url = jdbc:mysql://mysql-min.mysql-min:3306/DevApolloConfigDB?characterEncoding=utf8
@@ -18,37 +18,38 @@ data:
     #eureka.service.url = http://statefulset-apollo-config-server-dev-0.service-apollo-meta-server-dev:8080/eureka/,http://statefulset-apollo-config-server-dev-1.service-apollo-meta-server-dev:8080/eureka/,http://statefulset-apollo-config-server-dev-2.service-apollo-meta-server-dev:8080/eureka/
 
 ---
-kind: Service
-apiVersion: v1
 metadata:
-  namespace: apollo-min
-  name: service-apollo-admin-server-dev
+  name: apollo-min-adminserver-clusterip
   labels:
-    app: service-apollo-admin-server-dev
+    app: apollo-min-adminserver-clusterip
+  namespace: dev
 spec:
+  selector:
+    app: apollo-min-adminserver
   ports:
     - protocol: TCP
       port: 8090
       targetPort: 8090
-  selector:
-    app: pod-apollo-admin-server-dev
+      name: apollo-min-adminserver-clusterip-8090
   type: ClusterIP
   sessionAffinity: ClientIP
+kind: Service
+apiVersion: v1
+
 
 ---
 kind: Deployment
 apiVersion: apps/v1beta2
 metadata:
-  namespace: apollo-min
-  name: deployment-apollo-admin-server-dev
+  name: apollo-min-adminserver
+  namespace: dev
   labels:
-    app: deployment-apollo-admin-server-dev
+    app: apollo-min-adminserver
 spec:
   replicas: 1
-  #replicas: 3
   selector:
     matchLabels:
-      app: pod-apollo-admin-server-dev
+      app: apollo-min-adminserver
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -57,27 +58,29 @@ spec:
   template:
     metadata:
       labels:
-        app: pod-apollo-admin-server-dev
+        app: apollo-min-adminserver
+        wayne-app: apollo-min
+        wayne-ns: dev
     spec:
-      #我只有一台机器，不做selector配置
-      #nodeSelector:
-      #  node: "apollo"
-      
       volumes:
         - name: volume-configmap-apollo-admin-server-dev
           configMap:
-            name: configmap-apollo-admin-server-dev
+            name: apollo-min-adminserver
             items:
               - key: application-github.properties
                 path: application-github.properties
-      
       initContainers:
-        - image: hpy253215039/alpine-bash:v3.8
+        - image: 'hpy253215039/alpine-bash:v3.8'
           name: check-service-apollo-config-server-dev
-          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-config-server-dev.apollo-min:8080"]
-      
+          command:
+            - bash
+            - '-c'
+            - >-
+              curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1
+              --retry-max-time 120
+              apollo-min-configserver-clusterip.dev:8080
       containers:
-        - image: hpy253215039/apollo-admin-server:v1.4.0
+        - image: 'hpy253215039/apollo-admin-server:v1.4.0'
           securityContext:
             privileged: true
           imagePullPolicy: IfNotPresent
@@ -85,27 +88,33 @@ spec:
           ports:
             - protocol: TCP
               containerPort: 8090
-          
           volumeMounts:
             - name: volume-configmap-apollo-admin-server-dev
               mountPath: /apollo-admin-server/config/application-github.properties
               subPath: application-github.properties
-          
           env:
             - name: APOLLO_ADMIN_SERVICE_NAME
-              value: "service-apollo-admin-server-dev.apollo-min"
-          
+              value: service-apollo-admin-server-dev.apollo-min
           readinessProbe:
             tcpSocket:
               port: 8090
             initialDelaySeconds: 10
             periodSeconds: 5
-          
+            timeoutSeconds: 1
+            failureThreshold: 10
           livenessProbe:
             tcpSocket:
               port: 8090
             initialDelaySeconds: 120
             periodSeconds: 10
-          
+            timeoutSeconds: 1
+            failureThreshold: 10
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              memory: 1Gi
+              cpu: '0.1'
       dnsPolicy: ClusterFirst
       restartPolicy: Always

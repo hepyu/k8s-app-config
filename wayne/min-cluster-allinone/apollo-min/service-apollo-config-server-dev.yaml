@@ -4,8 +4,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: apollo-min
-  name: configmap-apollo-config-server-dev
+  namespace: dev
+  name: apollo-min-configserver
 data:
   application-github.properties: |
     spring.datasource.url = jdbc:mysql://mysql-min.mysql-min:3306/DevApolloConfigDB?characterEncoding=utf8
@@ -18,55 +18,60 @@ data:
     #eureka.service.url = http://statefulset-apollo-config-server-dev-0.service-apollo-meta-server-dev:8080/eureka/,http://statefulset-apollo-config-server-dev-1.service-apollo-meta-server-dev:8080/eureka/,http://statefulset-apollo-config-server-dev-2.service-apollo-meta-server-dev:8080/eureka/
 
 ---
-kind: Service
-apiVersion: v1
 metadata:
-  namespace: apollo-min
-  name: service-apollo-meta-server-dev
+  name: apollo-min-configserver-clusterip
   labels:
-    app: service-apollo-meta-server-dev
+    app: apollo-min-configserver-clusterip
+  namespace: dev
 spec:
+  selector:
+    app: apollo-min-configserver
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-  selector:
-    app: apollo-min-configserver
+      name: apollo-min-configserver-clusterip-8080
   type: ClusterIP
   clusterIP: None
   sessionAffinity: ClientIP
-
----
 kind: Service
 apiVersion: v1
+  
+
+---
 metadata:
-  namespace: apollo-min
-  name: service-apollo-config-server-dev
+  name: apollo-min-configserver-nodeport
   labels:
-    app: service-apollo-config-server-dev
+    app: apollo-min-configserver-nodeport
+  namespace: dev
 spec:
+  selector:
+    app: apollo-min-configserver
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
       nodePort: 30002
-  selector:
-    app: apollo-min-configserver 
+      name: apollo-min-configserver-nodeport-8080
   type: NodePort
   sessionAffinity: ClientIP
+kind: Service
+apiVersion: v1
+
 
 ---
 kind: StatefulSet
 apiVersion: apps/v1beta2
 metadata:
-  namespace: apollo-min
-  name: statefulset-apollo-config-server-dev
+  name: apollo-min-configserver
+  namespace: dev
   labels:
-    app: statefulset-apollo-config-server-dev
+    app: apollo-min-configserver
+    wayne-app: apollo-min
+    wayne-ns: apollo-min
 spec:
   serviceName: service-apollo-meta-server-dev
   replicas: 1
-  #replicas: 3
   selector:
     matchLabels:
       app: apollo-min-configserver
@@ -76,21 +81,18 @@ spec:
     metadata:
       labels:
         app: apollo-min-configserver
+        wayne-app: apollo-min
+        wayne-ns: apollo-min
     spec:
-      #要注释掉，我只有一台机器
-      #nodeSelector:
-      #  node: "apollo"
-
       volumes:
         - name: volume-configmap-apollo-config-server-dev
           configMap:
-            name: configmap-apollo-config-server-dev
+            name: apollo-min-configserver
             items:
               - key: application-github.properties
                 path: application-github.properties
-      
       containers:
-        - image: hpy253215039/apollo-config-server:v1.4.0
+        - image: 'hpy253215039/apollo-config-server:v1.4.0'
           securityContext:
             privileged: true
           imagePullPolicy: IfNotPresent
@@ -98,27 +100,33 @@ spec:
           ports:
             - protocol: TCP
               containerPort: 8080
-          
           volumeMounts:
             - name: volume-configmap-apollo-config-server-dev
               mountPath: /apollo-config-server/config/application-github.properties
               subPath: application-github.properties
-          
           env:
             - name: APOLLO_CONFIG_SERVICE_NAME
-              value: "service-apollo-config-server-dev.apollo-min"
-          
+              value: service-apollo-config-server-dev.apollo-min
           readinessProbe:
             tcpSocket:
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
-          
+            timeoutSeconds: 1
+            failureThreshold: 10
           livenessProbe:
             tcpSocket:
               port: 8080
-            initialDelaySeconds:  120
+            initialDelaySeconds: 120
             periodSeconds: 10
-          
+            timeoutSeconds: 1
+            failureThreshold: 10
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              memory: 1Gi
+              cpu: '0.1'
       dnsPolicy: ClusterFirst
       restartPolicy: Always
