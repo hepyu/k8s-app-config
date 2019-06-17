@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: infra-wayne
+  name: infra-wayne
+  namespace: wayne
+spec:
+  rules:
+  - host: wayne.future.coohua.com
+    http:
+      paths:
+      - backend:
+          serviceName: infra-wayne
+          servicePort: 8080
+        path: /
+
+  #- host: es-min.future.coohua.com
+  #  transport:
+  #    paths:
+  #    - backend:
+  #        serviceName: es-min-ingest
+  #        servicePort: 9300
+  #      path: /

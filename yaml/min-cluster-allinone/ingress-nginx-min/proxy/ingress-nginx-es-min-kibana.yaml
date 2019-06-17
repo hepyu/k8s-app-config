@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # kubernetes.io/ingress.class: biz
+  labels:
+    app: kibana
+  name: es-min-kibana
+  namespace: es-min-kibana
+spec:
+  rules:
+  - host: es-min-kibana.future.coohua.com
+  #- host: es-min-c0-kibana
+    http:
+      paths:
+      - backend:
+          serviceName: es-min-kibana-kibana
+          servicePort: 5601
+        path: /

@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  generation: 1
+  labels:
+    app: ingress-nginx
+    component: default-backend
+    release: ingress-nginx
+  name: ingress-nginx-default-backend
+  namespace: ingress-nginx
+spec:
+  #Deployment 在尝试部署新的 ReplicaSet 的时候可能卡住，也不会完成。这可能是因为以下几个因素引起的：
+  #无效的引用
+  #不可读的 probe failure
+  #镜像拉取错误
+  #权限不够
+  #范围限制
+  #程序运行时配置错误
+  #探测这种情况的一种方式是:
+  #Deployment spec 中指定spec.progressDeadlineSeconds。spec.progressDeadlineSeconds 表示 Deployment controller 等待多少秒才能确定（通过 Deployment status）Deployment进程是卡住的; 
+  #根据实际情况调整这个值
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  #revisionHistoryLimit 项来指定保留多少旧的ReplicaSet。 余下的将在后台被当作垃圾收集。默认的，所有的revision历史就都会被保留;
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ingress-nginx
+      component: default-backend
+      release: ingress-nginx
+  strategy:
+    rollingUpdate:
+      #滚动升级时每次只启停1个pod
+      maxSurge: 1
+      #滚动升级时允许的最大Unavailable的pod个数
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ingress-nginx
+        component: default-backend
+        release: ingress-nginx
+    spec:
+      containers:
+      - image: hpy253215039/defaultbackend:1.4
+        imagePullPolicy: IfNotPresent
+        #kubelet 使用 liveness probe（存活探针）来确定何时重启容器。
+        #例如，当应用程序处于运行状态但无法做进一步操作，liveness 探针将捕获到 deadlock，重启处于该状态下的容器，使应用程序在存在 bug 的情况下依然能够继续运行下去
+        livenessProbe:
+          #探测成功后，最少连续探测失败多少次才被认定为失败。默认是 3。最小值是 1。
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          #容器启动后第一次执行探测是需要等待多少秒。
+          initialDelaySeconds: 30
+          #执行探测的频率。默认是10秒，最小1秒。
+          periodSeconds: 10
+          #探测失败后，最少连续探测成功多少次才被认定为成功。默认是 1。对于 liveness 必须是 1。最小值是 1。
+          successThreshold: 1
+          #探测超时时间。默认1秒，最小1秒。
+          timeoutSeconds: 5
+        name: ingress-nginx-default-backend
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources: {}
+        #为了达到一个相当高水平的实用性，特别是为了积极开发应用，快速调试失败是很重要的。
+        #除了一般的日志采集，Kubernetes还能通过查出重大错误原因来加速调试，并在某种程度上通过kubectl或者UI陈列出来。
+        #可以指定一个’terminationMessagePath’来让容器写下它的“death rattle“，比如声明失败消息，堆栈跟踪，免责条款等等。默认途径是‘/dev/termination-log’。
+        terminationMessagePath: /dev/termination-log
+        #此字段默认为 “File“，这意味着仅从终止消息文件中检索终止消息。 
+        #通过将 terminationMessagePolicy 设置为 “FallbackToLogsOnError“，你就可以告诉 Kubernetes，在容器因错误退出时，如果终止消息文件为空，则使用容器日志输出的最后一块作为终止消息。 
+        #日志输出限制为 2048 字节或 80 行，以较小者为准。
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      #如果容器中的进程能够在遇到问题或不健康的情况下自行崩溃，则不一定需要存活探针; kubelet 将根据 Pod 的restartPolicy 自动执行正确的操作。
+      restartPolicy: Always
+      #scheduler 是 kubernetes 的调度器，主要的任务是把定义的 pod 分配到集群的节点上。
+      schedulerName: default-scheduler
+      securityContext: {}
+      #如果容器在优雅终止宽限期后仍在运行，则会发送SIGKILL信号并强制删除。与此同时，所有的Kubernetes对象也会被清除。
+      terminationGracePeriodSeconds: 60
