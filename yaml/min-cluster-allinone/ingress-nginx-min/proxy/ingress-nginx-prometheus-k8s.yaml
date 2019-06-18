@@ -6,19 +6,17 @@ metadata:
     #nginx.ingress.kubernetes.io/ssl-redirect: "false"
     #nginx.ingress.kubernetes.io/rewrite-target: /
   labels:
-    app.kubernetes.io/component: controller
-    app.kubernetes.io/name: prometheus-operator
-    app.kubernetes.io/version: v0.30.0
-  name: prometheus-operator
-  namespace: prometheus-operator
+    prometheus: k8s
+  name: prometheus-k8s
+  namespace: monitoring
 spec:
   rules:
-  - host: prometheus-operator.future.coohua.com
+  - host: prometheus-k8s.future.coohua.com
     http:
       paths:
       - backend:
-          serviceName: prometheus-operator
-          servicePort: 8080
+          serviceName: prometheus-k8s
+          servicePort: 9090
         path: /
 
   #- host: es-min.future.coohua.com

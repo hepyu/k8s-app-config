@@ -11,7 +11,7 @@ spec:
   #type: LoadBalancer
   type: NodePort
   externalIPs:
-  - 47.92.123.228
+  - 39.98.43.48
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
