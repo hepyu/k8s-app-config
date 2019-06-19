@@ -134,6 +134,14 @@ spec:
           ports:
             - protocol: TCP
               containerPort: 8070
+
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 500Mi
+            limits:
+              cpu: 1
+              memory: 1024Mi
           
           volumeMounts:
             - name: volume-configmap-apollo-portal-server

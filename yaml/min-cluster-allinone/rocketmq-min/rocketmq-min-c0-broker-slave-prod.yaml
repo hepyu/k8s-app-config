@@ -1,0 +1,133 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: rocketmq-min
+  name: configmap-rocketmq-min-c0-broker-slave-prod
+data:
+  NAME_SRV_ADDR: "service-rocketmq-min-c0-namesrv-prod:9876"
+  BROKER_ID: "1"
+  BROKER_ROLE: "SLAVE"
+  STATEFULSET_NAME: "statefulset-rocketmq-min-c0-broker-slave-prod"
+  SEND_MESSAGE_THREAD_POOL_NUMS: "128"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: rocketmq-min
+  name: service-rocketmq-min-c0-broker-slave-prod
+  labels:
+    app: service-rocketmq-min-c0-broker-slave-prod
+spec:
+  ports:
+  - name: rocketmq-port-10909
+    protocol: TCP
+    port: 10909
+    targetPort: 10909
+  - name: rocketmq-port-10911
+    protocol: TCP
+    port: 10911
+    targetPort: 10911
+  selector:
+    app: pod-rocketmq-min-c0-broker-slave-prod
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: ClientIP
+
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  namespace: rocketmq-min
+  name: statefulset-rocketmq-min-c0-broker-slave-prod
+  labels:
+    app: statefulset-rocketmq-min-c0-broker-slave-prod
+spec:
+  replicas: 1
+  serviceName: service-rocketmq-min-c0-broker-slave-prod
+  selector:
+    matchLabels:
+      app: pod-rocketmq-min-c0-broker-slave-prod
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: pod-rocketmq-min-c0-broker-slave-prod
+    spec:
+#      nodeSelector:
+#        node-role.kubernetes.io/rocketmq: "true"
+      #imagePullSecrets:
+      #- name: hpy
+      containers:
+      - image: hpy253215039/rocketmq-broker:v4.3.2
+        securityContext:
+          privileged: true
+        imagePullPolicy: IfNotPresent
+        name: container-rocketmq-min-c0-broker-slave-prod
+        ports:
+        - protocol: TCP
+          containerPort: 10909
+        - protocol: TCP
+          containerPort: 10911
+
+        resources:
+          requests:
+            cpu: 0.1
+            #memory: 4.5Gi
+            memory: 500Mi
+          limits:
+            cpu: 1
+            #memory: 4.5Gi
+            memory: 500Mi
+        envFrom:
+        - configMapRef:
+            name: configmap-rocketmq-min-c0-broker-slave-prod
+
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+
+        volumeMounts:
+        - name: rocketmq-min-c0-broker-slave
+          mountPath: /opt/rocketmq/
+
+        readinessProbe:
+          tcpSocket:
+            port: 10909
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+        livenessProbe:
+          tcpSocket:
+            port: 10909
+          initialDelaySeconds: 120
+          periodSeconds: 10
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - pod-rocketmq-min-c0-broker-slave-prod
+              topologyKey: kubernetes.io/hostname
+
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+
+  volumeClaimTemplates:
+    - metadata:
+        name: rocketmq-min-c0-broker-slave
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "rocketmq-min-c0-broker-slave"
+        resources:
+          requests:
+            storage: 1Gi

@@ -82,10 +82,10 @@ spec:
         resources:
           limits:
             cpu: "1"
-            memory: 1Gi
+            memory: 1024m
           requests:
             cpu: 100m
-            memory: 500m
+            memory: 1024m
         #为了达到一个相当高水平的实用性，特别是为了积极开发应用，快速调试失败是很重要的。
         #除了一般的日志采集，Kubernetes还能通过查出重大错误原因来加速调试，并在某种程度上通过kubectl或者UI陈列出来。
         #可以指定一个’terminationMessagePath’来让容器写下它的“death rattle“，比如声明失败消息，堆栈跟踪，免责条款等等。默认途径是‘/dev/termination-log’。

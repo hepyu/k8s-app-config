@@ -1,0 +1,93 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: rocketmq-min
+  name: configmap-rocketmq-min-c0-console-ng-prod
+data:
+  JAVA_OPTS: "-Drocketmq.namesrv.addr=service-rocketmq-min-c0-namesrv-prod:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: rocketmq-min
+  name: service-rocketmq-min-c0-console-ng-prod
+  labels:
+    app: service-rocketmq-min-c0-console-ng-prod
+spec:
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30018
+  selector:
+    app: pod-rocketmq-min-c0-console-ng-prod
+  type: NodePort
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: rocketmq-min
+  name: deployment-rocketmq-min-c0-console-ng-prod
+  labels:
+    app: deployment-rocketmq-min-c0-console-ng-prod
+spec:
+  # 1 个实例
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-rocketmq-min-c0-console-ng-prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: pod-rocketmq-min-c0-console-ng-prod
+    spec:
+      #imagePullSecrets:
+      #- name: hpy
+      containers:
+      - image: styletang/rocketmq-console-ng
+        securityContext:
+          privileged: true
+        imagePullPolicy: IfNotPresent
+        name: container-rocketmq-min-c0-console-ng-prod
+        ports:
+        - protocol: TCP
+          containerPort: 8080
+
+        # 挂载configmap-apollo-portal-server相关配置
+        envFrom:
+        - configMapRef:
+            name: configmap-rocketmq-min-c0-console-ng-prod
+        # 计算资源分配
+        resources:
+          # 初始请求资源
+          requests:
+            cpu: 0.1
+            memory: 1024Mi
+          # 资源限制
+          limits:
+            cpu: 1
+            memory: 1024Mi
+
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 5
+
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          # 120s 内, server 未启动则重启 container
+          initialDelaySeconds: 120
+          periodSeconds: 15
+
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always

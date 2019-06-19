@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: service-rocketmq-min-c0-console-ng-prod
+  name: rocketmq-min-c0-console
+  namespace: rocketmq-min
+spec:
+  rules:
+  - host: pro-rocketmq-min-c0.console.future.coohua.com
+    http:
+      paths:
+      - backend:
+          serviceName: service-rocketmq-min-c0-console-ng-prod
+          servicePort: 8080
+        path: /

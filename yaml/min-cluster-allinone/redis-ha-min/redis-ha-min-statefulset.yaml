@@ -1,0 +1,181 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: redis-ha
+    release: redis-ha-min
+  name: redis-ha-min-server
+  namespace: redis-ha-min
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: redis-ha
+      release: redis-ha-min
+  serviceName: redis-ha-min
+  template:
+    metadata:
+      labels:
+        app: redis-ha
+        release: redis-ha-min
+    spec:
+      '''
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: redis-ha
+                  release: redis-ha-min
+              topologyKey: failure-domain.beta.kubernetes.io/zone
+            weight: 100
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: redis-ha
+                release: redis-ha-min
+            topologyKey: kubernetes.io/hostname
+      '''
+      containers:
+      - args:
+        - /data/conf/redis.conf
+        command:
+        - redis-server
+        image: redis:5.0.3-alpine
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - /probes/readiness.sh
+            - "6379"
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - /probes/readiness.sh
+            - "6379"
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        - mountPath: /probes
+          name: probes
+      - args:
+        - /data/conf/sentinel.conf
+        command:
+        - redis-sentinel
+        image: redis:5.0.3-alpine
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - /probes/readiness.sh
+            - "26379"
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: sentinel
+        ports:
+        - containerPort: 26379
+          name: sentinel
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - /probes/readiness.sh
+            - "26379"
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        - mountPath: /probes
+          name: probes
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - args:
+        - /readonly-config/init.sh
+        command:
+        - sh
+        env:
+        - name: SENTINEL_ID_0
+          value: c53108b2896f43ff5b269d97c0fcde5ddd41f7c1
+        - name: SENTINEL_ID_1
+          value: 5fa1a29305dccd42cf9a1a854928b785f27282c1
+        - name: SENTINEL_ID_2
+          value: 6f6b231d2689f682075e493fa0f8eadbc1cec126
+        image: redis:5.0.3-alpine
+        imagePullPolicy: IfNotPresent
+        name: config-init
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /readonly-config
+          name: config
+          readOnly: true
+        - mountPath: /data
+          name: data
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccount: redis-ha-min
+      serviceAccountName: redis-ha-min
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: redis-ha-min-configmap
+        name: config
+      - configMap:
+          defaultMode: 420
+          name: redis-ha-min-probes
+        name: probes
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      creationTimestamp: null
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      dataSource: null
+      resources:
+        requests:
+          storage: 10Gi
+      volumeMode: Filesystem

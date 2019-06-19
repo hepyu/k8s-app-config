@@ -1,0 +1,185 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins2
+  namespace: jenkins
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins2
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: jenkins2
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+        - containerPort: 50000
+          name: agent
+          protocol: TCP
+        resources:
+          limits:
+            #cpu: 2000m
+            cpu: 1
+            memory: 1Gi
+          requests:
+            #cpu: 1000m
+            cpu: 0.1
+            memory: 1Gi
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          failureThreshold: 12
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          failureThreshold: 12
+        volumeMounts:
+        - name: jenkinshome
+          subPath: jenkins2
+          mountPath: /var/jenkins_home
+        env:
+        - name: LIMITS_MEMORY
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+              divisor: 1Mi
+        - name: JAVA_OPTS
+          value: -Xmx$(LIMITS_MEMORY)m -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -Duser.timezone=Asia/Shanghai
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: jenkinshome
+        persistentVolumeClaim:
+          claimName: jenkins
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins2
+  namespace: jenkins
+  labels:
+    app: jenkins2
+spec:
+  selector:
+    app: jenkins2
+  ports:
+  - name: web
+    port: 8080
+    targetPort: web
+  - name: agent
+    port: 50000
+    targetPort: agent
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-pv-local
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "jenkins-storageclass-local"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/jenkins-pv-local
+    #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+    #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  #当启用PVC 保护 alpha 功能时，如果用户删除了一个 pod 正在使用的 PVC，则该 PVC 不会被立即删除。PVC 的删除将被推迟，直到 PVC 不再被任何 pod 使用。
+  #可以看到，当 PVC 的状态为 Teminatiing 时，PVC 受到保护，Finalizers 列表中包含 kubernetes.io/pvc-protection：
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: jenkins
+    release: jenkins
+  name: jenkins
+  namespace: jenkins
+spec:
+  #PV 的访问模式（accessModes）有三种：
+  #ReadWriteOnce（RWO）：是最基本的方式，可读可写，但只支持被单个 Pod 挂载。
+  #ReadOnlyMany（ROX）：可以以只读的方式被多个 Pod 挂载。
+  #ReadWriteMany（RWX）：这种存储可以以读写的方式被多个 Pod 共享。
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: jenkins-storageclass-local
+  #表示使用本地磁盘，实际生产中一般都使用nfs。
+  volumeMode: Filesystem
+  volumeName: jenkins-pv-local
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins2
+  namespace: jenkins
+
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: jenkins2
+  namespace: jenkins
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["create","delete","get","list","patch","update","watch"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create","delete","get","list","patch","update","watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get","list","watch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: jenkins2
+  namespace: jenkins
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: jenkins2
+subjects:
+  - kind: ServiceAccount
+    name: jenkins2
+    namespace: jenkins

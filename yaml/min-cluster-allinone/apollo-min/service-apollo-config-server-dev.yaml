@@ -99,6 +99,14 @@ spec:
             - protocol: TCP
               containerPort: 8080
           
+          resources:
+            requests:
+              cpu: 0.1
+              memory: 500Mi
+            limits:
+              cpu: 1
+              memory: 1024Mi
+          
           volumeMounts:
             - name: volume-configmap-apollo-config-server-dev
               mountPath: /apollo-config-server/config/application-github.properties
