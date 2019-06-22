@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  name: repo-nexus
+  namespace: repo-nexus
+spec:
+  rules:
+  - host: repo-nexus.future.coohua.com
+    http:
+      paths:
+      - backend:
+          serviceName: repo-nexus
+          servicePort: 8081
+        path: /

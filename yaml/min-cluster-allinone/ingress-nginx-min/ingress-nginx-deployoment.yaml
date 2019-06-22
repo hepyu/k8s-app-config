@@ -16,6 +16,8 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
+data:
+  proxy-body-size: "600m"
 
 ---
 kind: ConfigMap
