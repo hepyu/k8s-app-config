@@ -11,18 +11,10 @@ metadata:
   namespace: es-min
 spec:
   rules:
-  - host: es-min-admin.future.coohua.com
+  - host: es-min-admin.future.com
     http:
       paths:
       - backend:
           serviceName: es-min-ingest
           servicePort: 9200
         path: /
-
-  #- host: es-min.future.coohua.com
-  #  transport:
-  #    paths:
-  #    - backend:
-  #        serviceName: es-min-ingest
-  #        servicePort: 9300
-  #      path: /

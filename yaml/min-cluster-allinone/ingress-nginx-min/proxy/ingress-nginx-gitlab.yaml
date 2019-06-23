@@ -11,18 +11,10 @@ metadata:
   namespace: gitlab
 spec:
   rules:
-  - host: gitlab.future.coohua.com
+  - host: gitlab.future.com
     http:
       paths:
       - backend:
           serviceName: gitlab
           servicePort: 80
         path: /
-
-  #- host: es-min.future.coohua.com
-  #  transport:
-  #    paths:
-  #    - backend:
-  #        serviceName: es-min-ingest
-  #        servicePort: 9300
-  #      path: /

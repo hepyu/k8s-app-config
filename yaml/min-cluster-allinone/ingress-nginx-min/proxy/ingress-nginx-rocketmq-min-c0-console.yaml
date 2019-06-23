@@ -10,7 +10,7 @@ metadata:
   namespace: rocketmq-min
 spec:
   rules:
-  - host: pro-rocketmq-min-c0.console.future.coohua.com
+  - host: pro-rocketmq-min-c0.console.future.com
     http:
       paths:
       - backend:

@@ -9,7 +9,7 @@ metadata:
   namespace: repo-nexus
 spec:
   rules:
-  - host: repo-nexus.future.coohua.com
+  - host: repo-nexus.future.com
     http:
       paths:
       - backend:

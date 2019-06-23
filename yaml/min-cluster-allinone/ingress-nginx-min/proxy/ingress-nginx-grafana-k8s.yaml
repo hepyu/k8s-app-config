@@ -11,18 +11,10 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-  - host: grafana-k8s.future.coohua.com
+  - host: grafana-k8s.future.com
     http:
       paths:
       - backend:
           serviceName: grafana
           servicePort: 3000
         path: /
-
-  #- host: es-min.future.coohua.com
-  #  transport:
-  #    paths:
-  #    - backend:
-  #        serviceName: es-min-ingest
-  #        servicePort: 9300
-  #      path: /

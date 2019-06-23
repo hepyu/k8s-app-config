@@ -11,7 +11,7 @@ metadata:
   namespace: apollo-min
 spec:
   rules:
-  - host: dev.apollo-portal.future.coohua.com
+  - host: dev.apollo-portal.future.com
     http:
       paths:
       - backend:
@@ -19,10 +19,3 @@ spec:
           servicePort: 8070
         path: /
 
-  #- host: es-min.future.coohua.com
-  #  transport:
-  #    paths:
-  #    - backend:
-  #        serviceName: es-min-ingest
-  #        servicePort: 9300
-  #      path: /

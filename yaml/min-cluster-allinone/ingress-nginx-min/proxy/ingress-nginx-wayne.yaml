@@ -11,18 +11,10 @@ metadata:
   namespace: wayne
 spec:
   rules:
-  - host: wayne.future.coohua.com
+  - host: wayne.future.com
     http:
       paths:
       - backend:
           serviceName: infra-wayne
           servicePort: 8080
         path: /
-
-  #- host: es-min.future.coohua.com
-  #  transport:
-  #    paths:
-  #    - backend:
-  #        serviceName: es-min-ingest
-  #        servicePort: 9300
-  #      path: /

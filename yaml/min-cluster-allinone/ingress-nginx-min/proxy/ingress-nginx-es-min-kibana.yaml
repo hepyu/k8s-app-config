@@ -11,8 +11,7 @@ metadata:
   namespace: es-min-kibana
 spec:
   rules:
-  - host: es-min-kibana.future.coohua.com
-  #- host: es-min-c0-kibana
+  - host: es-min-kibana.future.com
     http:
       paths:
       - backend:
