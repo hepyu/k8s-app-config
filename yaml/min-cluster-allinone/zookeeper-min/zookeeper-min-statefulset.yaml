@@ -1,0 +1,183 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: zookeeper-min
+   labels:
+     app: zk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk-hs
+  namespace: zookeeper-min
+  labels:
+    app: zk
+spec:
+  ports:
+  #集群内机器通讯使用（Leader监听此端口）
+  - port: 2888
+    name: server
+  #选举leader使用
+  - port: 3888
+    name: leader-election
+  clusterIP: None
+  selector:
+    app: zk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zk-cs
+  namespace: zookeeper-min
+  labels:
+    app: zk
+spec:
+  ports:
+  #对cline端提供服务
+  - port: 2181
+    name: client
+  selector:
+    app: zk
+---
+apiVersion: policy/v1beta1
+#在Kubernetes中，为了保证业务不中断或业务SLA不降级，需要将应用进行集群化部署。通过PodDisruptionBudget控制器可以设置应用POD集群处于运行状态最低个数，也可以设置应用POD集群处于运行状态的最低百分比，这样可以保证在主动销毁应用POD的时候，不会一次性销毁太多的应用POD，从而保证业务不中断或业务SLA不降级。
+#这里面需要注意的是，使用PodDisruptionBudget控制器并不能保证任何情况下都对业务POD集群进行约束，PodDisruptionBudget控制器只能保证POD主动逃离的情况下业务不中断或者业务SLA不降级，例如在执行kubectl drain命令时。
+#kubectl drain表示将node设置为unschedulable,然后删除Node上运行的所有Pod,但不会删除不由apiserver管理的pod.
+kind: PodDisruptionBudget
+metadata:
+  name: zk-pdb
+  namespace: zookeeper-min
+spec:
+  selector:
+    matchLabels:
+      app: zk
+  #表示最大不可用PO数，表示应用POD集群处于不可用状态的最大POD数，或者是不可用状态的POD数同总POD数的最大百分比。
+  #MinAvailable参数：表示最小可用POD数，表示应用POD集群处于运行状态的最小POD数量，或者是运行状态的POD数同总POD数的最小百分比。
+  #这里需要注意的是，MinAvailable参数和MaxUnavailable参数是互斥的，也就是说如果使用了其中一个参数，那么就不能使用另外一个参数了。
+  maxUnavailable: 1
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zk
+  namespace: zookeeper-min
+spec:
+  selector:
+    matchLabels:
+      app: zk
+  serviceName: zk-hs
+  #由于笔者只有一台机器，所以设置为1，生产环境是最小值是3，且必须为奇数
+  replicas: 1
+  #replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  #OrderedReady表示顺序创建pod，存在等待时间，是默认值；Parallel表示同时创建，同时删除
+  podManagementPolicy: OrderedReady
+  template:
+    metadata:
+      labels:
+        app: zk
+    spec:
+      affinity:
+        #pod反亲和性:下边podAntiAffinity这一段配置表示在满足labelSelector的条件的worknode上只能有一个zookeeper的pod.
+        #requiredDuringSchedulingIgnoredDuringExecutionb表示pod应该被分配到符合哪些条件的node上。
+        #topologyKey表示反亲和性在哪一个级别：kubernetes.io/hostname表示node级别。
+        podAntiAffinity:
+          ##目前有两种主要的 node affinity： 
+          #requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution。
+          #前者表示 pod 必须部署到满足条件的节点上，如果没有满足条件的节点，就不断重试；后者表示优先部署在满足条件的节点上，如果没有满足条件的节点，就忽略这些条件，按照正常逻辑部署。
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - zk
+             #topologyKey 是拓扑域，那 Pod 之间怎样才是属于同一个拓扑域？
+             #如果使用 k8s.io/hostname，
+             #则表示拓扑域为 Node 范围，那么 k8s.io/hostname 对应的值不一样就是不同的拓扑域。
+             #比如 Pod1 在 k8s.io/hostname=node1 的 Node 上，Pod2 在 k8s.io/hostname=node2 的 Node 上，Pod3 在 k8s.io/hostname=node1 的 Node 上，则 Pod2 和 Pod1、Pod3 不在同一个拓扑域，而Pod1 和 Pod3在同一个拓扑域。
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: kubernetes-zookeeper
+        imagePullPolicy: Always
+        #生产环境要放到自己的私服
+        image: "mirrorgooglecontainers/kubernetes-zookeeper:1.0-3.4.10"
+        #image: "k8s.gcr.io/kubernetes-zookeeper:1.0-3.4.10"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "0.1"
+        ports:
+        - containerPort: 2181
+          name: client
+        - containerPort: 2888
+          name: server
+        - containerPort: 3888
+          name: leader-election
+        command:
+        - sh
+        - -c
+        - "start-zookeeper \
+          --servers=3 \
+          --data_dir=/var/lib/zookeeper/data \
+          --data_log_dir=/var/lib/zookeeper/data/log \
+          --conf_dir=/opt/zookeeper/conf \
+          --client_port=2181 \
+          --election_port=3888 \
+          --server_port=2888 \
+          --tick_time=2000 \
+          --init_limit=10 \
+          --sync_limit=5 \
+          --heap=512M \
+          --max_client_cnxns=60 \
+          --snap_retain_count=3 \
+          --purge_interval=12 \
+          --max_session_timeout=40000 \
+          --min_session_timeout=4000 \
+          --log_level=INFO"
+        #Kubelet 使用 readiness probe（就绪探针）来确定容器是否已经就绪可以接受流量。只有当 Pod 中的容器都处于就绪状态时 kubelet 才会认定该 Pod处于就绪状态。该信号的作用是控制哪些 Pod应该作为service的后端。如果 Pod 处于非就绪状态，那么它们将会被从 service 的 load balancer中移除。
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "zookeeper-ready 2181"
+          #容器启动后第一次执行探测是需要等待多少秒。
+          initialDelaySeconds: 10
+          #探测超时时间。默认1秒，最小1秒。
+          timeoutSeconds: 5
+        #kubelet 使用 liveness probe（存活探针）来确定何时重启容器。例如，当应用程序处于运行状态但无法做进一步操作，liveness 探针将捕获到 deadlock，重启处于该状态下的容器，使应用程序在存在 bug 的情况下依然能够继续运行下去
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "zookeeper-ready 2181"
+          #容器启动后第一次执行探测是需要等待多少秒。
+          initialDelaySeconds: 10
+          #探测超时时间。默认1秒，最小1秒。
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/zookeeper
+      #在运行一个容器时，有时候需要使用sysctl修改内核参数，比如net.、vm.、kernel等，sysctl需要容器拥有超级权限，容器启动时加上--privileged参数即可。
+      #kubernetes中有个字段叫securityContext，即安全上下文，它用于定义Pod或Container的权限和访问控制设置。其设置包括：
+      #Discretionary Access Control: 根据用户ID（UID）和组ID（GID）来限制其访问资源（如：文件）的权限
+      securityContext:
+        #runAsUser表示使用哪个用户运行zookeeper，1000表示uid.
+        #pod启动后进入pod，执行id可以看到uid和fsgroup的值分别是1000,2000.
+        #表示以uid(1000)和fsgroup(1000)的身份来运行zookeeper进程。
+        runAsUser: 1000
+        fsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: zookeeper-min-pv-local
+      volumeMode: Filesystem
