@@ -1,8 +1,12 @@
 
+# 工程目的
+
+提供一个低成本容器化所有组件的最佳实践，方便大家学习/研究。
+
 # QA
 
 ## QA1.storage资源不足发生pod驱逐
-demo机器盘小，我都调成了100M。
+原来ECS的磁盘小，扩容到100G后解决。
 ```
 Events:
   Type     Reason            Age                    From               Message
