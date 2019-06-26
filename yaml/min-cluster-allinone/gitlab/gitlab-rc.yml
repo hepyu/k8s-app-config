@@ -39,7 +39,7 @@ spec:
 
         #git clone时的url的前缀
         - name: GITLAB_HOST
-          value: git.default.cluster.local
+          value: gitlab.future.com:30834
         - name: GITLAB_PORT
           value: "80"
         - name: GITLAB_SSH_PORT

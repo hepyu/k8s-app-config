@@ -16,6 +16,7 @@ spec:
       containers:
       - name: jenkins
         image: jenkins/jenkins:lts
+        #image: cnych/jenkins:jnlp
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
