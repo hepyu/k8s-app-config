@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: skywalking-ui
+  name: skywalking-ui
+  namespace: skywalking-min
+spec:
+  rules:
+  - host: skywalking-ui.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: skywalking-ui
+          servicePort: 8080
+        path: /

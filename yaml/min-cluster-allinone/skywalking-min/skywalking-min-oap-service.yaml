@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: oap
+  name: oap
+  namespace: skywalking-min
+spec:
+  ports:
+  - name: rest
+    port: 12800
+    protocol: TCP
+    targetPort: 12800
+  - name: grpc
+    port: 11800
+    protocol: TCP
+    targetPort: 11800
+  selector:
+    app: oap
+  sessionAffinity: None
+  type: ClusterIP

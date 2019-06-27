@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    choerodon.io/infra: skywalking-ui
+    choerodon.io/release: skywalking-ui
+  name: skywalking-ui
+  namespace: skywalking-min
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    choerodon.io/infra: skywalking-ui
+    choerodon.io/release: skywalking-ui
+  sessionAffinity: None
+  type: ClusterIP
