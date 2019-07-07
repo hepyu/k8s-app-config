@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: prod-configservice
+  name: prod-configservice001
+  namespace: apollo-min
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    app: pod-apollo-config-server-dev
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: prod-configservice
+  name: prod-configservice002
+  namespace: apollo-min
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    app: pod-apollo-config-server-dev
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    app: prod-configservice
+  name: prod-configservice003
+  namespace: apollo-min
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    app: pod-apollo-config-server-dev
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  type: ClusterIP

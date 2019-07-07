@@ -68,8 +68,8 @@ spec:
       app: zk
   serviceName: zk-hs
   #由于笔者只有一台机器，所以设置为1，生产环境是最小值是3，且必须为奇数
-  replicas: 1
-  #replicas: 3
+  #replicas: 1
+  replicas: 3
   updateStrategy:
     type: RollingUpdate
   #OrderedReady表示顺序创建pod，存在等待时间，是默认值；Parallel表示同时创建，同时删除
@@ -83,22 +83,22 @@ spec:
         #pod反亲和性:下边podAntiAffinity这一段配置表示在满足labelSelector的条件的worknode上只能有一个zookeeper的pod.
         #requiredDuringSchedulingIgnoredDuringExecutionb表示pod应该被分配到符合哪些条件的node上。
         #topologyKey表示反亲和性在哪一个级别：kubernetes.io/hostname表示node级别。
-        podAntiAffinity:
+        #podAntiAffinity:
           ##目前有两种主要的 node affinity： 
           #requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution。
           #前者表示 pod 必须部署到满足条件的节点上，如果没有满足条件的节点，就不断重试；后者表示优先部署在满足条件的节点上，如果没有满足条件的节点，就忽略这些条件，按照正常逻辑部署。
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: "app"
-                    operator: In
-                    values:
-                    - zk
+          #requiredDuringSchedulingIgnoredDuringExecution:
+          #  - labelSelector:
+          #      matchExpressions:
+          #        - key: "app"
+          #          operator: In
+          #          values:
+          #          - zk
              #topologyKey 是拓扑域，那 Pod 之间怎样才是属于同一个拓扑域？
              #如果使用 k8s.io/hostname，
              #则表示拓扑域为 Node 范围，那么 k8s.io/hostname 对应的值不一样就是不同的拓扑域。
              #比如 Pod1 在 k8s.io/hostname=node1 的 Node 上，Pod2 在 k8s.io/hostname=node2 的 Node 上，Pod3 在 k8s.io/hostname=node1 的 Node 上，则 Pod2 和 Pod1、Pod3 不在同一个拓扑域，而Pod1 和 Pod3在同一个拓扑域。
-              topologyKey: "kubernetes.io/hostname"
+          #    topologyKey: "kubernetes.io/hostname"
       containers:
       - name: kubernetes-zookeeper
         imagePullPolicy: Always

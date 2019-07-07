@@ -22,3 +22,53 @@ spec:
           operator: In
           values:
           - future
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zookeeper-min-data1-pv-local
+  namespace: zookeeper-min
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "zookeeper-min-pv-local"
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /datavip/k8s-data/zookeeper-min-data1-pv-local
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - future
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zookeeper-min-data2-pv-local
+  namespace: zookeeper-min
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "zookeeper-min-pv-local"
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /datavip/k8s-data/zookeeper-min-data2-pv-local
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - future
