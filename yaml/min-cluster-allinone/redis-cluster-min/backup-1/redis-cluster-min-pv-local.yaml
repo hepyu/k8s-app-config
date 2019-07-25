@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-redis-min-0
+  namespace: redis-cluster-min
+spec:
+  storageClassName: "redis-cluster-min"
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /datavip/k8s-data/data-redis-min-0
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - future
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-redis-min-1
+  namespace: redis-cluster-min
+spec:
+  storageClassName: "redis-cluster-min"
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /datavip/k8s-data/data-redis-min-1
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - future
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-redis-min-2
+  namespace: redis-cluster-min
+spec:
+  storageClassName: "redis-cluster-min"
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /datavip/k8s-data/data-redis-min-2
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - future

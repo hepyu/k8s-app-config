@@ -1,0 +1,100 @@
+---
+apiVersion: v1
+data:
+  init.sh: "HOSTNAME=\"$(hostname)\"\nINDEX=\"${HOSTNAME##*-}\"\nMASTER=\"$(redis-cli
+    -h redis-ha-min -p 26379 sentinel get-master-addr-by-name mymaster | grep -E '[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}')\"\nMASTER_GROUP=\"mymaster\"\nQUORUM=\"2\"\nREDIS_CONF=/data/conf/redis.conf\nREDIS_PORT=6379\nSENTINEL_CONF=/data/conf/sentinel.conf\nSENTINEL_PORT=26379\nSERVICE=redis-ha-min\nset
+    -eu\n\nsentinel_update() {\n    echo \"Updating sentinel config\"\n    eval MY_SENTINEL_ID=\"\\${SENTINEL_ID_$INDEX}\"\n
+    \   sed -i \"1s/^/sentinel myid $MY_SENTINEL_ID\\\\n/\" \"$SENTINEL_CONF\"\n    sed
+    -i \"2s/^/sentinel monitor $MASTER_GROUP $1 $REDIS_PORT $QUORUM \\\\n/\" \"$SENTINEL_CONF\"\n
+    \   echo \"sentinel announce-ip $ANNOUNCE_IP\" >> $SENTINEL_CONF\n    echo \"sentinel
+    announce-port $SENTINEL_PORT\" >> $SENTINEL_CONF\n}\n\nredis_update() {\n    echo
+    \"Updating redis config\"\n    echo \"slaveof $1 $REDIS_PORT\" >> \"$REDIS_CONF\"\n
+    \   echo \"slave-announce-ip $ANNOUNCE_IP\" >> $REDIS_CONF\n    echo \"slave-announce-port
+    $REDIS_PORT\" >> $REDIS_CONF\n}\n\ncopy_config() {\n    cp /readonly-config/redis.conf
+    \"$REDIS_CONF\"\n    cp /readonly-config/sentinel.conf \"$SENTINEL_CONF\"\n}\n\nsetup_defaults()
+    {\n    echo \"Setting up defaults\"\n    if [ \"$INDEX\" = \"0\" ]; then\n        echo
+    \"Setting this pod as the default master\"\n        redis_update \"$ANNOUNCE_IP\"\n
+    \       sentinel_update \"$ANNOUNCE_IP\"\n        sed -i \"s/^.*slaveof.*//\"
+    \"$REDIS_CONF\"\n    else\n        DEFAULT_MASTER=\"$(getent hosts \"$SERVICE-announce-0\"
+    | awk '{ print $1 }')\"\n        if [ -z \"$DEFAULT_MASTER\" ]; then\n            echo
+    \"Unable to resolve host\"\n            exit 1\n        fi\n        echo \"Setting
+    default slave config..\"\n        redis_update \"$DEFAULT_MASTER\"\n        sentinel_update
+    \"$DEFAULT_MASTER\"\n    fi\n}\n\nfind_master() {\n    echo \"Attempting to find
+    master\"\n    if [ \"$(redis-cli -h \"$MASTER\" ping)\" != \"PONG\" ]; then\n
+    \      echo \"Can't ping master, attempting to force failover\"\n       if redis-cli
+    -h \"$SERVICE\" -p \"$SENTINEL_PORT\" sentinel failover \"$MASTER_GROUP\" | grep
+    -q 'NOGOODSLAVE' ; then \n           setup_defaults\n           return 0\n       fi\n
+    \      sleep 10\n       MASTER=\"$(redis-cli -h $SERVICE -p $SENTINEL_PORT sentinel
+    get-master-addr-by-name $MASTER_GROUP | grep -E '[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}')\"\n
+    \      if [ \"$MASTER\" ]; then\n           sentinel_update \"$MASTER\"\n           redis_update
+    \"$MASTER\"\n       else\n          echo \"Could not failover, exiting...\"\n
+    \         exit 1\n       fi\n    else\n        echo \"Found reachable master,
+    updating config\"\n        sentinel_update \"$MASTER\"\n        redis_update \"$MASTER\"\n
+    \   fi\n}\n\nmkdir -p /data/conf/\n\necho \"Initializing config..\"\ncopy_config\n\nANNOUNCE_IP=$(getent
+    hosts \"$SERVICE-announce-$INDEX\" | awk '{ print $1 }')\nif [ -z \"$ANNOUNCE_IP\"
+    ]; then\n    \"Could not resolve the announce ip for this pod\"\n    exit 1\nelif
+    [ \"$MASTER\" ]; then\n    find_master\nelse\n    setup_defaults\nfi\n\nif [ \"${AUTH:-}\"
+    ]; then\n    echo \"Setting auth values\"\n    ESCAPED_AUTH=$(echo \"$AUTH\" |
+    sed -e 's/[\\/&]/\\\\&/g');\n    sed -i \"s/replace-default-auth/${ESCAPED_AUTH}/\"
+    \"$REDIS_CONF\" \"$SENTINEL_CONF\"\nfi\n\necho \"Ready...\"\n"
+  redis.conf: |
+    dir "/data"
+    maxmemory 0
+    maxmemory-policy volatile-lru
+    min-slaves-max-lag 5
+    min-slaves-to-write 1
+    rdbchecksum yes
+    rdbcompression yes
+    repl-diskless-sync yes
+    save 900 1
+  sentinel.conf: |
+    dir "/data"
+    sentinel down-after-milliseconds mymaster 10000
+    sentinel failover-timeout mymaster 180000
+    sentinel parallel-syncs mymaster 5
+kind: ConfigMap
+metadata:
+  labels:
+    app: redis-ha-min
+  name: redis-ha-min-configmap
+  namespace: redis-ha-min
+
+---
+apiVersion: v1
+data:
+  check-quorum.sh: |
+    #!/bin/sh
+    set -eu
+    MASTER_GROUP="mymaster"
+    SENTINEL_PORT=26379
+    REDIS_PORT=6379
+    NUM_SLAVES=$(redis-cli -p "$SENTINEL_PORT" sentinel master mymaster | awk '/num-slaves/{getline; print}')
+    MIN_SLAVES=1
+
+    if [ "$1" = "$SENTINEL_PORT" ]; then
+        if redis-cli -p "$SENTINEL_PORT" sentinel ckquorum "$MASTER_GROUP" | grep -q NOQUORUM ; then
+            echo "ERROR: NOQUORUM. Sentinel quorum check failed, not enough sentinels found"
+            exit 1
+        fi
+    elif [ "$1" = "$REDIS_PORT" ]; then
+        if [ "$MIN_SLAVES" -gt "$NUM_SLAVES" ]; then
+            echo "Could not find enough replicating slaves. Needed $MIN_SLAVES but found $NUM_SLAVES"
+            exit 1
+        fi
+    fi
+    sh /probes/readiness.sh "$1"
+  readiness.sh: |
+    #!/bin/sh
+    set -eu
+    CHECK_SERVER="$(redis-cli -p "$1" ping)"
+
+    if [ "$CHECK_SERVER" != "PONG" ]; then
+        echo "Server check failed with: $CHECK_SERVER"
+        exit 1
+    fi
+kind: ConfigMap
+metadata:
+  labels:
+    app: redis-ha-min
+  name: redis-ha-min-probes
+  namespace: redis-ha-min

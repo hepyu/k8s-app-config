@@ -35,7 +35,8 @@ spec:
           value: "100000"
         - name: collector.ribbon.listOfServers
           value: oap:12800
-        image: registry.cn-shanghai.aliyuncs.com/vinkdong/skywalking-ui:v6.0.0-beta
+        #image: registry.cn-shanghai.aliyuncs.com/vinkdong/skywalking-ui:v6.0.0-beta
+        image: apache/skywalking-ui:6.2.0
         imagePullPolicy: IfNotPresent
         name: ui
         ports:

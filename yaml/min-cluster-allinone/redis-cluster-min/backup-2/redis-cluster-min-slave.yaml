@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  generation: 1
+  labels:
+    app: redis
+    release: redis-cluster-min
+  name: redis-cluster-min-slave
+  namespace: redis-cluster-min
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: redis
+      release: redis-cluster-min
+      role: slave
+  serviceName: redis-cluster-min-headless
+  template:
+    metadata:
+      #annotations:
+      #  checksum/configmap: 293e99bf1b0bdf12e054bb41da1a0c4c69ada9c01529ef7520b69fee56efcbda
+      #  checksum/health: 89045b42505703f7545c30c9dedeadf2415e88c1ea7eda42536d18546cb2c64f
+      #  checksum/secret: 686a0da855efc34cab3e69acf2bfd486886490e602845624e5935dded55eeb6a
+      labels:
+        app: redis
+        release: redis-cluster-min
+        role: slave
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - "if [[ -n $REDIS_PASSWORD_FILE ]]; then\n  password_aux=`cat ${REDIS_PASSWORD_FILE}`\n
+          \ export REDIS_PASSWORD=$password_aux\nfi\nif [[ -n $REDIS_MASTER_PASSWORD_FILE
+          ]]; then\n  password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`\n  export REDIS_MASTER_PASSWORD=$password_aux\nfi\nif
+          [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then\n  cp /opt/bitnami/redis/mounted-etc/replica.conf
+          /opt/bitnami/redis/etc/replica.conf\nfi\nif [[ ! -f /opt/bitnami/redis/etc/redis.conf
+          ]];then\n  cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf\nfi
+          \         \nARGS=(\"--port\" \"${REDIS_PORT}\")\nARGS+=(\"--slaveof\" \"${REDIS_MASTER_HOST}\"
+          \"${REDIS_MASTER_PORT_NUMBER}\")\nARGS+=(\"--requirepass\" \"${REDIS_PASSWORD}\")\nARGS+=(\"--masterauth\"
+          \"${REDIS_MASTER_PASSWORD}\")\nARGS+=(\"--include\" \"/opt/bitnami/redis/etc/redis.conf\")\nARGS+=(\"--include\"
+          \"/opt/bitnami/redis/etc/replica.conf\")\n/run.sh \"${ARGS[@]}\"\n"
+        env:
+        - name: REDIS_REPLICATION_MODE
+          value: slave
+        - name: REDIS_MASTER_HOST
+          value: redis-cluster-min-master-0.redis-cluster-min-headless.redis-cluster-min.svc.cluster.local
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_MASTER_PORT_NUMBER
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: redis-password
+              name: redis-cluster-min
+        - name: REDIS_MASTER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: redis-password
+              name: redis-cluster-min
+        image: docker.io/bitnami/redis:5.0.5-debian-9-r36
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /health/ping_local_and_master.sh 5
+          failureThreshold: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: redis-cluster-min
+        ports:
+        - containerPort: 6379
+          name: redis
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /health/ping_local_and_master.sh 5
+          failureThreshold: 5
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources: {}
+        securityContext:
+          procMount: Default
+          runAsUser: 1001
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /health
+          name: health
+        - mountPath: /data
+          name: redis-data
+        - mountPath: /opt/bitnami/redis/mounted-etc
+          name: config
+        - mountPath: /opt/bitnami/redis/etc
+          name: redis-tmp-conf
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1001
+      serviceAccount: default
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 493
+          name: redis-cluster-min-health
+        name: health
+      - configMap:
+          defaultMode: 420
+          name: redis-cluster-min
+        name: config
+      - emptyDir: {}
+        name: sentinel-tmp-conf
+      - emptyDir: {}
+        name: redis-tmp-conf
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      labels:
+        app: redis
+        component: slave
+        heritage: Tiller
+        release: redis-cluster-min
+      name: redis-data
+    spec:
+      storageClassName: "redis-cluster-min-slave"
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      volumeMode: Filesystem

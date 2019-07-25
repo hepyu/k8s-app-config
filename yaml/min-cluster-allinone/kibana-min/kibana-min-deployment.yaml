@@ -42,7 +42,7 @@ spec:
       - env:
         - name: ELASTICSEARCH_URL
           value: http://es-min-ingest.es-min:9200
-        image: kibana:6.4.3
+        image: kibana:7.2.0
         imagePullPolicy: IfNotPresent
         name: kibana
         ports:

@@ -1,11 +1,18 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  creationTimestamp: "2019-07-19T08:47:07Z"
+  generation: 1
   labels:
     app: redis-ha
+    chart: redis-ha-3.5.0
+    heritage: Tiller
     release: redis-ha-min
   name: redis-ha-min-server
   namespace: redis-ha-min
+  resourceVersion: "3555371"
+  selfLink: /apis/apps/v1/namespaces/redis-ha-min/statefulsets/redis-ha-min-server
+  uid: ca373b2a-aa01-11e9-a983-00163e054564
 spec:
   podManagementPolicy: OrderedReady
   replicas: 3
@@ -17,26 +24,30 @@ spec:
   serviceName: redis-ha-min
   template:
     metadata:
+      annotations:
+        checksum/init-config: 5272177ccaff8ed776c39eb14a9eac8dae6d203d9a968b6c5c4669d1ddfd84a2
+        checksum/probe-config: 676313f88825477f2fd947693324269f5c8c304fe8b32316789e719823f03838
+      creationTimestamp: null
       labels:
         app: redis-ha
         release: redis-ha-min
     spec:
-      #affinity:
-      #  podAntiAffinity:
-      #    preferredDuringSchedulingIgnoredDuringExecution:
-      #    - podAffinityTerm:
-      #        labelSelector:
-      #          matchLabels:
-      #            app: redis-ha
-      #            release: redis-ha-min
-      #        topologyKey: failure-domain.beta.kubernetes.io/zone
-      #      weight: 100
-      #    requiredDuringSchedulingIgnoredDuringExecution:
-      #    - labelSelector:
-      #        matchLabels:
-      #          app: redis-ha
-      #          release: redis-ha-min
-      #      topologyKey: kubernetes.io/hostname
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: redis-ha
+                  release: redis-ha-min
+              topologyKey: failure-domain.beta.kubernetes.io/zone
+            weight: 100
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: redis-ha
+                release: redis-ha-min
+            topologyKey: kubernetes.io/hostname
       containers:
       - args:
         - /data/conf/redis.conf
@@ -167,11 +178,24 @@ spec:
     type: RollingUpdate
   volumeClaimTemplates:
   - metadata:
+      creationTimestamp: null
       name: data
     spec:
       accessModes:
       - ReadWriteOnce
+      dataSource: null
       resources:
         requests:
-          storage: 1Gi
+          storage: 10Gi
       volumeMode: Filesystem
+    status:
+      phase: Pending
+status:
+  collisionCount: 0
+  currentReplicas: 2
+  currentRevision: redis-ha-min-server-5c7b59544d
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 2
+  updateRevision: redis-ha-min-server-5c7b59544d
+  updatedReplicas: 2
