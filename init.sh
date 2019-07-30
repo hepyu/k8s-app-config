@@ -28,3 +28,11 @@ mkdir -p /datavip/k8s-data/redis-pv-local
 mkdir -p /datavip/k8s-data/es-min-data0-pv-local             
 mkdir -p /datavip/k8s-data/postgres-pv-local  
 mkdir -p /datavip/k8s-data/repo-nexus-pv-local
+
+mkdir -p /datavip/k8s-data/data-redis-min-5
+mkdir -p /datavip/k8s-data/data-redis-min-4
+mkdir -p /datavip/k8s-data/data-redis-min-3
+mkdir -p /datavip/k8s-data/data-redis-min-2
+mkdir -p /datavip/k8s-data/data-redis-min-1
+mkdir -p /datavip/k8s-data/data-redis-min-0
+

@@ -33,7 +33,7 @@ spec:
         #gitlab的root账户默认密码
         - name: GITLAB_ROOT_PASSWORD
           value: root
-        #gitlab的root账号的默认email，也是登录用户名
+        #gitlab的root账号的默认email，也是登录用户名，登陸用戶名默認是root,用下边配置的关联email也可以登录.
         - name: GITLAB_ROOT_EMAIL
           value: root@163.com
 
