@@ -37,7 +37,7 @@ spec:
               apiVersion: v1
               fieldPath: metadata.uid
         #image: registry.cn-shanghai.aliyuncs.com/vinkdong/skywalking-oap:v6.0.0-beta
-        image: apache/skywalking-oap-server:6.2.0
+        image: apache/skywalking-oap-server:6.1.0
         imagePullPolicy: IfNotPresent
         name: oap
         ports:
