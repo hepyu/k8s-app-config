@@ -1,13 +1,17 @@
 # (1).本例生产级实践基于apollo官方的容器化配置文件修改
 
 1.1.官方地址容器化配置地址：
+
 https://github.com/ctripcorp/apollo/tree/master/scripts/apollo-on-kubernetes/kubernetes
 
 1.2.官方apollo容器化步骤(Step by Step):
+
 https://github.com/ctripcorp/apollo/blob/master/scripts/apollo-on-kubernetes/README.md
 
 1.3.笔者apollo容器化步骤(Step by Step):
+
 https://www.toutiao.com/i6698673592915198478/
+
 相对于官方文档增加了镜像仓库推送/db初始化的更加详细的操作，根据笔者的习惯整理了步骤，作为笔者自己的笔记/备份
 
 # (2).apollo容器化之工程拓扑
@@ -24,3 +28,15 @@ apollo配置中心本身非常简单，但是从非容器化向容器化过渡�
 适配这些情况改代码的周期和风险太大，不可接受，通过在k8s中建立不同的service负载均衡的域名(与非容器化的域名对应)这种方式可以0成本的解决过渡阶段的这些问题。
 
 <img src="https://github.com/hepyu/kubernetes-microsvc-product-practice/blob/master/images/%E9%98%BF%E9%87%8C%E4%BA%91%26kubernetes%26%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%94%9F%E4%BA%A7%E5%AE%9E%E8%B7%B5-1%EF%BC%9Aapollo%E6%9E%B6%E6%9E%84-1.jpg" width="100%">
+
+# (3).本例配置文件说明
+
+我们使用的是360的wayne作为yaml管理工具，所以本例配置的文件组织形式对应wayne的组织结构，第一层project对应的是wayne中项目概念。
+
+
+|              Directory               |                             Description                             |                       备注                       |
+| ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
+| wayne-project-apollo-adminservice | admin容器，抽象api，提供给apollo-portal用。                                    |
+| wayne-project-apollo-configservice | config容器，提供配置服务。 |
+| wayne-project-apollo-portal | portal容器，提供web操作页面。 |
+| wayne-project-apollo-configservice-transition | config容器，为容器外的独立部署服务提供配置服务，容器化过渡阶段存在，完成后剔除。 |
