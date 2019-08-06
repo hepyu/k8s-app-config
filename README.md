@@ -19,7 +19,7 @@
 # QA
 
 ## QA1.storage资源不足发生pod驱逐
-原来ECS的磁盘小，扩容到100G后解决。
+原来ECS的磁盘小，扩容到100G后解决，因为只是私服demo用，我图省事了；正确方式是单挂一个盘，修改docker指向。
 ```
 Events:
   Type     Reason            Age                    From               Message
