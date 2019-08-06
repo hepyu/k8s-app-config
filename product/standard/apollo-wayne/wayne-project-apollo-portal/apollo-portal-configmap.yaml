@@ -1,0 +1,19 @@
+metadata:
+  name: apollo-portal-prod
+  namespace: inc
+  labels:
+    wayne-app: apollo-portal
+    wayne-ns: inc
+    app: apollo-portal-prod
+data:
+  application-github.properties: >
+    spring.datasource.url=jdbc:mysql://db-host:3306/apolloportaldb?characterEncoding=utf8
+
+    spring.datasource.username=apollo
+    
+    spring.datasource.password=passport
+
+    spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
+
+    eureka.service.url=http://apollo-configservice-prod/eureka/
+  apollo-env.properties: 'pro.meta=http://apollo-configservice-prod'

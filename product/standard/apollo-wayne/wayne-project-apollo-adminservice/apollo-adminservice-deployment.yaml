@@ -1,0 +1,85 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apollo-adminservice-prod
+  namespace: inc
+  labels:
+    wayne-app: apollo-adminservice
+    wayne-ns: inc
+    app: apollo-adminservice-prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: apollo-adminservice-prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        wayne-app: apollo-adminservice
+        wayne-ns: inc
+        app: apollo-adminservice-prod
+    spec:
+      volumes:
+        - name: apollo-adminservice-prod
+          configMap:
+            name: apollo-adminservice-prod
+            items:
+              - key: application-github.properties
+                path: application-github.properties
+      initContainers:
+        - image: 'your_registry/inc_img/alpine-bash:3.8'
+          name: check-apollo-configservice-prod
+          command:
+            - bash
+            - '-c'
+            - >-
+              curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1
+              --retry-max-time 120 apollo-configservice-prod
+      containers:
+        - name: apollo-adminservice-prod
+          image: >-
+            your_registry/inc_img/apollo-adminservice:v1.4.0
+          securityContext:
+            privileged: false
+          imagePullPolicy: Always
+          ports:
+            - protocol: TCP
+              containerPort: 8090
+          volumeMounts:
+            - name: apollo-adminservice-prod
+              mountPath: /apollo-admin-server/config/application-github.properties
+              subPath: application-github.properties
+          readinessProbe:
+            tcpSocket:
+              port: 8090
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8090
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 10
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: '1'
+            requests:
+              cpu: '0.1'
+              memory: 1Gi
+          env:
+            - name: APOLLO_ADMIN_SERVICE_NAME
+              value: apollo-adminservice-prod
+          envFrom:
+            - configMapRef:
+                name: apollo-adminservice-prod
+      imagePullSecrets:
+        - name: inc

@@ -1,0 +1,67 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pro-apollo-configservice001
+  namespace: inc
+  labels:
+    wayne-app: pro-apollo
+    wayne-ns: inc
+    app: pro-apollo-configservice001
+  annotations:
+    kubernetes.io/ingress.class: xwz
+spec:
+  tls: []
+  rules:
+    - host: pro-apollo-configservice001
+      http:
+        paths:
+          - backend:
+              serviceName: apollo-configservice-prod
+              servicePort: 80
+            path: /
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pro-apollo-configservice002
+  namespace: inc
+  labels:
+    wayne-app: pro-apollo
+    wayne-ns: inc
+    app: pro-apollo-configservice002
+  annotations:
+    kubernetes.io/ingress.class: xwz
+spec:
+  tls: []
+  rules:
+    - host: pro-apollo-configservice002
+      http:
+        paths:
+          - backend:
+              serviceName: apollo-configservice-prod
+              servicePort: 80
+            path: /
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pro-apollo-configservice003
+  namespace: inc
+  labels:
+    wayne-app: pro-apollo
+    wayne-ns: inc
+    app: pro-apollo-configservice003
+  annotations:
+    kubernetes.io/ingress.class: xwz
+spec:
+  tls: []
+  rules:
+    - host: pro-apollo-configservice003
+      http:
+        paths:
+          - backend:
+              serviceName: apollo-configservice-prod
+              servicePort: 80
+            path: /

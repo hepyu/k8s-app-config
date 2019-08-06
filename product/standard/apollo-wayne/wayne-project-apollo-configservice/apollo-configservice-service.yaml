@@ -1,0 +1,18 @@
+metadata:
+  name: apollo-configservice-prod
+  labels:
+    wayne-app: apollo-configservice
+    wayne-ns: inc
+    app: apollo-configservice-prod
+  namespace: inc
+spec:
+  selector:
+    wayne-app: apollo-configservice
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 80
+      name: apollo-configservice-prod-80
+  type: ClusterIP
+apiVersion: v1
+kind: Service

@@ -1,0 +1,18 @@
+metadata:
+  name: apollo-portal-prod
+  labels:
+    wayne-app: apollo-portal
+    wayne-ns: inc
+    app: apollo-portal-prod
+  namespace: inc
+spec:
+  selector:
+    wayne-app: apollo-portal
+  ports:
+    - protocol: TCP
+      targetPort: 8070
+      port: 80
+      name: apollo-portal-prod-80
+  type: ClusterIP
+apiVersion: v1
+kind: Service

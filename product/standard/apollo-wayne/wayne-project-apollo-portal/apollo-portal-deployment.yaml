@@ -1,0 +1,88 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: apollo-portal-prod
+  labels:
+    wayne-app: apollo-portal
+    wayne-ns: inc
+    app: apollo-portal-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apollo-portal-prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        wayne-app: apollo-portal
+        wayne-ns: inc
+        app: apollo-portal-prod
+    spec:
+      volumes:
+        - name: apollo-portal-prod
+          configMap:
+            name: apollo-portal-prod
+            items:
+              - key: application-github.properties
+                path: application-github.properties
+              - key: apollo-env.properties
+                path: apollo-env.properties
+      initContainers:
+        - image: 'your_registry/inc_img/alpine-bash:3.8'
+          name: check-apollo-adminservice-prod
+          command:
+            - bash
+            - '-c'
+            - >-
+              curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1
+              --retry-max-time 120 apollo-adminservice-prod
+      containers:
+        - name: apollo-portal-prod
+          image: 'your_registry/inc_img/apollo-portal:v1.4.0'
+          securityContext:
+            privileged: false
+          imagePullPolicy: Always
+          ports:
+            - protocol: TCP
+              containerPort: 8070
+          volumeMounts:
+            - name: apollo-portal-prod
+              mountPath: /apollo-portal-server/config/application-github.properties
+              subPath: application-github.properties
+            - name: apollo-portal-prod
+              mountPath: /apollo-portal-server/config/apollo-env.properties
+              subPath: apollo-env.properties
+          readinessProbe:
+            tcpSocket:
+              port: 8070
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8070
+            initialDelaySeconds: 120
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 10
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: '1'
+            requests:
+              cpu: '0.1'
+              memory: 1Gi
+          env:
+            - name: APOLLO_PORTAL_SERVICE_NAME
+              value: apollo-portal-prod
+          envFrom:
+            - configMapRef:
+                name: apollo-adminservice-prod
+      imagePullSecrets:
+        - name: inc
