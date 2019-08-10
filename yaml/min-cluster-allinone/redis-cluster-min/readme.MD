@@ -1,10 +1,1 @@
-kubectl run -i --tty centos --image=centos --restart=Never /bin/bash
-
-yum install centos-release-scl-rh -y
-yum install rh-ruby23  -y
-scl  enable  rh-ruby23 bash
-ruby -v
-
-gem install redis
-
-wget https://github.com/antirez/redis/archive/5.0.5.tar.gz
+redis-cli --cluster-replicas 1 --cluster create 10.244.0.23:6379 10.244.0.37:6379 10.244.0.39:6379 10.244.0.40:6379 10.244.0.41:6379 10.244.0.42:6379
