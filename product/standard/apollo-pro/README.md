@@ -1,4 +1,12 @@
-# (1).本例生产级实践基于apollo官方的容器化配置文件修改
+# 头条技术号：实战架构
+
+# 微信公众号：千里行走
+
+本例配置可以直接用于生产环境，configservice/adminservice/portal都是2副本，可以根据业务规模调整线上副本数;
+
+本例生产级实践基于apollo官方的容器化配置文件修改;
+
+# (1).相关文章
 
 1.1.官方地址容器化配置地址：
 
@@ -14,12 +22,12 @@ https://www.toutiao.com/i6698673592915198478/
 
 相对于官方文档增加了镜像仓库推送/db初始化的更加详细的操作，根据笔者的习惯整理了步骤，作为笔者自己的笔记/备份
 
-# (2).apollo容器化之工程拓扑
+# (2).apollo容器化混合架构
+
+从非容器化到容器化的过渡阶段时的apollo容器化拓扑，与最终容器化后完成的apollo容器化拓扑。
 
 详细内容参见笔者文章，地址：
 
-
-从非容器化到容器化的过渡阶段时的apollo容器化拓扑，与最终容器化后完成的apollo容器化拓扑。
 
 apollo配置中心本身非常简单，但是从非容器化向容器化过渡时，会遇到一些实际问题，要求在工程拓扑上兼容4种版本的代码。
 
@@ -31,12 +39,10 @@ apollo配置中心本身非常简单，但是从非容器化向容器化过渡�
 
 # (3).本例配置文件说明
 
-我们使用的是360的wayne作为yaml管理工具，所以本例配置的文件组织形式对应wayne的组织结构，第一层project对应的是wayne中项目概念。
-
-
 |              Directory               |                             Description                             |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
-| wayne-project-apollo-adminservice | admin容器，抽象api，提供给apollo-portal用。                                    |
-| wayne-project-apollo-configservice | config容器，提供配置服务。 |
-| wayne-project-apollo-portal | portal容器，提供web操作页面。 |
-| wayne-project-apollo-configservice-transition | config容器，为容器外的独立部署服务提供配置服务，容器化过渡阶段存在，完成后剔除。 |
+| apollo-adminservice | admin容器，抽象api，提供给apollo-portal用。                                    |
+| apollo-configservice | config容器，提供配置服务。 |
+| apollo-portal | portal容器，提供web操作页面。 |
+| apollo-configservice-transition | config容器，为容器外的独立部署服务提供配置服务，容器化过渡阶段存在，完成后剔除。 |
+
