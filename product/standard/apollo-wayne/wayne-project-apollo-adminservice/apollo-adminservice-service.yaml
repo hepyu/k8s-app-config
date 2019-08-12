@@ -14,5 +14,6 @@ spec:
       port: 80
       name: apollo-adminservice-prod-80
   type: ClusterIP
+  sessionAffinity: ClientIP
 apiVersion: v1
 kind: Service
