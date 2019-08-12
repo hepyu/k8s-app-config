@@ -1,27 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: apollo-adminservice-prod
+  name: apollo-portal
   namespace: inc
   labels:
-    wayne-app: apollo-adminservice
-    wayne-ns: inc
-    app: apollo-adminservice-prod
-    inc-app: apollo-adminservice
+    inc-app: apollo-portal
 spec:
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            topologyKey: kubernetes.io/hostname
-            labelSelector:
-              matchLabels:
-                inc-app: apollo-adminservice
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: apollo-adminservice-prod
+      inc-app: apollo-portal
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -30,52 +18,63 @@ spec:
   template:
     metadata:
       labels:
-        wayne-app: apollo-adminservice
-        wayne-ns: inc
-        app: apollo-adminservice-prod
+        inc-app: apollo-portal
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    inc-app: apollo-configservice
       volumes:
-        - name: apollo-adminservice-prod
+        - name: apollo-portal
           configMap:
-            name: apollo-adminservice-prod
+            name: apollo-portal
             items:
               - key: application-github.properties
                 path: application-github.properties
+              - key: apollo-env.properties
+                path: apollo-env.properties
       initContainers:
-        - image: 'your_registry/inc_img/alpine-bash:3.8'
-          name: check-apollo-configservice-prod
+        - image: 'hpy253215039/alpine-bash:v3.8'
+          name: check-apollo-adminservice
           command:
             - bash
             - '-c'
             - >-
               curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1
-              --retry-max-time 120 apollo-configservice-prod
+              --retry-max-time 120 apollo-adminservice
       containers:
-        - name: apollo-adminservice-prod
-          image: >-
-            your_registry/inc_img/apollo-adminservice:v1.4.0
+        - name: apollo-portal
+          image: 'hpy253215039/apollo-portal-server:v1.4.0'
           securityContext:
             privileged: false
           imagePullPolicy: Always
           ports:
             - protocol: TCP
-              containerPort: 8090
+              containerPort: 8070
           volumeMounts:
-            - name: apollo-adminservice-prod
-              mountPath: /apollo-admin-server/config/application-github.properties
+            - name: apollo-portal
+              mountPath: /apollo-portal-server/config/application-github.properties
               subPath: application-github.properties
+            - name: apollo-portal
+              mountPath: /apollo-portal-server/config/apollo-env.properties
+              subPath: apollo-env.properties
           readinessProbe:
             tcpSocket:
-              port: 8090
+              port: 8070
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 1
             failureThreshold: 10
           livenessProbe:
             tcpSocket:
-              port: 8090
+              port: 8070
             initialDelaySeconds: 120
-            periodSeconds: 10
+            periodSeconds: 15
             timeoutSeconds: 1
             failureThreshold: 10
           resources:
@@ -86,10 +85,10 @@ spec:
               cpu: '0.1'
               memory: 1Gi
           env:
-            - name: APOLLO_ADMIN_SERVICE_NAME
-              value: apollo-adminservice-prod
+            - name: APOLLO_PORTAL_SERVICE_NAME
+              value: apollo-portal
           envFrom:
             - configMapRef:
-                name: apollo-adminservice-prod
+                name: apollo-adminservice
       imagePullSecrets:
         - name: inc

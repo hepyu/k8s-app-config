@@ -2,13 +2,11 @@
 metadata:
   name: pro-apollo-configservice001
   labels:
-    wayne-app: pro-apollo
-    wayne-ns: inc
-    app: pro-apollo-configservice001
+    inc-app: pro-apollo-configservice001
   namespace: inc
 spec:
   selector:
-    wayne-app: apollo-configservice
+    inc-app: apollo-configservice
   ports:
     - protocol: TCP
       targetPort: 8080
@@ -23,13 +21,11 @@ kind: Service
 metadata:
   name: pro-apollo-configservice002
   labels:
-    wayne-app: pro-apollo
-    wayne-ns: inc
-    app: pro-apollo-configservice002
+    inc-app: pro-apollo-configservice002
   namespace: inc
 spec:
   selector:
-    wayne-app: apollo-configservice
+    inc-app: apollo-configservice
   ports:
     - protocol: TCP
       targetPort: 8080
@@ -44,13 +40,11 @@ kind: Service
 metadata:
   name: pro-apollo-configservice003
   labels:
-    wayne-app: pro-apollo
-    wayne-ns: inc
-    app: pro-apollo-configservice003
+    inc-app: pro-apollo-configservice003
   namespace: inc
 spec:
   selector:
-    wayne-app: apollo-configservice
+    inc-app: apollo-configservice
   ports:
     - protocol: TCP
       targetPort: 8080

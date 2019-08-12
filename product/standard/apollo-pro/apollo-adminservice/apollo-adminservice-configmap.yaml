@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apollo-adminservice
+  namespace: inc
+  labels:
+    inc-app: apollo-adminservice
+data:
+  application-github.properties: |
+    spring.datasource.url=jdbc:mysql://mysql-min.mysql-min:3306/DevApolloConfigDB?characterEncoding=utf8
+    spring.datasource.username=apollo
+    spring.datasource.password=admin
+    spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
+    eureka.service.url=http://apollo-configservice/eureka/

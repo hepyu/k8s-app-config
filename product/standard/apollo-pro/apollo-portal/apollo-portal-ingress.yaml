@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: apollo-portal
+  namespace: inc
+  labels:
+    inc-app: apollo-portal
+  #pro:开启，挂载负载均衡
+  #annotations:
+  #  kubernetes.io/ingress.class: inc
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+spec:
+  tls: []
+  rules:
+    - host: pro-apollo-portal.inc.com
+      http:
+        paths:
+          - backend:
+              serviceName: apollo-portal
+              servicePort: 80
+            path: /

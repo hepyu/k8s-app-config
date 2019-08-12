@@ -1,18 +1,16 @@
 metadata:
-  name: apollo-adminservice-prod
+  name: apollo-adminservice
   labels:
-    wayne-app: apollo-adminservice
-    wayne-ns: inc
-    app: apollo-adminservice-prod
+    inc-app: apollo-adminservice
   namespace: inc
 spec:
   selector:
-    wayne-app: apollo-adminservice
+    inc-app: apollo-adminservice
   ports:
     - protocol: TCP
       targetPort: 8090
       port: 80
-      name: apollo-adminservice-prod-80
+      name: apollo-adminservice-80
   type: ClusterIP
   sessionAffinity: ClientIP
 apiVersion: v1

@@ -1,47 +1,45 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: apollo-configservice-prod
+  name: apollo-configservice
   namespace: inc
   labels:
-    wayne-app: apollo-configservice
-    wayne-ns: inc
-    app: apollo-configservice-prod
     inc-app: apollo-configservice
 spec:
-  affinity:
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            topologyKey: kubernetes.io/hostname
-            labelSelector:
-              matchLabels:
-                inc-app: apollo-configservice
-  replicas: 3
+  serviceName: apollo-configservice
+  #pro:
+  #replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: apollo-configservice-prod
+      inc-app: apollo-configservice
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        wayne-app: apollo-configservice
-        wayne-ns: inc
-        app: apollo-configservice-prod
+        inc-app: apollo-configservice
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    inc-app: apollo-configservice
       volumes:
-        - name: apollo-configservice-prod
+        - name: apollo-configservice
           configMap:
-            name: apollo-configservice-prod
+            name: apollo-configservice
             items:
               - key: application-github.properties
                 path: application-github.properties
       containers:
-        - name: apollo-configservice-prod
+        - name: apollo-configservice
           image: >-
-            your_registry/inc_img/apollo-configservice:v1.4.0
+            hpy253215039/apollo-config-server:v1.4.0
           securityContext:
             privileged: false
           imagePullPolicy: IfNotPresent
@@ -49,7 +47,7 @@ spec:
             - protocol: TCP
               containerPort: 8080
           volumeMounts:
-            - name: apollo-configservice-prod
+            - name: apollo-configservice
               mountPath: /apollo-config-server/config/application-github.properties
               subPath: application-github.properties
           livenessProbe:
@@ -67,4 +65,17 @@ spec:
             timeoutSeconds: 1
             failureThreshold: 10
           env:
-            - name: A
+            - name: APOLLO_CONFIG_SERVICE_NAME
+              value: apollo-configservice
+          envFrom:
+            - configMapRef:
+                name: apollo-configservice
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: '1'
+            requests:
+              cpu: '0.1'
+              memory: 1Gi
+      imagePullSecrets:
+        - name: inc
