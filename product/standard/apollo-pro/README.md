@@ -46,3 +46,20 @@ apollo配置中心本身非常简单，但是从非容器化向容器化过渡�
 | apollo-portal | portal容器，提供web操作页面。 |
 | apollo-configservice-transition | config容器，为容器外的独立部署服务提供配置服务，容器化过渡阶段存在，完成后剔除。 |
 
+# (4).注意事项
+
+# 1.apollo-portal开启多副本要主要配置session亲和性
+
+config/admin/portal的负载均衡都需要配置：sessionAffinity: ClientIP；
+
+如果你还是用的ingress代理apollo-portal，那么ingress也需要配置亲和性保证session的正确传递：
+
+nginx.ingress.kubernetes.io/affinity: cookie
+
+ingress的亲和性配置参见文件：https://github.com/hepyu/k8s-app-config/blob/master/product/standard/apollo-pro/apollo-portal/apollo-portal-ingress.yaml
+
+如果不配置亲和性，apollo-portal开启多副本后将出现无法登陆的现象。
+
+# 2.使用openjdk
+
+沿用apollo官方的默认做法。
