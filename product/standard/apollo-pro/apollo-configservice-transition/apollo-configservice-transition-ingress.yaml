@@ -8,7 +8,7 @@ metadata:
     wayne-ns: inc
     app: pro-apollo-configservice001
   annotations:
-    kubernetes.io/ingress.class: xwz
+    kubernetes.io/ingress.class: inc
 spec:
   tls: []
   rules:
@@ -31,7 +31,7 @@ metadata:
     wayne-ns: inc
     app: pro-apollo-configservice002
   annotations:
-    kubernetes.io/ingress.class: xwz
+    kubernetes.io/ingress.class: inc
 spec:
   tls: []
   rules:
@@ -54,7 +54,7 @@ metadata:
     wayne-ns: inc
     app: pro-apollo-configservice003
   annotations:
-    kubernetes.io/ingress.class: xwz
+    kubernetes.io/ingress.class: inc
 spec:
   tls: []
   rules:
