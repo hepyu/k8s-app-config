@@ -1,6 +1,6 @@
-微信公众号：千里行走
+# 微信公众号：千里行走
 
-头条技术号：实战架构
+# 头条技术号：实战架构
 
 # (1).工程目的
 
@@ -22,7 +22,7 @@
 
 |              Directory               |                             Description                             |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
-| apollo配置中心。                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-wayne                                    |
+| apollo配置中心。                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    |
 
 # QA
 
