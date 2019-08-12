@@ -7,7 +7,17 @@ metadata:
     wayne-app: apollo-adminservice
     wayne-ns: inc
     app: apollo-adminservice-prod
+    inc-app: apollo-adminservice
 spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                inc-app: apollo-adminservice
   replicas: 3
   selector:
     matchLabels:
