@@ -26,8 +26,7 @@ https://www.toutiao.com/i6698673592915198478/
 
 从非容器化到容器化的过渡阶段时的apollo容器化拓扑，与最终容器化后完成的apollo容器化拓扑。
 
-详细内容参见笔者文章，地址：
-
+详细内容参见笔者微信公众号：千里行走，搜索apollo。
 
 apollo配置中心本身非常简单，但是从非容器化向容器化过渡时，会遇到一些实际问题，要求在工程拓扑上兼容4种版本的代码。
 
@@ -48,7 +47,7 @@ apollo配置中心本身非常简单，但是从非容器化向容器化过渡�
 
 # (4).注意事项
 
-# 1.apollo-portal开启多副本要主要配置session亲和性
+# 1.apollo-portal开启多副本要注意配置session亲和性
 
 config/admin/portal的负载均衡都需要配置：sessionAffinity: ClientIP；
 
