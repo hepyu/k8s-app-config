@@ -22,6 +22,12 @@ https://www.toutiao.com/i6698673592915198478/
 
 相对于官方文档增加了镜像仓库推送/db初始化的更加详细的操作，根据笔者的习惯整理了步骤，作为笔者自己的笔记/备份
 
+1.4.笔者apollo容器化的生产级实践与总结：
+
+阿里云&kubernetes&微服务生产实践-1：apollo架构-1
+
+https://mp.weixin.qq.com/s?__biz=Mzg4MDEzMDM4MA==&mid=2247484149&idx=1&sn=6c2d50aeeadbb30f07de7f5c3d2ec545&chksm=cf78a2d6f80f2bc0319e55a16a8903ce9f2af2f0bb7a85d64bbcdb6ba0fb2c1654f87842ca8c&token=1699061844&lang=zh_CN#rd
+
 # (2).apollo容器化混合架构
 
 从非容器化到容器化的过渡阶段时的apollo容器化拓扑，与最终容器化后完成的apollo容器化拓扑。
