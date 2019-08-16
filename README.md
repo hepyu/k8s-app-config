@@ -53,7 +53,8 @@ Password: guest
 
 |              Directory               |                             Description                             |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
-| apollo配置中心。                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    |
+| apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    |
+| rocketmq                        | 进行中                                    |
 
 # (4).QA
 
