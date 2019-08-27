@@ -1,0 +1,17 @@
+metadata:
+  name: rocketmq-c3-namesrv-prod-server
+  labels:
+    wayne-app: rocketmq-c3-namesrv-prod
+    wayne-ns: coohua
+    app: rocketmq-c3-namesrv-prod-server
+spec:
+  selector:
+    app: rocketmq-c3-namesrv-prod-server
+  ports:
+    - protocol: TCP
+      port: 9876
+      targetPort: 9876
+      name: rocketmq-c3-namesrv-prod-server-9876
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: ClientIP

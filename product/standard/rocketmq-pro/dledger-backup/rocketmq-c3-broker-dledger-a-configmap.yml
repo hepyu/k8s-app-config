@@ -1,0 +1,14 @@
+metadata:
+  name: rocketmq-c3-broker-prod-dledger-a
+  labels:
+    wayne-app: rocketmq-c3-broker-prod
+    wayne-ns: coohua
+    app: rocketmq-c3-broker-prod-dledger-a
+data:
+  application-github.properties: >
+    brokerClusterName = RaftCluster brokerName=RaftNode00 listenPort=30931
+    namesrvAddr=127.0.0.1:9876 storePathRootDir=/tmp/rmqstore/node02
+    storePathCommitLog=/tmp/rmqstore/node02/commitlog enableDLegerCommitLog=true
+    dLegerGroup=RaftNode00
+    dLegerPeers=n0-127.0.0.1:40911;n1-127.0.0.1:40912;n2-127.0.0.1:40913 ## must
+    be unique dLegerSelfId=n2 sendMessageThreadPoolNums=16

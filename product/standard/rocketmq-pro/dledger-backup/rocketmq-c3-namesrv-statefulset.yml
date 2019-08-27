@@ -1,0 +1,85 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: rocketmq-c3-namesrv-prod-server
+  labels:
+    wayne-app: rocketmq-c3-namesrv-prod
+    wayne-ns: coohua
+    app: rocketmq-c3-namesrv-prod-server
+spec:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: rocketmq-c3-namesrv-prod-server
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+              - key: failure-domain.beta.kubernetes.io/zone
+                operator: In
+                values:
+                  - cn-beijing-c
+  serviceName: rocketmq-c3-namesrv-prod-server
+  selector:
+    matchLabels:
+      app: rocketmq-c3-namesrv-prod-server
+  template:
+    metadata:
+      labels:
+        wayne-app: rocketmq-c3-namesrv-prod
+        wayne-ns: coohua
+        app: rocketmq-c3-namesrv-prod-server
+    spec:
+      containers:
+        - name: rocketmq-nameserver
+          image: '/coohua_img/rocketmq:4.5.2'
+          command:
+            - sh
+            - mqnamesrv
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9876
+          volumeMounts:
+            - mountPath: /home/rocketmq/logs
+              name: rocketmq-c3-namesrv-log
+            - mountPath: /home/rocketmq/store
+              name: rocketmq-c3-namesrv-store
+          resources:
+            limits:
+              cpu: '1'
+              memory: 6Gi
+            requests:
+              memory: 6Gi
+              cpu: '0.1'
+      imagePullSecrets:
+        - name: coohua
+  volumeClaimTemplates:
+    - metadata:
+        name: rocketmq-c3-namesrv-log
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: rocketmq-c3-namesrv-log
+        resources:
+          requests:
+            storage: 20Gi
+    - metadata:
+        name: rocketmq-c3-namesrv-store
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: rocketmq-c3-namesrv-store
+        resources:
+          requests:
+            storage: 20Gi
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
