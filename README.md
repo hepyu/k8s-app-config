@@ -2,6 +2,10 @@
 
 # 头条技术号：实战架构
 
+# 实战交流群
+
+ ![image](https://github.com/hepyu/k8s-app-config/blob/master/images/K8S.png)
+
 # (1).演示地址
 
 目前可开放的演示地址（个人私服，8核32G）：
