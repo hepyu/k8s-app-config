@@ -15,6 +15,6 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: es-min-kibana-kibana
+          serviceName: kibana
           servicePort: 5601
         path: /
