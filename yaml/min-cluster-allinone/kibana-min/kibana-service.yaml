@@ -5,11 +5,13 @@ items:
   kind: Service
   metadata:
     name: kibana
+    namespace: es-min-kibana
   spec:
-    type: NodePort
     ports:
     - name: http
       port: 5601
       targetPort: 5601 
     selector:
       app: kibana      
+    type: ClusterIP
+
