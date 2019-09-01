@@ -1,0 +1,25 @@
+kind: List
+apiVersion: v1
+items:
+- apiVersion: apps/v1beta1
+  kind: Deployment
+  metadata:
+    name: kibana
+    namespace: es-min-kibana
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        name: kibana
+        labels:
+          app: kibana
+      spec:
+        containers:
+        - image: docker.elastic.co/kibana/kibana:6.4.3
+          name: kibana
+          env:
+          - name: ELASTICSEARCH_URL
+            value: "http://es-min-ingest.es-min:9200"
+          ports:
+          - name: http
+            containerPort: 5601
