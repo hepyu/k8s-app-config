@@ -1,7 +1,5 @@
-kubectl apply -f redis-cluster-min-namespace.yaml
-kubectl create configmap redis-conf --namespace=redis-cluster-min --from-file=redis.conf
-
-kubectl apply -f redis-cluster-min-service.yaml 
-#kubectl apply -f redis-cluster-min-secret.yaml
-kubectl apply -f redis-cluster-min-pv-local.yaml
-kubectl apply -f redis-cluster-min-statefulset.yaml
+kubectl create namespace redis-cluster-min
+kubectl apply -f redis-configmap.yaml
+kubectl apply -f redis-service.yaml
+kubectl apply -f redis-statefulset.yaml
+kubectl apply -f redis-pv-local.yaml

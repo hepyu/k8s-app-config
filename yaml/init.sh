@@ -36,3 +36,9 @@ mkdir -p /datavip/k8s-data/data-redis-min-2
 mkdir -p /datavip/k8s-data/data-redis-min-1
 mkdir -p /datavip/k8s-data/data-redis-min-0
 
+mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-0
+mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-1
+mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-2
+mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-3
+mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-4
+mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-5

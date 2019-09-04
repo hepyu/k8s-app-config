@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: redis-cluster-min
+  name: redis-hkc
+  labels:
+    app: redis-hkc
+spec:
+  serviceName: redis-hkc
+  replicas: 6
+  selector:
+    matchLabels:
+      app: redis-hkc
+  template:
+    metadata:
+      labels:
+        app: redis-hkc
+    spec:
+      containers:
+      - name: redis
+        image: redis:5.0-rc
+        ports:
+        - containerPort: 9720
+          name: client
+        - containerPort: 19720
+          name: gossip
+        command: ["/conf/fix-ip.sh", "redis-server", "/conf/redis.conf"]
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "redis-cli -h $(hostname) -p 9720 ping"
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "redis-cli -h $(hostname) -p 9720 ping"
+          initialDelaySeconds: 20
+          periodSeconds: 3
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+        - name: conf
+          mountPath: /conf
+          readOnly: false
+        - name: data
+          mountPath: /data
+          readOnly: false
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 500Mi
+          limits:
+            cpu: 1
+            memory: 500Mi
+      volumes:
+      - name: conf
+        configMap:
+          name: redis-hkc
+          defaultMode: 0755
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+      labels:
+        name: redis-hkc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "redis-cluster-min-storage"
+      resources:
+        requests:
+          storage: 1Gi
