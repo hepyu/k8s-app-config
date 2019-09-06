@@ -49,10 +49,11 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-      nodePort: 30002
+      #nodePort: 30002
   selector:
     app: pod-apollo-config-server-dev 
-  type: NodePort
+  #type: NodePort
+  type: ClusterIP
   sessionAffinity: ClientIP
 
 ---
