@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rocketmq-c4-broker-pv0
+  namespace: inc
+  labels:
+    app: rocketmq-c4-broker-prod-server
+    wayne-app: rocketmq-c4-broker-prod-server
+    wayne-ns: inc
+spec:
+  capacity:
+      storage: 200Gi
+  mountOptions:
+      - vers=4.0
+      - noresvport
+  accessModes:
+      - ReadWriteOnce
+  storageClassName: "rocketmq-c4-broker-prod-server"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/rocketmq-c4-broker-pv0
+  #生产使用阿里云的nas存储。
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /rocketmq-c4-broker-pv0
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rocketmq-c4-broker-pv1
+  namespace: inc
+  labels:
+    app: rocketmq-c4-broker-prod-server
+    wayne-app: rocketmq-c4-broker-prod-server
+    wayne-ns: inc
+spec:
+  capacity:
+      storage: 200Gi
+  mountOptions:
+      - vers=4.0
+      - noresvport
+  accessModes:
+      - ReadWriteOnce
+  storageClassName: "rocketmq-c4-broker-prod-server"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/rocketmq-c4-broker-pv1
+  #生产使用阿里云的nas存储。
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /rocketmq-c4-broker-pv1
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rocketmq-c4-broker-pv2
+  namespace: inc
+  labels:
+    app: rocketmq-c4-broker-prod-server
+    wayne-app: rocketmq-c4-broker-prod-server
+    wayne-ns: inc
+spec:
+  capacity:
+      storage: 200Gi
+  mountOptions:
+      - vers=4.0
+      - noresvport
+  accessModes:
+      - ReadWriteOnce
+  storageClassName: "rocketmq-c4-broker-prod-server"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/rocketmq-c4-broker-pv2
+  #生产使用阿里云的nas存储。
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /rocketmq-c4-broker-pv2
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: rocketmq-c4-broker-pv3
+  namespace: inc
+  labels:
+    app: rocketmq-c4-broker-prod-server
+    wayne-app: rocketmq-c4-broker-prod-server
+    wayne-ns: inc
+spec:
+  capacity:
+      storage: 200Gi
+  mountOptions:
+      - vers=4.0
+      - noresvport
+  accessModes:
+      - ReadWriteOnce
+  storageClassName: "rocketmq-c4-broker-prod-server"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/rocketmq-c4-broker-pv3
+  #生产使用阿里云的nas存储。
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /rocketmq-c4-broker-pv3

@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rocketmq-c4-console-prod-server
+  namespace: inc
+  labels:
+    wayne-app: rocketmq-c4-console-prod
+    wayne-ns: inc
+    app: rocketmq-c4-console-prod-server
+  annotations:
+    kubernetes.io/ingress.class: xwz
+spec:
+  tls: []
+  rules:
+    - host: pro-rocketmq-c4-k8s.inc.com
+      http:
+        paths:
+          - backend:
+              serviceName: rocketmq-c4-console-prod-server
+              servicePort: 8080
+            path: /

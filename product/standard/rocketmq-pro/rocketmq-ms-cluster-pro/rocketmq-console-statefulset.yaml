@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rocketmq-c4-console-prod-server
+  labels:
+    app: rocketmq-c4-console-prod-server
+    wayne-app: rocketmq-c4-console-prod
+    wayne-ns: inc
+spec:
+  serviceName: rocketmq-c4-console-prod
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketmq-c4-console-prod-server
+  template:
+    metadata:
+      labels:
+        app: rocketmq-c4-console-prod-server
+        wayne-app: rocketmq-c4-console-prod
+        wayne-ns: inc
+    spec:
+      containers:
+        - name: rocketmq-c4-console-prod
+          image: 'styletang/rocketmq-console-ng:1.0.0'
+          imagePullPolicy: Always
+          resources:
+            #生产用配置
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '0.1'
+              memory: 1Gi
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+            - name: JAVA_OPTS
+              value: >-
+                -Drocketmq.namesrv.addr=rocketmq-c4-namesrv-prod-server-0.rocketmq-c4-namesrv-prod-server.inc.svc.cluster.local:9876;rocketmq-c4-namesrv-prod-server-0.rocketmq-c4-namesrv-prod-server.inc.svc.cluster.local:9876
+                -Dcom.rocketmq.sendMessageWithVIPChannel=false
+                -Duser.home=/root  -Xms512m -Xmx512m
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: vol-logs
+              mountPath: /root/logs
+      #镜像仓库秘钥，生产环境配置
+      #imagePullSecrets:
+      #  - name: inc
+      volumes:
+        - name: vol-logs
+          persistentVolumeClaim:
+            claimName: rocketmq-c4-console-prod-server
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1

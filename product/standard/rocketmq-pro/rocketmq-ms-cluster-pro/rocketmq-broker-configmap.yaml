@@ -1,0 +1,68 @@
+metadata:
+  name: rocketmq-c4-broker-prod-configmap
+  labels:
+    wayne-app: rocketmq-c4-broker-prod
+    wayne-ns: inc
+    app: rocketmq-c4-broker-prod-configmap
+data:
+  broker.properties: >
+    brokerClusterName=rocketmq-c4-cluster
+
+    deleteWhen=04
+
+    fileReservedTime=48
+
+    flushDiskType=ASYNC_FLUSH
+
+    namesrvAddr=rocketmq-c4-namesrv-prod-server-0.rocketmq-c4-namesrv-prod-server.inc.svc.cluster.local:9876;rocketmq-c4-namesrv-prod-server-0.rocketmq-c4-namesrv-prod-server.inc.svc.cluster.local:9876
+
+    storePathRootDir=/data/rocketmq/store/data
+
+    storePathCommitLog=/data/rocketmq/store/data/commitlog
+
+    storePathConsumeQueue=/data/rocketmq/store/data/consumequeue
+
+    storePathIndex=/data/rocketmq/store/data/index
+
+    storeCheckpoint=/data/rocketmq/store/data/checkpoint
+
+    abortFile=/data/rocketmq/store/data/abort
+
+    slaveReadEnable=true
+  rewrite-broker-config.sh: >
+    #!/bin/sh
+
+    mkdir -p /data/rocketmq/conf
+
+    \cp /home/rocketmq/rocketmq-4.3.2/conf/broker.properties
+    /data/rocketmq/conf/
+
+    BROKER_CONFIG="/data/rocketmq/conf/broker.properties"
+
+    if [ -f ${BROKER_CONFIG} ]; then
+      len=${#HOSTNAME}
+      index=${HOSTNAME//rocketmq-c4-broker-prod-server-/}
+      flag=$((index%2))
+      brokerName=$((index/2))
+      if [ ${flag} == 0 ]; then
+        if [ `grep -c "brokerName=broker-" /data/rocketmq/conf/broker.properties` -eq '0' ]; then
+          echo brokerName=broker-${brokerName} >> ${BROKER_CONFIG}
+        fi
+        if [ `grep -c "brokerId=" /data/rocketmq/conf/broker.properties` -eq '0' ]; then
+          echo brokerId=${flag} >> ${BROKER_CONFIG}
+        fi
+        if [ `grep -c "brokerRole=ASYNC_MASTER" /data/rocketmq/conf/broker.properties` -eq '0' ]; then
+          echo brokerRole=ASYNC_MASTER >> ${BROKER_CONFIG}
+        fi
+      else
+        if [ `grep -c "brokerName=broker-" /data/rocketmq/conf/broker.properties` -eq '0' ]; then
+          echo brokerName=broker-${brokerName} >> ${BROKER_CONFIG}
+        fi
+        if [ `grep -c "brokerId=" /data/rocketmq/conf/broker.properties` -eq '0' ]; then
+          echo brokerId=${flag} >> ${BROKER_CONFIG}
+        fi
+        if [ `grep -c "brokerRole=SLAVE" /data/rocketmq/conf/broker.properties` -eq '0' ]; then
+          echo brokerRole=SLAVE >> ${BROKER_CONFIG}
+        fi
+      fi
+    fi

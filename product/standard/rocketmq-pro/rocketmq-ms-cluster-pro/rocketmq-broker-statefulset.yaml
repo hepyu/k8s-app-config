@@ -1,0 +1,116 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: rocketmq-c4-broker-prod-server
+  labels:
+    wayne-app: rocketmq-c4-broker-prod
+    wayne-ns: inc
+    app: rocketmq-c4-broker-prod-server
+spec:
+  selector:
+    matchLabels:
+      app: rocketmq-c4-broker-prod-server
+  template:
+    metadata:
+      labels:
+        wayne-app: rocketmq-c4-broker-prod
+        wayne-ns: inc
+        app: rocketmq-c4-broker-prod-server
+    spec:
+      #生产级配置，生产需要打开。
+      #affinity:
+      #  podAntiAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #      - weight: 100
+      #        podAffinityTerm:
+      #          topologyKey: kubernetes.io/hostname
+      #          labelSelector:
+      #            matchLabels:
+      #              app: rocketmq-c4-broker-prod-server
+      #  nodeAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #      - weight: 100
+      #        preference:
+      #          matchExpressions:
+      #            #标记节点,用于区分区域，pod只能分布在这个区域，根据各自情况修改
+      #            - key: failure-domain.beta.kubernetes.io/zone
+      #              operator: In
+      #              values:
+      #                - cn-beijing-c
+      volumes:
+        - name: rocketmq-c4-broker-properties
+          configMap:
+            name: rocketmq-c4-broker-prod-configmap
+            defaultMode: 511
+            items:
+              - key: broker.properties
+                path: broker.properties
+        - name: rocketmq-c4-broker-rewrite-config
+          configMap:
+            name: rocketmq-c4-broker-prod-configmap
+            defaultMode: 511
+            items:
+              - key: rewrite-broker-config.sh
+                path: rewrite-broker-config.sh
+      containers:
+        - name: rocketmq-c4-broker-prod-server
+          image: 'hpy253215039/rocketmq-offical:4.3.2'
+          command:
+            - sh
+            - mqbroker
+            - '-c'
+            - /data/rocketmq/conf/broker.properties
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 10909
+            - containerPort: 10911
+          volumeMounts:
+            - name: rocketmq-c4-broker-prod-server
+              mountPath: /data/rocketmq
+            - name: rocketmq-c4-broker-properties
+              mountPath: /home/rocketmq/rocketmq-4.3.2/conf/broker.properties
+              subPath: broker.properties
+              readOnly: false
+            - name: rocketmq-c4-broker-rewrite-config
+              mountPath: /home/rocketmq/rocketmq-4.3.2/bin/rewrite-broker-config.sh
+              subPath: rewrite-broker-config.sh
+              readOnly: false
+          resources:
+            #生产用配置
+            #limits:
+            #  cpu: '4'
+            #  memory: 8Gi
+            #requests:
+            #  memory: 8Gi
+            #  cpu: '4'
+            #测试用配置
+            limits:
+              cpu: '1'
+              memory: 6Gi
+            requests:
+              memory: 6Gi
+              cpu: '0.1'
+          env:
+            - name: rocketmq-c4-broker-prod-configmap
+              value: rocketmq-c4-broker-prod-configmap
+          envFrom:
+            - configMapRef:
+                name: rocketmq-c4-broker-prod-configmap
+      #镜像仓库秘钥，生产环境配置
+      #imagePullSecrets:
+      #  - name: inc
+  volumeClaimTemplates:
+    - metadata:
+        name: rocketmq-c4-broker-prod-server
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: rocketmq-c4-broker-prod-server
+        resources:
+          requests:
+            storage: 200Gi
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1

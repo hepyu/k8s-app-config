@@ -1,0 +1,16 @@
+metadata:
+  name: rocketmq-c4-console-prod-server
+  labels:
+    wayne-app: rocketmq-c4-console-prod
+    wayne-ns: inc
+    app: rocketmq-c4-console-prod-server
+spec:
+  selector:
+    app: rocketmq-c4-console-prod-server
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: rocketmq-c4-console-prod-server-8080
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: ClientIP

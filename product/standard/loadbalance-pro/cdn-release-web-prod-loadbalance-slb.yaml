@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    #取值可以是 internet(表示外网LB) 或者 intranet(表示内网LB，只能内网访问)
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    #是否自动创建监听
+    service.beta.kubernetes.io/alicloud-loadbalancer-force-override-listeners: "true"
+    #阿里云负载均衡唯一标识，在阿里云负载均衡列表查找，spec.selector中匹配到的ingress的地址&域名会挂载到这个alicloud-loadbalance下。
+    service.beta.kubernetes.io/alicloud-loadbalancer-id: 
+  labels:
+    app: biz-name-nginx-ingress-lb-1
+  name: biz-name-nginx-ingress-lb-1
+  namespace: kube-system
+spec:
+  #存在两种选项：”Cluster”（默认）和 “Local”；
+  #“Cluster” 隐藏源 IP 地址，可能会导致第二跳（second hop）到其他节点，但是全局负载效果较好；
+  #”Local” 保留客户端源 IP 地址，避免 LoadBalancer 和 NodePort 类型服务的第二跳，但是可能会导致负载不平衡；
+  externalTrafficPolicy: Local
+  ports:
+  - name: http
+    nodePort: 30478
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    nodePort: 32647
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    #要挂载到alicloud-loadbalance的ingress的服务
+    app: biz-ingress-nginx  
+  #如果是有状态请求(session)，需要开启session亲和性
+  sessionAffinity: None
+  type: LoadBalancer
