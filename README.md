@@ -1,7 +1,3 @@
-# 微信公众号：千里行走
-
-# 头条技术号：实战架构
-
 # (1).工程目的
 
 提供生产级实践；
@@ -67,3 +63,12 @@ resources:
 
 Message: The node was low on resource: ephemeral-storage. Container codis-proxy was using 10619440Ki, which exceeds its request of 0.
 ```
+
+
+## 微信公众号：千里行走
+
+## 头条技术号：实战架构
+
+## 实战交流群
+
+![image](https://github.com/hepyu/saf/blob/master/images/k8s.png)
