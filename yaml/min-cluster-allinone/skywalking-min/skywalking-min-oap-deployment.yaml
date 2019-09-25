@@ -47,7 +47,13 @@ spec:
         - containerPort: 12800
           name: rest
           protocol: TCP
-        resources: {}
+        resources:
+            limits:
+              cpu: '1'
+              memory: 8Gi
+            requests:
+              memory: 8Gi
+              cpu: '1'
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:

@@ -2,12 +2,17 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: rocketmq-c4-namesrv-prod-server
+  namespace: inc
   labels:
     wayne-app: rocketmq-c4-namesrv-prod
     wayne-ns: inc
     app: rocketmq-c4-namesrv-prod-server
 spec:
   serviceName: rocketmq-c4-namesrv-prod-server
+  #生产级配置
+  #replicas: 2
+  #测试用配置
+  replicas: 1
   selector:
     matchLabels:
       app: rocketmq-c4-namesrv-prod-server
@@ -79,6 +84,3 @@ spec:
             storage: 20Gi
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1

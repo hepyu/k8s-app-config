@@ -7,8 +7,9 @@ metadata:
     wayne-app: rocketmq-c4-console-prod
     wayne-ns: inc
     app: rocketmq-c4-console-prod-server
-  annotations:
-    kubernetes.io/ingress.class: xwz
+  #生产级配置，挂载云厂商的loadbalance
+  #annotations:
+  #  kubernetes.io/ingress.class: biz
 spec:
   tls: []
   rules:

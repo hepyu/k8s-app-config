@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rocketmq-c4-console-prod-server
+  namespace: inc
+  labels:
+    app: rocketmq-c4-console-prod-server
+    wayne-app: rocketmq-c4-console-prod
+    wayne-ns: inc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: rocketmq-c4-console
+  resources:
+    requests:
+      storage: 10Gi
+  selector:
+    matchLabels: {}

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: rocketmq-c4-console-prod-server
+  namespace: inc
   labels:
     app: rocketmq-c4-console-prod-server
     wayne-app: rocketmq-c4-console-prod
@@ -53,6 +54,3 @@ spec:
             claimName: rocketmq-c4-console-prod-server
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1

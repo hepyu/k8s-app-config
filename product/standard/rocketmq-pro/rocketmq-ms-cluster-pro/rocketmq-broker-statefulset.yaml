@@ -2,6 +2,7 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: rocketmq-c4-broker-prod-server
+  namespace: inc
   labels:
     wayne-app: rocketmq-c4-broker-prod
     wayne-ns: inc
@@ -10,6 +11,11 @@ spec:
   selector:
     matchLabels:
       app: rocketmq-c4-broker-prod-server
+  serviceName: rocketmq-c4-broker-prod-server
+  #生产级配置
+  #replicas: 4
+  #测试用配置
+  replicas: 2
   template:
     metadata:
       labels:
@@ -111,6 +117,3 @@ spec:
             storage: 200Gi
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1

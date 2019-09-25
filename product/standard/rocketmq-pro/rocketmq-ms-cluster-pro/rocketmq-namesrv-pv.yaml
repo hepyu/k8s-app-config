@@ -20,6 +20,17 @@ spec:
   #表示使用本地存储
   local:
     path: /datavip/k8s-data/rocketmq-c4-namesrv-0
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
   #生产使用阿里云的nas存储。
   #nfs:
   #  server: aliyun nas url
@@ -45,6 +56,17 @@ spec:
       - ReadWriteOnce
   storageClassName: "rocketmq-c4-namesrv"
   persistentVolumeReclaimPolicy: Retain
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
   #表示使用本地存储
   local:
     path: /datavip/k8s-data/rocketmq-c4-namesrv-1

@@ -43,7 +43,13 @@ spec:
         - containerPort: 8080
           name: page
           protocol: TCP
-        resources: {}
+        resources:
+            limits:
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              memory: 2Gi
+              cpu: '0.1'
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
