@@ -18,6 +18,10 @@ kubectl apply -f .
 
 但要注意需要执行两遍，因为namespace刚开始可能还没有初始化，会报错。
 
+本地配置ingress宿主机的host,即可访问rocketmq-console控制台：
+
+Ip pro-rocketmq-c4-k8s.inc.com
+
 # (2).本例配置文件说明
 
 |              Directory               |                             Description                             | 
