@@ -58,7 +58,7 @@ Password: guest
 |              Directory               |                             Description                             |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
 | apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    |
-| rocketmq消息队列中间件                        | 生产环境已经容器化，正在文档整理中                 |
+| rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 |
 | skywalking链路追踪中间件                        | 生产环境已经容器化，正在文档整理中                 |
 | elasticsearch搜索中间件                        | 生产环境已经容器化，正在文档整理中                 |
 
