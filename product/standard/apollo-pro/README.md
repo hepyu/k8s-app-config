@@ -68,3 +68,9 @@ ingress的亲和性配置参见文件：https://github.com/hepyu/k8s-app-config/
 # 2.使用openjdk
 
 沿用apollo官方的默认做法。
+
+# (5).TODO
+
+1.增加PV存储，将日志放到PV：待做
+
+2.更改基础镜像，基于oracle-jdk8制作基础镜像，同时增加辅助工具如redis-client, mysql-client，arthas等：待做
