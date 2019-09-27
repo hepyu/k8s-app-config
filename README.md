@@ -16,14 +16,14 @@
 
 # (2).生产级实践
 
-可以直接用于生产。
+可以直接用于生产，中间件版本可以根据各自情况修正。
 
-|              Directory               |                             Description                             |                       备注                       |
+|              目录               |                            地址                              |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
-| apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    |
-| rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 |
+| apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    | apollo1.4.0版本。 |
+| rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 | rocketmq4.3.2版本。 |
+| elasticsearch搜索中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/elasticsearch-pro | elasticsearch6.3.2版本。|
 | skywalking链路追踪中间件                        | 生产环境已经容器化，正在文档整理中                 |
-| elasticsearch搜索中间件                        | 生产环境已经容器化，正在文档整理中                 |
 
 # (3).QA
 
