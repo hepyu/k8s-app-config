@@ -10,6 +10,7 @@ metadata:
     app: skywalking-c0-ui
 spec:
   progressDeadlineSeconds: 600
+  #1个够了
   replicas: 1
   revisionHistoryLimit: 2
   selector:
@@ -37,6 +38,7 @@ spec:
             #至关重要，必须保证agent与oap，ui的时区一致，否则UI不显示数据。根据各自公司的情况设置合适的时区。
             - name: TZ
               value: Asia/Shanghai
+          #生产环境要换成自己公司的镜像仓库，防止网络因素失败
           image: 'apache/skywalking-ui:6.4.0'
           imagePullPolicy: IfNotPresent
           name: skywalking-c0-ui

@@ -28,6 +28,26 @@ spec:
         wayne-app: skywalking-c0
         wayne-ns: inc
     spec:
+      #生产级配置，生产需要打开。
+      #affinity:
+      #  podAntiAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #      - weight: 100
+      #        podAffinityTerm:
+      #          topologyKey: kubernetes.io/hostname
+      #          labelSelector:
+      #            matchLabels:
+      #              app: skywalking-c0-oap
+      #  nodeAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #      - weight: 100
+      #        preference:
+      #          matchExpressions:
+      #            #标记节点,用于区分区域，pod只能分布在这个区域，根据各自情况修改
+      #            - key: failure-domain.beta.kubernetes.io/zone
+      #              operator: In
+      #              values:
+      #                - cn-beijing-c
       containers:
         - env:
             - name: SW_L0AD_CONFIG_FILE_FROM_VOLUME
@@ -46,6 +66,7 @@ spec:
             #至关重要，必须保证agent与oap，ui的时区一致，否则UI不显示数据。根据各自公司的情况设置合适的时区。
             - name: TZ
               value: Asia/Shanghai
+          #生产环境要换成自己公司的镜像仓库，防止网络因素失败
           image: 'apache/skywalking-oap-server:6.4.0'
           imagePullPolicy: IfNotPresent
           name: oap
