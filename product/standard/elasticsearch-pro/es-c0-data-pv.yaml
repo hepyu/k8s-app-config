@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es-c0-data0
+  namespace: inc
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "es-c0-data"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/es-c0-data0
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /es-c0-data0
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es-c0-data1
+  namespace: inc
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "es-c0-data"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/es-c0-data1
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /es-c0-data1
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: es-c0-data2
+  namespace: inc
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "es-c0-data"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/es-c0-data2
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
+  #nfs:
+  #  server: aliyun nas url
+  #  path: /es-c0-data2

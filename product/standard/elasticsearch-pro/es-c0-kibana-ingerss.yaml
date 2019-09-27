@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: es-c0-kibana-prod
+  namespace: inc
+  labels:
+    wayne-app: es-c0
+    wayne-ns: inc
+    app: es-c0-kibana-prod
+  annotations:
+    kubernetes.io/ingress.class: xwz
+spec:
+  tls: []
+  rules:
+    - host: es-c0-kibana-prod.inc-inc.com
+      http:
+        paths:
+          - backend:
+              serviceName: es-c0-kibana-prod
+              servicePort: 5601
+            path: /

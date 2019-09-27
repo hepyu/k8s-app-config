@@ -1,0 +1,153 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: es-c0-data-prod
+  namespace: inc
+  labels:
+    app: es-c0-data-prod
+    release: es-c0-data
+    wayne-app: es-c0
+    wayne-ns: inc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: es-c0-data-prod
+  serviceName: es-c0-data-headless-prod
+  template:
+    metadata:
+      labels:
+        app: es-c0-data-prod
+        release: es-c0-data
+        wayne-app: es-c0
+        wayne-ns: inc
+      name: es-c0-data
+    spec:
+      #生产级配置，生产需要打开。
+      #affinity:
+      #  podAntiAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #      - weight: 100
+      #        podAffinityTerm:
+      #          topologyKey: kubernetes.io/hostname
+      #          labelSelector:
+      #            matchLabels:
+      #              app: rocketmq-c4-broker-prod-server
+      #  nodeAffinity:
+      #    preferredDuringSchedulingIgnoredDuringExecution:
+      #      - weight: 100
+      #        preference:
+      #          matchExpressions:
+      #            #标记节点,用于区分区域，pod只能分布在这个区域，根据各自情况修改
+      #            - key: failure-domain.beta.kubernetes.io/zone
+      #              operator: In
+      #              values:
+      #                - cn-beijing-c
+      containers:
+        - env:
+            - name: node.name
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: discovery.zen.ping.unicast.hosts
+              value: es-c0-master-headless-prod
+            - name: cluster.name
+              value: es-c0
+            - name: discovery.zen.minimum_master_nodes
+              value: '1'
+            - name: network.host
+              value: 0.0.0.0
+            #生产级配置，生产打开。
+            #- name: ES_JAVA_OPTS
+            #  value: '-Xmx6g -Xms6g'
+            - name: ES_JAVA_OPTS
+              value: '-Xmx1g -Xms1g'
+            - name: node.master
+              value: 'false'
+            - name: node.data
+              value: 'true'
+            - name: node.ingest
+              value: 'false'
+          image: 'elasticsearch:6.3.2'
+          imagePullPolicy: IfNotPresent
+          name: elasticsearch
+          ports:
+            - containerPort: 9200
+              name: http
+              protocol: TCP
+            - containerPort: 9300
+              name: transport
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - '-c'
+                - '#!/usr/bin/env bash -e'
+                - '# If the node is starting up wait for the cluster to be green'
+                - >-
+                  # Once it has started only check that the node itself is
+                  responding
+                - START_FILE=/tmp/.es_start_file
+                - ''
+                - 'http () {'
+                - '    local path="${1}"'
+                - '    if [ -n "${ELASTIC_USERNAME}" ] && [ -n "${ELASTIC_PASSWORD}" ]; then'
+                - '      BASIC_AUTH="-u ${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}"'
+                - '    else'
+                - '      BASIC_AUTH='''''
+                - '    fi'
+                - '    curl -XGET -s -k --fail ${BASIC_AUTH} http://127.0.0.1:9200${path}'
+                - '}'
+                - ''
+                - 'if [ -f "${START_FILE}" ]; then'
+                - '    echo ''Elasticsearch is already running, lets check the node is healthy'''
+                - '    http "/"'
+                - else
+                - '    echo ''Waiting for elasticsearch cluster to become green'''
+                - '    if http "/_cluster/health?wait_for_status=green&timeout=1s" ; then'
+                - '        touch ${START_FILE}'
+                - '        exit 0'
+                - '    else'
+                - '        echo ''Cluster is not yet green'''
+                - '        exit 1'
+                - '    fi'
+                - fi
+                - ''
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 3
+            timeoutSeconds: 5
+          resources:
+            #生产级配置，生产需要打开，根据自己情况修改资源。
+            #limits:
+            #  cpu: '1'
+            #  memory: 8Gi
+            #requests:
+            #  cpu: '0.1'
+            #  memory: 8Gi
+            #测试用配置
+            limits:
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              cpu: '0.1'
+              memory: 2Gi
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: es-c0-data
+  volumeClaimTemplates:
+    - metadata:
+        name: es-c0-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Gi
+        storageClassName: es-c0-data
+  updateStrategy:
+    type: RollingUpdate

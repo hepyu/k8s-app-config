@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-c0-master-headless-prod
+  labels:
+    wayne-app: es-c0
+    wayne-ns: inc
+    app: es-c0-master-headless-prod
+  namespace: inc
+spec:
+  selector:
+    app: es-c0-master-prod
+  ports:
+    - name: http
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: None
+
+---
+metadata:
+  name: es-c0-master-prod
+  labels:
+    wayne-app: es-c0
+    wayne-ns: inc
+    app: es-c0-master-prod
+  namespace: inc
+spec:
+  selector:
+    app: es-c0-master-prod
+  ports:
+    - name: http
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+    - name: transport
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+  type: ClusterIP
+  sessionAffinity: None

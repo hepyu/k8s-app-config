@@ -1,0 +1,43 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: es-c0-kibana-prod
+  labels:
+    wayne-app: es-c0
+    wayne-ns: inc
+    app: es-c0-kibana-prod
+spec:
+  selector:
+    matchLabels:
+      app: es-c0-kibana-prod
+  template:
+    metadata:
+      labels:
+        wayne-app: es-c0
+        wayne-ns: inc
+        app: es-c0-kibana-prod
+    spec:
+      containers:
+        - image: 'kibana:6.3.2'
+          name: kibana
+          env:
+            - name: ELASTICSEARCH_URL
+              value: 'http://es-c0-ingest-prod:9200'
+          ports:
+            - name: http
+              containerPort: 5601
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '0.1'
+              memory: 1Gi
+      imagePullSecrets:
+        - name: inc
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
