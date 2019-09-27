@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skywalking-c0-ui
+  labels:
+    wayne-app: skywalking-c0
+    wayne-ns: inc
+    app: skywalking-c0-ui
+  namespace: inc
+spec:
+  selector:
+    choerodon.io/infra: skywalking-c0-ui
+    choerodon.io/release: skywalking-c0-ui
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  type: ClusterIP
+  sessionAffinity: None

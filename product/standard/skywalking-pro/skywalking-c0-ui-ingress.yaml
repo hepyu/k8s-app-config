@@ -1,0 +1,23 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: skywalking-c0-ui
+  namespace: inc
+  labels:
+    wayne-app: skywalking-c0
+    wayne-ns: inc
+    app: skywalking-c0-ui
+  #生产配置，可以挂在第三方云厂商的负载均衡
+  #annotations:
+  #  kubernetes.io/ingress.class: inc
+spec:
+  tls: []
+  rules:
+    - host: skywalking-c0-ui.inc-inc.com
+      http:
+        paths:
+          - backend:
+              serviceName: skywalking-c0-ui
+              servicePort: 8080
+            path: /
