@@ -34,7 +34,7 @@ spec:
       #          topologyKey: kubernetes.io/hostname
       #          labelSelector:
       #            matchLabels:
-      #              app: rocketmq-c4-broker-prod-server
+      #              app: es-c0-master-prod
       #  nodeAffinity:
       #    preferredDuringSchedulingIgnoredDuringExecution:
       #      - weight: 100
@@ -68,6 +68,7 @@ spec:
               value: 'false'
             - name: node.ingest
               value: 'false'
+          #生产环境要换成自己公司的镜像地址
           image: 'docker.elastic.co/elasticsearch/elasticsearch:6.3.2'
           imagePullPolicy: IfNotPresent
           name: elasticsearch

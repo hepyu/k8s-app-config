@@ -20,6 +20,7 @@ spec:
         app: es-c0-kibana-prod
     spec:
       containers:
+        #生产环境要换成自己公司的镜像地址
         - image: 'docker.elastic.co/kibana/kibana:6.3.2'
           name: kibana
           env:

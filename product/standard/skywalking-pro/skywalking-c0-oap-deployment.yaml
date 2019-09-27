@@ -97,6 +97,9 @@ spec:
           volumeMounts:
             - mountPath: /skywalking/config
               name: config
+      #生产级配置，配置自己公司image仓库的秘钥
+      #imagePullSecrets:
+      #  - name: inc
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
