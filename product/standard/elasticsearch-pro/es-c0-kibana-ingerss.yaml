@@ -8,8 +8,9 @@ metadata:
     wayne-app: es-c0
     wayne-ns: inc
     app: es-c0-kibana-prod
-  annotations:
-    kubernetes.io/ingress.class: xwz
+  #生产级配置，用于挂载云厂商的SLB
+  #annotations:
+  #  kubernetes.io/ingress.class: inc
 spec:
   tls: []
   rules:

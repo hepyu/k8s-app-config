@@ -21,6 +21,8 @@ spec:
   sessionAffinity: None
 
 ---
+apiVersion: v1
+kind: Service
 metadata:
   name: es-c0-master-prod
   labels:

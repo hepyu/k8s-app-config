@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: es-c0-kibana-prod
+  namespace: inc
   labels:
     wayne-app: es-c0
     wayne-ns: inc
@@ -19,7 +20,7 @@ spec:
         app: es-c0-kibana-prod
     spec:
       containers:
-        - image: 'kibana:6.3.2'
+        - image: 'docker.elastic.co/kibana/kibana:6.3.2'
           name: kibana
           env:
             - name: ELASTICSEARCH_URL
@@ -34,8 +35,9 @@ spec:
             requests:
               cpu: '0.1'
               memory: 1Gi
-      imagePullSecrets:
-        - name: inc
+      #生产级配置，配置自己公司image仓库的秘钥
+      #imagePullSecrets:
+      #  - name: inc
   strategy:
     type: RollingUpdate
     rollingUpdate:
