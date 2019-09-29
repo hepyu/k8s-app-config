@@ -1,0 +1,635 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: skywalking-c0-configmap
+  namespace: inc
+  labels:
+    wayne-app: skywalking-c0
+    wayne-ns: inc
+    app: skywalking-c0-configmap
+data:
+  gateways.yml: |-
+    #gateways:
+    #  - name: proxy0
+    #    instances:
+    #      - host: 127.0.0.1 # the host/ip of this gateway instance
+    #        port: 9099 # the port of this gateway instance, defaults to 80
+  official_analysis.oal: >-
+    //All scope metrics
+
+    all_p99 = from(All.latency).p99(10);
+
+    all_p95 = from(All.latency).p95(10);
+
+    all_p90 = from(All.latency).p90(10);
+
+    all_p75 = from(All.latency).p75(10);
+
+    all_p50 = from(All.latency).p50(10);
+
+    all_heatmap = from(All.latency).thermodynamic(100, 20);
+
+
+    // Service scope metrics
+
+    service_resp_time = from(Service.latency).longAvg();
+
+    service_sla = from(Service.*).percent(status == true);
+
+    service_cpm = from(Service.*).cpm();
+
+    service_p99 = from(Service.latency).p99(10);
+
+    service_p95 = from(Service.latency).p95(10);
+
+    service_p90 = from(Service.latency).p90(10);
+
+    service_p75 = from(Service.latency).p75(10);
+
+    service_p50 = from(Service.latency).p50(10);
+
+
+    // Service relation scope metrics for topology
+
+    service_relation_client_cpm = from(ServiceRelation.*).filter(detectPoint ==
+    DetectPoint.CLIENT).cpm();
+
+    service_relation_server_cpm = from(ServiceRelation.*).filter(detectPoint ==
+    DetectPoint.SERVER).cpm();
+
+    service_relation_client_call_sla =
+    from(ServiceRelation.*).filter(detectPoint ==
+    DetectPoint.CLIENT).percent(status == true);
+
+    service_relation_server_call_sla =
+    from(ServiceRelation.*).filter(detectPoint ==
+    DetectPoint.SERVER).percent(status == true);
+
+    service_relation_client_resp_time =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.CLIENT).longAvg();
+
+    service_relation_server_resp_time =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.SERVER).longAvg();
+
+    service_relation_client_p99 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.CLIENT).p99(10);
+
+    service_relation_server_p99 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.SERVER).p99(10);
+
+    service_relation_client_p95 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.CLIENT).p95(10);
+
+    service_relation_server_p95 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.SERVER).p95(10);
+
+    service_relation_client_p90 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.CLIENT).p90(10);
+
+    service_relation_server_p90 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.SERVER).p90(10);
+
+    service_relation_client_p75 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.CLIENT).p75(10);
+
+    service_relation_server_p75 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.SERVER).p75(10);
+
+    service_relation_client_p50 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.CLIENT).p50(10);
+
+    service_relation_server_p50 =
+    from(ServiceRelation.latency).filter(detectPoint ==
+    DetectPoint.SERVER).p50(10);
+
+
+    // Service Instance Scope metrics
+
+    service_instance_sla = from(ServiceInstance.*).percent(status == true);
+
+    service_instance_resp_time= from(ServiceInstance.latency).longAvg();
+
+    service_instance_cpm = from(ServiceInstance.*).cpm();
+
+
+    // Endpoint scope metrics
+
+    endpoint_cpm = from(Endpoint.*).cpm();
+
+    endpoint_avg = from(Endpoint.latency).longAvg();
+
+    endpoint_sla = from(Endpoint.*).percent(status == true);
+
+    endpoint_p99 = from(Endpoint.latency).p99(10);
+
+    endpoint_p95 = from(Endpoint.latency).p95(10);
+
+    endpoint_p90 = from(Endpoint.latency).p90(10);
+
+    endpoint_p75 = from(Endpoint.latency).p75(10);
+
+    endpoint_p50 = from(Endpoint.latency).p50(10);
+
+
+    // Endpoint relation scope metrics
+
+    endpoint_relation_cpm = from(EndpointRelation.*).filter(detectPoint ==
+    DetectPoint.SERVER).cpm();
+
+    endpoint_relation_resp_time =
+    from(EndpointRelation.rpcLatency).filter(detectPoint ==
+    DetectPoint.SERVER).longAvg();
+
+
+    // JVM instance metrics
+
+    instance_jvm_cpu = from(ServiceInstanceJVMCPU.usePercent).doubleAvg();
+
+    instance_jvm_memory_heap =
+    from(ServiceInstanceJVMMemory.used).filter(heapStatus == true).longAvg();
+
+    instance_jvm_memory_noheap =
+    from(ServiceInstanceJVMMemory.used).filter(heapStatus == false).longAvg();
+
+    instance_jvm_memory_heap_max =
+    from(ServiceInstanceJVMMemory.max).filter(heapStatus == true).longAvg();
+
+    instance_jvm_memory_noheap_max =
+    from(ServiceInstanceJVMMemory.max).filter(heapStatus == false).longAvg();
+
+    instance_jvm_young_gc_time = from(ServiceInstanceJVMGC.time).filter(phrase
+    == GCPhrase.NEW).sum();
+
+    instance_jvm_old_gc_time = from(ServiceInstanceJVMGC.time).filter(phrase ==
+    GCPhrase.OLD).sum();
+
+    instance_jvm_young_gc_count = from(ServiceInstanceJVMGC.count).filter(phrase
+    == GCPhrase.NEW).sum();
+
+    instance_jvm_old_gc_count = from(ServiceInstanceJVMGC.count).filter(phrase
+    == GCPhrase.OLD).sum();
+
+
+    database_access_resp_time = from(DatabaseAccess.latency).longAvg();
+
+    database_access_sla = from(DatabaseAccess.*).percent(status == true);
+
+    database_access_cpm = from(DatabaseAccess.*).cpm();
+
+    database_access_p99 = from(DatabaseAccess.latency).p99(10);
+
+    database_access_p95 = from(DatabaseAccess.latency).p95(10);
+
+    database_access_p90 = from(DatabaseAccess.latency).p90(10);
+
+    database_access_p75 = from(DatabaseAccess.latency).p75(10);
+
+    database_access_p50 = from(DatabaseAccess.latency).p50(10);
+
+
+    // CLR instance metrics
+
+    instance_clr_cpu = from(ServiceInstanceCLRCPU.usePercent).doubleAvg();
+
+    instance_clr_gen0_collect_count =
+    from(ServiceInstanceCLRGC.gen0CollectCount).sum();
+
+    instance_clr_gen1_collect_count =
+    from(ServiceInstanceCLRGC.gen1CollectCount).sum();
+
+    instance_clr_gen2_collect_count =
+    from(ServiceInstanceCLRGC.gen2CollectCount).sum();
+
+    instance_clr_heap_memory = from(ServiceInstanceCLRGC.heapMemory).longAvg();
+
+    instance_clr_available_completion_port_threads =
+    from(ServiceInstanceCLRThread.availableCompletionPortThreads).max();
+
+    instance_clr_available_worker_threads =
+    from(ServiceInstanceCLRThread.availableWorkerThreads).max();
+
+    instance_clr_max_completion_port_threads =
+    from(ServiceInstanceCLRThread.maxCompletionPortThreads).max();
+
+    instance_clr_max_worker_threads =
+    from(ServiceInstanceCLRThread.maxWorkerThreads).max();
+
+
+    // Envoy instance metrics
+
+    envoy_heap_memory_max_used =
+    from(EnvoyInstanceMetric.value).filter(metricName ==
+    "server.memory_heap_size").maxDouble();
+
+    envoy_total_connections_used =
+    from(EnvoyInstanceMetric.value).filter(metricName ==
+    "server.total_connections").maxDouble();
+
+    envoy_parent_connections_used =
+    from(EnvoyInstanceMetric.value).filter(metricName ==
+    "server.parent_connections").maxDouble();
+
+
+    // Disable unnecessary hard core sources
+
+    /////////
+
+    // disable(segment);
+
+    // disable(endpoint_relation_server_side);
+
+    // disable(top_n_database_statement);
+
+    // disable(zipkin_span);
+
+    // disable(jaeger_span);
+  alarm-settings.yml: |-
+    rules:
+      # Rule unique name, must be ended with `_rule`.
+      service_resp_time_rule:
+        metrics-name: service_resp_time
+        op: ">"
+        threshold: 1000
+        period: 10
+        count: 3
+        silence-period: 5
+        message: Response time of service {name} is more than 1000ms in 3 minutes of last 10 minutes.
+      service_sla_rule:
+        # Metrics value need to be long, double or int
+        metrics-name: service_sla
+        op: "<"
+        threshold: 8000
+        # The length of time to evaluate the metrics
+        period: 10
+        # How many times after the metrics match the condition, will trigger alarm
+        count: 2
+        # How many times of checks, the alarm keeps silence after alarm triggered, default as same as period.
+        silence-period: 3
+        message: Successful rate of service {name} is lower than 80% in 2 minutes of last 10 minutes
+      service_p90_sla_rule:
+        # Metrics value need to be long, double or int
+        metrics-name: service_p90
+        op: ">"
+        threshold: 1000
+        period: 10
+        count: 3
+        silence-period: 5
+        message: 90% response time of service {name} is more than 1000ms in 3 minutes of last 10 minutes
+      service_instance_resp_time_rule:
+        metrics-name: service_instance_resp_time
+        op: ">"
+        threshold: 1000
+        period: 10
+        count: 2
+        silence-period: 5
+        message: Response time of service instance {name} is more than 1000ms in 2 minutes of last 10 minutes
+  application.yml: |-
+    cluster:
+      zookeeper:
+        nameSpace: inc
+        hostPort: zk-hs.zookeeper-min:2181
+        #Retry Policy
+        baseSleepTimeMs: ${SW_CLUSTER_ZK_SLEEP_TIME:1000} # initial amount of time to wait between retries
+        maxRetries: ${SW_CLUSTER_ZK_MAX_RETRIES:3} # max number of times to retry
+        # Enable ACL
+        enableACL: ${SW_ZK_ENABLE_ACL:false} # disable ACL in default
+        schema: ${SW_ZK_SCHEMA:digest} # only support digest schema
+        expression: ${SW_ZK_EXPRESSION:skywalking:skywalking}
+    core:
+      default:
+        # Mixed: Receive agent data, Level 1 aggregate, Level 2 aggregate
+        # Receiver: Receive agent data, Level 1 aggregate
+        # Aggregator: Level 2 aggregate
+        role: ${SW_CORE_ROLE:Mixed} # Mixed/Receiver/Aggregator
+        restHost: ${SW_CORE_REST_HOST:0.0.0.0}
+        restPort: ${SW_CORE_REST_PORT:12800}
+        restContextPath: ${SW_CORE_REST_CONTEXT_PATH:/}
+        gRPCHost: ${SW_CORE_GRPC_HOST:0.0.0.0}
+        gRPCPort: ${SW_CORE_GRPC_PORT:11800}
+        downsampling:
+          - Hour
+          - Day
+          - Month
+        # Set a timeout on metrics data. After the timeout has expired, the metrics data will automatically be deleted.
+        enableDataKeeperExecutor: ${SW_CORE_ENABLE_DATA_KEEPER_EXECUTOR:true} # Turn it off then automatically metrics data delete will be close.
+        recordDataTTL: ${SW_CORE_RECORD_DATA_TTL:90} # Unit is minute
+        minuteMetricsDataTTL: ${SW_CORE_MINUTE_METRIC_DATA_TTL:90} # Unit is minute
+        hourMetricsDataTTL: ${SW_CORE_HOUR_METRIC_DATA_TTL:36} # Unit is hour
+        dayMetricsDataTTL: ${SW_CORE_DAY_METRIC_DATA_TTL:45} # Unit is day
+        monthMetricsDataTTL: ${SW_CORE_MONTH_METRIC_DATA_TTL:18} # Unit is month
+        # Cache metric data for 1 minute to reduce database queries, and if the OAP cluster changes within that minute,
+        # the metrics may not be accurate within that minute.
+        enableDatabaseSession: ${SW_CORE_ENABLE_DATABASE_SESSION:true}
+    storage:
+      elasticsearch:
+        nameSpace: inc
+        clusterNodes: es-c0-ingest-prod:9200
+        protocol: ${SW_STORAGE_ES_HTTP_PROTOCOL:"http"}
+        trustStorePath: ${SW_SW_STORAGE_ES_SSL_JKS_PATH:"../es_keystore.jks"}
+        trustStorePass: ${SW_SW_STORAGE_ES_SSL_JKS_PASS:""}
+        user: ${SW_ES_USER:""}
+        password: ${SW_ES_PASSWORD:""}
+        indexShardsNumber: ${SW_STORAGE_ES_INDEX_SHARDS_NUMBER:2}
+        indexReplicasNumber: ${SW_STORAGE_ES_INDEX_REPLICAS_NUMBER:0}
+        # Those data TTL settings will override the same settings in core module.
+        recordDataTTL: ${SW_STORAGE_ES_RECORD_DATA_TTL:7} # Unit is day
+        otherMetricsDataTTL: ${SW_STORAGE_ES_OTHER_METRIC_DATA_TTL:45} # Unit is day
+        monthMetricsDataTTL: ${SW_STORAGE_ES_MONTH_METRIC_DATA_TTL:18} # Unit is month
+        # Batch process setting, refer to https://www.elastic.co/guide/en/elasticsearch/client/java-api/5.5/java-docs-bulk-processor.html
+        bulkActions: ${SW_STORAGE_ES_BULK_ACTIONS:1000} # Execute the bulk every 1000 requests
+        flushInterval: ${SW_STORAGE_ES_FLUSH_INTERVAL:10} # flush the bulk every 10 seconds whatever the number of requests
+        concurrentRequests: ${SW_STORAGE_ES_CONCURRENT_REQUESTS:2} # the number of concurrent requests
+        metadataQueryMaxSize: ${SW_STORAGE_ES_QUERY_MAX_SIZE:5000}
+        segmentQueryMaxSize: ${SW_STORAGE_ES_QUERY_SEGMENT_SIZE:200}
+    receiver-sharing-server:
+      default:
+    receiver-register:
+      default:
+    receiver-trace:
+      default:
+        bufferPath: ${SW_RECEIVER_BUFFER_PATH:../trace-buffer/}  # Path to trace buffer files, suggest to use absolute path
+        bufferOffsetMaxFileSize: ${SW_RECEIVER_BUFFER_OFFSET_MAX_FILE_SIZE:100} # Unit is MB
+        bufferDataMaxFileSize: ${SW_RECEIVER_BUFFER_DATA_MAX_FILE_SIZE:500} # Unit is MB
+        bufferFileCleanWhenRestart: ${SW_RECEIVER_BUFFER_FILE_CLEAN_WHEN_RESTART:false}
+        sampleRate: ${SW_TRACE_SAMPLE_RATE:10000} # The sample rate precision is 1/10000. 10000 means 100% sample in default.
+        slowDBAccessThreshold: ${SW_SLOW_DB_THRESHOLD:default:200,mongodb:100} # The slow database access thresholds. Unit ms.
+    receiver-jvm:
+      default:
+    receiver-clr:
+      default:
+    service-mesh:
+      default:
+        bufferPath: ${SW_SERVICE_MESH_BUFFER_PATH:../mesh-buffer/}  # Path to trace buffer files, suggest to use absolute path
+        bufferOffsetMaxFileSize: ${SW_SERVICE_MESH_OFFSET_MAX_FILE_SIZE:100} # Unit is MB
+        bufferDataMaxFileSize: ${SW_SERVICE_MESH_BUFFER_DATA_MAX_FILE_SIZE:500} # Unit is MB
+        bufferFileCleanWhenRestart: ${SW_SERVICE_MESH_BUFFER_FILE_CLEAN_WHEN_RESTART:false}
+    istio-telemetry:
+      default:
+    envoy-metric:
+      default:
+    query:
+      graphql:
+        path: ${SW_QUERY_GRAPHQL_PATH:/graphql}
+    alarm:
+      default:
+    telemetry:
+      none:
+    configuration:
+      none:
+  component-libraries.yml: |-
+    Tomcat:
+      id: 1
+      languages: Java
+    HttpClient:
+      id: 2
+      languages: Java,C#,Node.js
+    Dubbo:
+      id: 3
+      languages: Java
+    H2:
+      id: 4
+      languages: Java
+    Mysql:
+      id: 5
+      languages: Java,C#,Node.js
+    ORACLE:
+      id: 6
+      languages: Java
+    Redis:
+      id: 7
+      languages: Java,C#,Node.js
+    Motan:
+      id: 8
+      languages: Java
+    MongoDB:
+      id: 9
+      languages: Java,C#,Node.js
+    Resin:
+      id: 10
+      languages: Java
+    Feign:
+      id: 11
+      languages: Java
+    OKHttp:
+      id: 12
+      languages: Java
+    SpringRestTemplate:
+      id: 13
+      languages: Java
+    SpringMVC:
+      id: 14
+      languages: Java
+    Struts2:
+      id: 15
+      languages: Java
+    NutzMVC:
+      id: 16
+      languages: Java
+    NutzHttp:
+      id: 17
+      languages: Java
+    JettyClient:
+      id: 18
+      languages: Java
+    JettyServer:
+      id: 19
+      languages: Java
+    Memcached:
+      id: 20
+      languages: Java
+    ShardingJDBC:
+      id: 21
+      languages: Java
+    PostgreSQL:
+      id: 22
+      languages: Java,C#,Node.js
+    GRPC:
+      id: 23
+      languages: Java
+    ElasticJob:
+      id: 24
+      languages: Java
+    RocketMQ:
+      id: 25
+      languages: Java
+    httpasyncclient:
+      id: 26
+      languages: Java
+    Kafka:
+      id: 27
+      languages: Java
+    ServiceComb:
+      id: 28
+      languages: Java
+    Hystrix:
+      id: 29
+      languages: Java
+    Jedis:
+      id: 30
+      languages: Java
+    SQLite:
+      id: 31
+      languages: Java,C#
+    h2-jdbc-driver:
+      id: 32
+      languages: Java
+    mysql-connector-java:
+      id: 33
+      languages: Java
+    Spymemcached:
+      id: 35
+      languages: Java
+    Xmemcached:
+      id: 36
+      languages: Java
+    postgresql-jdbc-driver:
+      id: 37
+      languages: Java
+    rocketMQ-producer:
+      id: 38
+      languages: Java
+    rocketMQ-consumer:
+      id: 39
+      languages: Java
+    kafka-producer:
+      id: 40
+      languages: Java
+    kafka-consumer:
+      id: 41
+      languages: Java
+    mongodb-driver:
+      id: 42
+      languages: Java
+    SOFARPC:
+      id: 43
+      languages: Java
+    ActiveMQ:
+      id: 44
+      languages: Java
+    activemq-producer:
+      id: 45
+      languages: Java
+    activemq-consumer:
+      id: 46
+      languages: Java
+    Elasticsearch:
+      id: 47
+      languages: Java
+    transport-client:
+      id: 48
+      languages: Java
+    AspNetCore:
+      id: 3001
+      languages: C#
+    EntityFrameworkCore:
+      id: 3002
+      languages: C#
+    SqlClient:
+      id: 3003
+      languages: C#
+    CAP:
+      id: 3004
+      languages: C#
+    StackExchange.Redis:
+      id: 3005
+      languages: C#
+    SqlServer:
+      id: 3006
+      languages: C#
+    Npgsql:
+      id: 3007
+      languages: C#
+    MySqlConnector:
+      id: 3008
+      languages: C#
+    EntityFrameworkCore.InMemory:
+      id: 3009
+      languages: C#
+    EntityFrameworkCore.SqlServer:
+      id: 3010
+      languages: C#
+    EntityFrameworkCore.Sqlite:
+      id: 3011
+      languages: C#
+    Pomelo.EntityFrameworkCore.MySql:
+      id: 3012
+      languages: C#
+    Npgsql.EntityFrameworkCore.PostgreSQL:
+      id: 3013
+      languages: C#
+    InMemoryDatabase:
+      id: 3014
+      languages: C#
+    AspNet:
+      id: 3015
+      languages: C#
+
+    # NoeJS components
+    # [4000, 5000) for Node.js agent
+    HttpServer:
+      id: 4001
+      languages: Node.js
+    express:
+      id: 4002
+      languages: Node.js
+    Egg:
+      id: 4003
+      languages: Node.js
+    Koa:
+      id: 4004
+      languages: Node.js
+    Component-Server-Mappings:
+      mongodb-driver: MongoDB
+      rocketMQ-producer: RocketMQ
+      rocketMQ-consumer: RocketMQ
+      kafka-producer: Kafka
+      kafka-consumer: Kafka
+      activemq-producer: ActiveMQ
+      activemq-consumer: ActiveMQ
+      postgresql-jdbc-driver: PostgreSQL
+      Xmemcached: Memcached
+      Spymemcached: Memcached
+      h2-jdbc-driver: H2
+      mysql-connector-java: Mysql
+      Jedis: Redis
+      StackExchange.Redis: Redis
+      SqlClient: SqlServer
+      Npgsql: PostgreSQL
+      MySqlConnector: Mysql
+      EntityFrameworkCore.InMemory: InMemoryDatabase
+      EntityFrameworkCore.SqlServer: SqlServer
+      EntityFrameworkCore.Sqlite: SQLite
+      Pomelo.EntityFrameworkCore.MySql: Mysql
+      Npgsql.EntityFrameworkCore.PostgreSQL: PostgreSQL
+      transport-client: Elasticsearch
+  log4j2.xml: |-
+    <Configuration status="INFO">
+        <Appenders>
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout charset="UTF-8" pattern="%d - %c -%-4r [%t] %-5p %x - %m%n"/>
+            </Console>
+        </Appenders>
+        <Loggers>
+            <logger name="org.eclipse.jetty" level="INFO"/>
+            <logger name="org.apache.zookeeper" level="INFO"/>
+            <logger name="org.elasticsearch.common.network.IfConfig" level="INFO"/>
+            <logger name="io.grpc.netty" level="INFO"/>
+            <logger name="org.apache.skywalking.oap.server.receiver.istio.telemetry" level="DEBUG"/>
+            <Root level="INFO">
+                <AppenderRef ref="Console"/>
+            </Root>
+        </Loggers>
+    </Configuration>
+

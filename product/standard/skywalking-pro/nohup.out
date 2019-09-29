@@ -1,0 +1,19 @@
+6.4.0: Pulling from apache/skywalking-oap-server
+4fe2ade4980c: Already exists
+6fc58a8d4ae4: Already exists
+819f4a45746c: Already exists
+5338c48afff4: Pulling fs layer
+3f2779143228: Pulling fs layer
+3f2779143228: Download complete
+5338c48afff4: Retrying in 5 seconds
+5338c48afff4: Retrying in 4 seconds
+5338c48afff4: Retrying in 3 seconds
+5338c48afff4: Retrying in 2 seconds
+5338c48afff4: Retrying in 1 second
+5338c48afff4: Verifying Checksum
+5338c48afff4: Download complete
+5338c48afff4: Pull complete
+3f2779143228: Pull complete
+Digest: sha256:68c5210e9e1607ccab1e2bce5e587ec582abd0574a9aa537555d75f17a2d3fbe
+Status: Image is up to date for apache/skywalking-oap-server:6.4.0
+docker.io/apache/skywalking-oap-server:6.4.0

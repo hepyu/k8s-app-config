@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: skywalking-c0-oap
+  namespace: inc
   labels:
     wayne-app: skywalking-c0
     wayne-ns: inc
