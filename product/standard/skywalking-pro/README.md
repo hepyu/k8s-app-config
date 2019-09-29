@@ -23,6 +23,9 @@ ip skywalking-c0-ui.inc-inc.com
 | skywalking-c0-ui-deployment.yaml | ui实例节点的deployment。 |
 | skywalking-c0-ui-ingress.yaml | ui实例节点的ingress。 |
 | skywalking-c0-ui-service.yaml | ui实例节点的service，包含headless svc。 |
+| skywalking-c0-configmap.yaml | sk-oap的配置文件，定义storage，服务发现等 |
+| skywalking-c0-namespace.yaml | 定义namespace。 |
+
 
 # (3).本例配置文件用于生产环境需要的改动
 
@@ -41,6 +44,9 @@ replicas, pod亲和，镜像仓库秘钥，pv存储大小，cpu/memory大小，i
 | skywalking-c0-ui-deployment.yaml | 修改replicas为合适的节点个数；打开亲和性affinity；修改resources；修改imagePullSecrets。 |
 | skywalking-c0-ui-ingress.yaml | 修改namespace；如果使用云厂商的loadbalance，开启kubernetes.io/ingress.class挂载SLB。 |
 | skywalking-c0-ui-service.yaml | 修改namespace。 |
+| skywalking-c0-configmap.yaml | 修改namespace。 |
+| skywalking-c0-namespace.yaml | 修改namespace。 |
+
 
 # (4).skywalking容器化注意事项
 
