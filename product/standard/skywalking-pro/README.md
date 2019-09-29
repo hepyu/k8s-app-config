@@ -44,6 +44,17 @@ replicas, pod亲和，镜像仓库秘钥，pv存储大小，cpu/memory大小，i
 
 # (4).skywalking容器化注意事项
 
+参见：https://mp.weixin.qq.com/s/7rutKiv_RkV5UJKD4aD8PA
+
+# (5).相关资源
+
+1.容器化实战交流钉钉群号：23394754。
+2.笔者oraclejdk镜像制作
+https://github.com/hepyu/oraclejdk-docker-image
+3.笔者oraclejdk-skywalking镜像制作
+https://github.com/hepyu/oraclejdk-skywalking-docker-image
+4.k8s-app-config主流中间件容器化工程(持续更新)
+https://github.com/hepyu/k8s-app-config
 
 ## 微信公众号：千里行走
 
