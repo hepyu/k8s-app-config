@@ -1,7 +1,3 @@
-## 头条技术号：实战架构
-
-## 微信公众号：千里行走
-
 本例配置可以直接进行容器化；
 
 但是如果用于生产环境，需要将生产级配置打开，同时注释掉测试用配置；
@@ -47,3 +43,12 @@ replicas, pod亲和，镜像仓库秘钥，pv存储大小，cpu/memory大小，i
 | skywalking-c0-ui-service.yaml | 修改namespace。 |
 
 # (4).skywalking容器化注意事项
+
+
+## 微信公众号：千里行走
+
+## 头条技术号：实战架构
+
+## 实战交流群
+
+![image](https://github.com/hepyu/saf/blob/master/images/k8s.png)
