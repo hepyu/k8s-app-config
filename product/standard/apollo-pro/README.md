@@ -69,6 +69,14 @@ ingress的亲和性配置参见文件：https://github.com/hepyu/k8s-app-config/
 
 沿用apollo官方的默认做法。
 
+# 3.修改支持的环境
+
+在apolloPortalDB的ServerConfig表中存放了支持的环境：pro,uat,fat,dev，如果只配置了pro，需要把其余的3个删除，否则portal会一直报错：
+
+'''
+Env is down. env: UAT, failed times: 39, meta server address: http://apollo.meta
+'''
+
 # (5).TODO
 
 1.增加PV存储，将日志放到PV：待做
