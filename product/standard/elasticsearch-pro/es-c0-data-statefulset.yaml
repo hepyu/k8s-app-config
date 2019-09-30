@@ -13,7 +13,7 @@ spec:
   #生产配置,>=3
   #replicas: 3
   #测试配置
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: es-c0-data-prod
