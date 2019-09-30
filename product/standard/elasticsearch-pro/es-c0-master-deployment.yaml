@@ -3,14 +3,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: es-c0-master-prod
-  namespace: inc
+  namespace: elasticsearch
   labels:
     app: es-c0-master-prod
     release: es-c0-master
     wayne-app: es-c0
-    wayne-ns: inc
+    wayne-ns: elasticsearch
 spec:
-  replicas: 3
+  #生产配置>=3
+  #replicas: 3
+  #测试配置
+  replicas: 2
   strategy:
     type: RollingUpdate
   selector:
@@ -22,7 +25,7 @@ spec:
         app: es-c0-master-prod
         release: es-c0-master
         wayne-app: es-c0
-        wayne-ns: inc
+        wayne-ns: elasticsearch
       name: es-c0-master
     spec:
       #生产级配置，生产需要打开。

@@ -3,10 +3,10 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: skywalking-c0-ui
-  namespace: inc
+  namespace: skywalking
   labels:
     wayne-app: skywalking-c0
-    wayne-ns: inc
+    wayne-ns: skywalking
     app: skywalking-c0-ui
 spec:
   progressDeadlineSeconds: 600
@@ -25,7 +25,7 @@ spec:
         choerodon.io/infra: skywalking-c0-ui
         choerodon.io/release: skywalking-c0-ui
         wayne-app: skywalking-c0
-        wayne-ns: inc
+        wayne-ns: skywalking
     spec:
       containers:
         - env:

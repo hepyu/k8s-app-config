@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: es-c0-data0
-  namespace: inc
+  namespace: elasticsearch
 spec:
   capacity:
     storage: 100Gi
@@ -34,7 +34,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: es-c0-data1
-  namespace: inc
+  namespace: elasticsearch
 spec:
   capacity:
     storage: 100Gi
@@ -65,7 +65,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: es-c0-data2
-  namespace: inc
+  namespace: elasticsearch
 spec:
   capacity:
     storage: 100Gi

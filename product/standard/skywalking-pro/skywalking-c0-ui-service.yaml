@@ -5,9 +5,9 @@ metadata:
   name: skywalking-c0-ui
   labels:
     wayne-app: skywalking-c0
-    wayne-ns: inc
+    wayne-ns: skywalking
     app: skywalking-c0-ui
-  namespace: inc
+  namespace: skywalking
 spec:
   selector:
     choerodon.io/infra: skywalking-c0-ui

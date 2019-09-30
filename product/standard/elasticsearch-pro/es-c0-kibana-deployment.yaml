@@ -3,10 +3,10 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: es-c0-kibana-prod
-  namespace: inc
+  namespace: elasticsearch
   labels:
     wayne-app: es-c0
-    wayne-ns: inc
+    wayne-ns: elasticsearch
     app: es-c0-kibana-prod
 spec:
   selector:
@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         wayne-app: es-c0
-        wayne-ns: inc
+        wayne-ns: elasticsearch
         app: es-c0-kibana-prod
     spec:
       containers:

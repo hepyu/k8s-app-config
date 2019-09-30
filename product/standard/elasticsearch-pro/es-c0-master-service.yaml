@@ -5,9 +5,9 @@ metadata:
   name: es-c0-master-headless-prod
   labels:
     wayne-app: es-c0
-    wayne-ns: inc
+    wayne-ns: elasticsearch
     app: es-c0-master-headless-prod
-  namespace: inc
+  namespace: elasticsearch
 spec:
   selector:
     app: es-c0-master-prod
@@ -27,9 +27,9 @@ metadata:
   name: es-c0-master-prod
   labels:
     wayne-app: es-c0
-    wayne-ns: inc
+    wayne-ns: elasticsearch
     app: es-c0-master-prod
-  namespace: inc
+  namespace: elasticsearch
 spec:
   selector:
     app: es-c0-master-prod

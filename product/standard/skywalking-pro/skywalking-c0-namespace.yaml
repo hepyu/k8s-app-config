@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: inc
+  name: skywalking
 spec:
   finalizers:
   - kubernetes

@@ -2,14 +2,15 @@ apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
   name: apollo-configservice
-  namespace: inc
+  namespace: apollo
   labels:
     inc-app: apollo-configservice
 spec:
   serviceName: apollo-configservice
-  #pro:
+  #生产配置 >=3
   #replicas: 3
-  replicas: 2
+  #测试配置
+  replicas: 1
   selector:
     matchLabels:
       inc-app: apollo-configservice
@@ -39,7 +40,7 @@ spec:
       containers:
         - name: apollo-configservice
           image: >-
-            hpy253215039/apollo-config-server:v1.4.0
+            hpy253215039/apollo-config-server-skywalking6.4.0:1.4.0
           securityContext:
             privileged: false
           imagePullPolicy: IfNotPresent
@@ -64,9 +65,6 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 1
             failureThreshold: 10
-          env:
-            - name: APOLLO_CONFIG_SERVICE_NAME
-              value: apollo-configservice
           envFrom:
             - configMapRef:
                 name: apollo-configservice
@@ -77,5 +75,6 @@ spec:
             requests:
               cpu: '0.1'
               memory: 1Gi
-      imagePullSecrets:
-        - name: inc
+      #生产配置
+      #imagePullSecrets:
+      #  - name: inc

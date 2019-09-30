@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: elasticsearch
+  name: apollo
 spec:
   finalizers:
   - kubernetes

@@ -3,10 +3,10 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: skywalking-c0-ui
-  namespace: inc
+  namespace: skywalking
   labels:
     wayne-app: skywalking-c0
-    wayne-ns: inc
+    wayne-ns: skywalking
     app: skywalking-c0-ui
   #生产配置，可以挂在第三方云厂商的负载均衡
   #annotations:

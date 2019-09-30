@@ -5,9 +5,9 @@ metadata:
   name: skywalking-c0-oap
   labels:
     wayne-app: skywalking-c0
-    wayne-ns: inc
+    wayne-ns: skywalking
     app: skywalking-c0-oap
-  namespace: inc
+  namespace: skywalking
 spec:
   selector:
     app: skywalking-c0-oap

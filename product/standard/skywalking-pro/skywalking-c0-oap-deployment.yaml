@@ -3,10 +3,10 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: skywalking-c0-oap
-  namespace: inc
+  namespace: skywalking
   labels:
     wayne-app: skywalking-c0
-    wayne-ns: inc
+    wayne-ns: skywalking
     app: skywalking-c0-oap
 spec:
   progressDeadlineSeconds: 600
@@ -27,7 +27,7 @@ spec:
         choerodon.io/infra: skywalking-c0-oap
         choerodon.io/release: skywalking-c0-oap
         wayne-app: skywalking-c0
-        wayne-ns: inc
+        wayne-ns: skywalking
     spec:
       #生产级配置，生产需要打开。
       #affinity:
