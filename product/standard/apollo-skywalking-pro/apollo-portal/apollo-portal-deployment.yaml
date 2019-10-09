@@ -1,15 +1,18 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: apollo-adminservice
-  namespace: inc
+  name: apollo-portal
+  namespace: apollo
   labels:
-    inc-app: apollo-adminservice
+    inc-app: apollo-portal
 spec:
-  replicas: 2
+  #生产配置
+  #replicas: 2
+  #测试配置
+  replicas: 1
   selector:
     matchLabels:
-      inc-app: apollo-adminservice
+      inc-app: apollo-portal
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -18,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        inc-app: apollo-adminservice
+        inc-app: apollo-portal
     spec:
       affinity:
         podAntiAffinity:
@@ -28,49 +31,53 @@ spec:
                 topologyKey: kubernetes.io/hostname
                 labelSelector:
                   matchLabels:
-                    inc-app: apollo-adminservice
+                    inc-app: apollo-configservice
       volumes:
-        - name: apollo-adminservice
+        - name: apollo-portal
           configMap:
-            name: apollo-adminservice
+            name: apollo-portal
             items:
               - key: application-github.properties
                 path: application-github.properties
+              - key: apollo-env.properties
+                path: apollo-env.properties
       initContainers:
         - image: 'hpy253215039/alpine-bash:v3.8'
-          name: check-apollo-configservice
+          name: check-apollo-adminservice
           command:
             - bash
             - '-c'
             - >-
               curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1
-              --retry-max-time 120 apollo-configservice
+              --retry-max-time 120 apollo-adminservice
       containers:
-        - name: apollo-adminservice
-          image: >-
-            hpy253215039/apollo-admin-server:v1.4.0
+        - name: apollo-portal
+          image: 'hpy253215039/apollo-portal-skywalking6.4.0:1.4.0'
           securityContext:
             privileged: false
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           ports:
             - protocol: TCP
-              containerPort: 8090
+              containerPort: 8070
           volumeMounts:
-            - name: apollo-adminservice
-              mountPath: /apollo-admin-server/config/application-github.properties
+            - name: apollo-portal
+              mountPath: /apollo-portal-server/config/application-github.properties
               subPath: application-github.properties
+            - name: apollo-portal
+              mountPath: /apollo-portal-server/config/apollo-env.properties
+              subPath: apollo-env.properties
           readinessProbe:
             tcpSocket:
-              port: 8090
+              port: 8070
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 1
             failureThreshold: 10
           livenessProbe:
             tcpSocket:
-              port: 8090
+              port: 8070
             initialDelaySeconds: 120
-            periodSeconds: 10
+            periodSeconds: 15
             timeoutSeconds: 1
             failureThreshold: 10
           resources:
@@ -80,11 +87,9 @@ spec:
             requests:
               cpu: '0.1'
               memory: 1Gi
-          env:
-            - name: APOLLO_ADMIN_SERVICE_NAME
-              value: apollo-adminservice
           envFrom:
             - configMapRef:
-                name: apollo-adminservice
-      imagePullSecrets:
-        - name: inc
+                name: apollo-portal
+      #生产配置
+      #imagePullSecrets:
+      #  - name: inc

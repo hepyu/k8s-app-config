@@ -1,0 +1,56 @@
+---
+metadata:
+  name: pro-apollo-configservice001
+  labels:
+    inc-app: pro-apollo-configservice001
+  namespace: inc
+spec:
+  selector:
+    inc-app: apollo-configservice
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 80
+      name: pro-apollo-configservice001-80
+  type: ClusterIP
+  sessionAffinity: ClientIP
+apiVersion: v1
+kind: Service
+
+---
+metadata:
+  name: pro-apollo-configservice002
+  labels:
+    inc-app: pro-apollo-configservice002
+  namespace: inc
+spec:
+  selector:
+    inc-app: apollo-configservice
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 80
+      name: pro-apollo-configservice002-80
+  type: ClusterIP
+  sessionAffinity: ClientIP
+apiVersion: v1
+kind: Service
+
+---
+metadata:
+  name: pro-apollo-configservice003
+  labels:
+    inc-app: pro-apollo-configservice003
+  namespace: inc
+spec:
+  selector:
+    inc-app: apollo-configservice
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 80
+      name: pro-apollo-configservice003-80
+  type: ClusterIP
+  sessionAffinity: ClientIP
+apiVersion: v1
+kind: Service

@@ -2,7 +2,7 @@ metadata:
   name: apollo-portal
   labels:
     inc-app: apollo-portal
-  namespace: inc
+  namespace: apollo
 spec:
   selector:
     inc-app: apollo-portal

@@ -2,25 +2,10 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: apollo-portal
-  namespace: apollo
+  namespace: inc
   labels:
     inc-app: apollo-portal
 data:
-  SERVICE_NAME: apollo-portal
-  LOG_DIR: /opt/logs/apollo-portal-server
-  SERVER_PORT: '8070'
-  #SKYWALKING_AGENT: ''
-  TIME_ZONE: Asia/Shanghai
-  SKYWALKING_AGENT: '-javaagent:/app/3rd/skywalking-agent/skywalking-agent.jar=agent.service_name=apollo-portal-k8s,collector.backend_service=skywalking-c0-oap.skywalking:11800'
-  JAVA_OPTS: >-
-    -Xms1024m -Xmx1024m -Xss256k -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:SurvivorRatio=8
-    -server -XX:-ReduceInitialCardMarks
-    -XX:ParallelGCThreads=4 -XX:MaxTenuringThreshold=9 -XX:+DisableExplicitGC -XX:+ScavengeBeforeFullGC -XX:SoftRefLRUPolicyMSPerMB=0
-    -XX:+ExplicitGCInvokesConcurrent -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow
-    -Duser.timezone=$TIME_ZONE -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8
-    -Djava.security.egd=file:/dev/./urandom
-    -Dserver.port=$SERVER_PORT -Dlogging.file=$LOG_DIR/$SERVICE_NAME.log -XX:HeapDumpPath=$LOG_DIR/
-    $SKYWALKING_AGENT
   application-github.properties: |
     spring.datasource.url=jdbc:mysql://mysql-min.mysql-min:3306/ApolloPortalDB?characterEncoding=utf8
     spring.datasource.username=apollo

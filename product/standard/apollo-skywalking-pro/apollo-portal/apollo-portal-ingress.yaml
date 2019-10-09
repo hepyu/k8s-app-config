@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: apollo-portal
-  namespace: inc
+  namespace: apollo
   labels:
     inc-app: apollo-portal
   #pro:开启，挂载负载均衡

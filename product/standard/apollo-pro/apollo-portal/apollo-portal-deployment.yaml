@@ -2,14 +2,11 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: apollo-portal
-  namespace: apollo
+  namespace: inc
   labels:
     inc-app: apollo-portal
 spec:
-  #生产配置
-  #replicas: 2
-  #测试配置
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       inc-app: apollo-portal
@@ -52,10 +49,10 @@ spec:
               --retry-max-time 120 apollo-adminservice
       containers:
         - name: apollo-portal
-          image: 'hpy253215039/apollo-portal-skywalking6.4.0:1.4.0'
+          image: 'hpy253215039/apollo-portal-server:v1.4.0'
           securityContext:
             privileged: false
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - protocol: TCP
               containerPort: 8070
@@ -87,9 +84,11 @@ spec:
             requests:
               cpu: '0.1'
               memory: 1Gi
+          env:
+            - name: APOLLO_PORTAL_SERVICE_NAME
+              value: apollo-portal
           envFrom:
             - configMapRef:
-                name: apollo-portal
-      #生产配置
-      #imagePullSecrets:
-      #  - name: inc
+                name: apollo-adminservice
+      imagePullSecrets:
+        - name: inc

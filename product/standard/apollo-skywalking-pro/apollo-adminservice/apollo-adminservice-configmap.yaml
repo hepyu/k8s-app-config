@@ -1,0 +1,29 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apollo-adminservice
+  namespace: apollo
+  labels:
+    inc-app: apollo-adminservice
+data:
+  SERVICE_NAME: apollo-adminservice
+  LOG_DIR: /opt/logs/apollo-admin-server
+  SERVER_PORT: '8090'
+  SKYWALKING_AGENT: '-javaagent:/app/3rd/skywalking-agent/skywalking-agent.jar=agent.service_name=apollo-adminservice-k8s,collector.backend_service=skywalking-c0-oap.skywalking:11800'
+  #SKYWALKING_AGENT: ''
+  TIME_ZONE: Asia/Shanghai
+  JAVA_OPTS: >-
+    -Xms1024m -Xmx1024m -Xss256k -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:SurvivorRatio=8
+    -server -XX:-ReduceInitialCardMarks
+    -XX:ParallelGCThreads=4 -XX:MaxTenuringThreshold=9 -XX:+DisableExplicitGC -XX:+ScavengeBeforeFullGC -XX:SoftRefLRUPolicyMSPerMB=0
+    -XX:+ExplicitGCInvokesConcurrent -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow
+    -Duser.timezone=$TIME_ZONE -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8
+    -Djava.security.egd=file:/dev/./urandom
+    -Dserver.port=$SERVER_PORT -Dlogging.file=$LOG_DIR/$SERVICE_NAME.log -XX:HeapDumpPath=$LOG_DIR
+    $SKYWALKING_AGENT
+  application-github.properties: |
+    spring.datasource.url=jdbc:mysql://mysql-min.mysql-min:3306/DevApolloConfigDB?characterEncoding=utf8
+    spring.datasource.username=apollo
+    spring.datasource.password=admin
+    spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
+    eureka.service.url=http://apollo-configservice/eureka/
