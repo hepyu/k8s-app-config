@@ -6,7 +6,13 @@ https://mp.weixin.qq.com/s?__biz=Mzg4MDEzMDM4MA==&mid=2247484212&idx=1&sn=a54436
 
 # (2).grafana/prometheus生产级实践
 
+生产容器化合理拓扑：
 
+![image](https://github.com/hepyu/k8s-app-config/blob/master/product/standard/grafana-prometheus-pro/images/grafana-prometheus%E7%94%9F%E4%BA%A7%E7%BA%A7%E5%AE%9E%E8%B7%B5.jpg)
+
+基础服务进行prometheus编程监控关键指标，下图为oss上传服务的架构图，prometheus用来监控上传文件的大小/时间等关键指标，确认业务调用方是否正确使用了oss上传服务：
+
+![image](https://github.com/hepyu/k8s-app-config/blob/master/product/standard/grafana-prometheus-pro/images/caf-cdn%E6%96%B9%E6%A1%88.jpg)
 
 # (3)容器化执行步骤
 
