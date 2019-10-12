@@ -1,3 +1,5 @@
+## 微信技术公众号：千里行走
+
 # (1).生产级实践
 
 可以直接用于生产，中间件版本可以根据各自情况更改。
@@ -63,11 +65,6 @@ resources:
 
 Message: The node was low on resource: ephemeral-storage. Container codis-proxy was using 10619440Ki, which exceeds its request of 0.
 ```
-
-
-## 微信公众号：千里行走
-
-## 头条技术号：实战架构
 
 ## 实战交流群
 
