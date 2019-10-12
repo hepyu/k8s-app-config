@@ -1,4 +1,15 @@
-# (1).工程目的
+# (1).生产级实践
+
+可以直接用于生产，中间件版本可以根据各自情况更改。
+
+|              目录               |                            地址                              |                       备注                       |
+| ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
+| apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    | apollo1.4.0版本。 |
+| rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 | rocketmq4.3.2版本。 |
+| elasticsearch搜索中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/elasticsearch-pro | elasticsearch6.3.2版本。|
+| skywalking链路追踪中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/skywalking-pro                 | skywalking6.4.0版本。
+
+# (2).工程目的
 
 提供生产级实践；
 
@@ -13,17 +24,6 @@
 | yaml                        | 提供yaml方式的容器化，步骤及注意事项。  |                                              |
 | yaml/min-cluster-allinone   | 用最小资源使用helm方式将大部分基础组件容器化，适当修改可直接用于生产环境。| 最小资源要求是8核32G，需要留足够的内存给os和demo。     |
 | product/standard   | 重点/持续维护目录，提供笔者生产实践中的容器化yaml配置文件；使用者需要注意的是要调整资源声明，由于笔者也会使用此目录下文件在私服搭建，而由于私服资源有限，会调整资源到最小比例，对于request/limit会提供两组配置，一组是最小配置，一组是生产环境笔者的实践配置，github中的配置文件会注释掉实践配置，开启最小配置。    |
-
-# (2).生产级实践
-
-可以直接用于生产，中间件版本可以根据各自情况更改。
-
-|              目录               |                            地址                              |                       备注                       |
-| ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
-| apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    | apollo1.4.0版本。 |
-| rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 | rocketmq4.3.2版本。 |
-| elasticsearch搜索中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/elasticsearch-pro | elasticsearch6.3.2版本。|
-| skywalking链路追踪中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/skywalking-pro                 | skywalking6.4.0版本。
 
 # (3).QA
 
