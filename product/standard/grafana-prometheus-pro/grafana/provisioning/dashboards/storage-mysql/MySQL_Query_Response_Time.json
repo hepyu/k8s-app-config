@@ -1,0 +1,361 @@
+{
+    "annotations": {
+        "list": []
+    }, 
+    "editable": true, 
+    "hideControls": false, 
+    "id": null, 
+    "links": [], 
+    "originalTitle": "MySQL Query Response Time", 
+    "refresh": false, 
+    "rows": [
+        {
+            "collapse": false, 
+            "editable": true, 
+            "height": "250px", 
+            "panels": [
+                {
+                    "aliasColors": {}, 
+                    "bars": false, 
+                    "datasource": "prometheus-storage-mysql", 
+                    "decimals": 2, 
+                    "editable": true, 
+                    "error": false, 
+                    "fill": 2, 
+                    "grid": {
+                        "threshold1": null, 
+                        "threshold1Color": "rgba(216, 200, 27, 0.27)", 
+                        "threshold2": null, 
+                        "threshold2Color": "rgba(234, 112, 112, 0.22)"
+                    }, 
+                    "id": 6, 
+                    "legend": {
+                        "alignAsTable": true, 
+                        "avg": true, 
+                        "current": false, 
+                        "hideZero": false, 
+                        "max": true, 
+                        "min": true, 
+                        "rightSide": false, 
+                        "show": true, 
+                        "total": false, 
+                        "values": true
+                    }, 
+                    "lines": true, 
+                    "linewidth": 2, 
+                    "links": [], 
+                    "nullPointMode": "null", 
+                    "percentage": false, 
+                    "pointradius": 5, 
+                    "points": false, 
+                    "renderer": "flot", 
+                    "seriesOverrides": [], 
+                    "span": 12, 
+                    "stack": false, 
+                    "steppedLine": false, 
+                    "targets": [
+                        {
+                            "calculatedInterval": "2m", 
+                            "datasourceErrors": {}, 
+                            "errors": {}, 
+                            "expr": "rate(mysql_info_schema_query_response_time_count_sum{alias=\"$host\"}[$interval]) / on (alias) rate(mysql_info_schema_query_response_time_count_count{alias=\"$host\"}[$interval]) * 1000 or irate(mysql_info_schema_query_response_time_count_sum{alias=\"$host\"}[5m]) / on (alias) irate(mysql_info_schema_query_response_time_count_count{alias=\"$host\"}[5m]) * 1000", 
+                            "hide": false, 
+                            "interval": "$interval", 
+                            "intervalFactor": 1, 
+                            "legendFormat": "Time", 
+                            "metric": "", 
+                            "prometheusLink": "/api/datasources/proxy/1/graph#%5B%7B%22expr%22%3A%22rate(mysql_global_status_connections%5B%24interval%5D)%22%2C%22range_input%22%3A%2243200s%22%2C%22end_input%22%3A%222015-10-6%207%3A46%22%2C%22step_input%22%3A%22%22%2C%22stacked%22%3Afalse%2C%22tab%22%3A0%7D%5D", 
+                            "refId": "B", 
+                            "step": 300
+                        }
+                    ], 
+                    "timeFrom": null, 
+                    "timeShift": null, 
+                    "title": "Average Query Response Time", 
+                    "tooltip": {
+                        "msResolution": false, 
+                        "shared": true, 
+                        "value_type": "cumulative"
+                    }, 
+                    "type": "graph", 
+                    "xaxis": {
+                        "show": true
+                    }, 
+                    "yaxes": [
+                        {
+                            "format": "ms", 
+                            "logBase": 1, 
+                            "max": null, 
+                            "min": 0, 
+                            "show": true
+                        }, 
+                        {
+                            "format": "short", 
+                            "logBase": 1, 
+                            "max": null, 
+                            "min": 0, 
+                            "show": true
+                        }
+                    ]
+                }, 
+                {
+                    "aliasColors": {}, 
+                    "bars": false, 
+                    "datasource": "prometheus-storage-mysql", 
+                    "decimals": 2, 
+                    "editable": true, 
+                    "error": false, 
+                    "fill": 2, 
+                    "grid": {
+                        "threshold1": null, 
+                        "threshold1Color": "rgba(216, 200, 27, 0.27)", 
+                        "threshold2": null, 
+                        "threshold2Color": "rgba(234, 112, 112, 0.22)"
+                    }, 
+                    "height": "", 
+                    "hideTimeOverride": false, 
+                    "id": 7, 
+                    "isNew": true, 
+                    "legend": {
+                        "alignAsTable": true, 
+                        "avg": true, 
+                        "current": false, 
+                        "hideEmpty": false, 
+                        "hideZero": false, 
+                        "max": true, 
+                        "min": true, 
+                        "rightSide": true, 
+                        "show": true, 
+                        "sort": null, 
+                        "sortDesc": null, 
+                        "total": false, 
+                        "values": true
+                    }, 
+                    "lines": true, 
+                    "linewidth": 2, 
+                    "links": [], 
+                    "nullPointMode": "null", 
+                    "percentage": false, 
+                    "pointradius": 5, 
+                    "points": false, 
+                    "renderer": "flot", 
+                    "seriesOverrides": [
+                        {
+                            "alias": "Queries >10s", 
+                            "color": "#E24D42"
+                        }, 
+                        {
+                            "alias": "Queries 1s - 10s", 
+                            "color": "#EF843C"
+                        }, 
+                        {
+                            "alias": "Queries 100ms - 1s", 
+                            "color": "#EAB839"
+                        }
+                    ], 
+                    "span": 12, 
+                    "stack": false, 
+                    "steppedLine": false, 
+                    "targets": [
+                        {
+                            "expr": "(rate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='1'}[$interval]) - on (alias) rate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='0.1'}[$interval])) or (irate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='1'}[5m]) - on (alias) irate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='0.1'}[5m]))", 
+                            "hide": false, 
+                            "interval": "$interval", 
+                            "intervalFactor": 1, 
+                            "legendFormat": "Queries 100ms - 1s", 
+                            "metric": "", 
+                            "refId": "A", 
+                            "step": 300
+                        }, 
+                        {
+                            "expr": "(rate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='10'}[$interval])  - on (alias) rate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='1'}[$interval])) or (irate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='10'}[5m])  - on (alias) irate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='1'}[5m]))", 
+                            "interval": "$interval", 
+                            "intervalFactor": 1, 
+                            "legendFormat": "Queries 1s - 10s", 
+                            "refId": "B", 
+                            "step": 300
+                        }, 
+                        {
+                            "expr": "(rate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='100000'}[$interval])  - on (alias) rate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='10'}[$interval])) or (irate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='100000'}[5m])  - on (alias) irate(mysql_info_schema_query_response_time_count_bucket{alias=\"$host\",le='10'}[5m]))", 
+                            "interval": "$interval", 
+                            "intervalFactor": 1, 
+                            "legendFormat": "Queries >10s", 
+                            "refId": "C", 
+                            "step": 300
+                        }
+                    ], 
+                    "timeFrom": null, 
+                    "timeShift": null, 
+                    "title": "Query Response Time Distribution", 
+                    "tooltip": {
+                        "msResolution": false, 
+                        "shared": true, 
+                        "value_type": "individual"
+                    }, 
+                    "transparent": false, 
+                    "type": "graph", 
+                    "xaxis": {
+                        "show": true
+                    }, 
+                    "yaxes": [
+                        {
+                            "format": "ops", 
+                            "logBase": 1, 
+                            "max": null, 
+                            "min": 0, 
+                            "show": true
+                        }, 
+                        {
+                            "format": "ops", 
+                            "logBase": 1, 
+                            "max": null, 
+                            "min": 0, 
+                            "show": true
+                        }
+                    ]
+                }, 
+                {
+                    "content": "These graphs require additional options to be enabled for mysqld_exporter: `-collect.info_schema.query_response_time=true`\n\nAlso query response time distribution should be installed on MySQL via plugin and `query_response_time_stats` is `ON`.", 
+                    "datasource": "prometheus-storage-mysql", 
+                    "editable": true, 
+                    "error": false, 
+                    "height": "50px", 
+                    "id": 5, 
+                    "links": [], 
+                    "mode": "markdown", 
+                    "span": 12, 
+                    "style": {}, 
+                    "title": "", 
+                    "transparent": true, 
+                    "type": "text"
+                }
+            ], 
+            "showTitle": false, 
+            "title": "Query Response Time Distribution"
+        }
+    ], 
+    "schemaVersion": 12, 
+    "sharedCrosshair": true, 
+    "style": "dark", 
+    "tags": [
+        "Percona", 
+        "MySQL"
+    ], 
+    "templating": {
+        "list": [
+            {
+                "allFormat": "glob", 
+                "auto": true, 
+                "auto_count": 200, 
+                "auto_min": "1s", 
+                "current": {
+                    "text": "auto", 
+                    "value": "$__auto_interval"
+                }, 
+                "datasource": "prometheus-storage-mysql", 
+                "hide": 0, 
+                "includeAll": false, 
+                "label": "Interval", 
+                "multi": false, 
+                "multiFormat": "glob", 
+                "name": "interval", 
+                "options": [
+                    {
+                        "selected": true, 
+                        "text": "auto", 
+                        "value": "$__auto_interval"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "1s", 
+                        "value": "1s"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "5s", 
+                        "value": "5s"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "1m", 
+                        "value": "1m"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "5m", 
+                        "value": "5m"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "1h", 
+                        "value": "1h"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "6h", 
+                        "value": "6h"
+                    }, 
+                    {
+                        "selected": false, 
+                        "text": "1d", 
+                        "value": "1d"
+                    }
+                ], 
+                "query": "1s,5s,1m,5m,1h,6h,1d", 
+                "refresh": 0, 
+                "type": "interval"
+            }, 
+            {
+                "allFormat": "glob", 
+                "datasource": "prometheus-storage-mysql", 
+                "hide": 0, 
+                "includeAll": false, 
+                "label": "Host", 
+                "multi": false, 
+                "multiFormat": "glob", 
+                "name": "host", 
+                "query": "label_values(alias)", 
+                "refresh": 1, 
+                "type": "query"
+            }
+        ]
+    }, 
+    "time": {
+        "from": "now-12h", 
+        "to": "now"
+    }, 
+    "timepicker": {
+        "collapse": false, 
+        "enable": true, 
+        "notice": false, 
+        "now": true, 
+        "refresh_intervals": [
+            "5s", 
+            "10s", 
+            "30s", 
+            "1m", 
+            "5m", 
+            "15m", 
+            "30m", 
+            "1h", 
+            "2h", 
+            "1d"
+        ], 
+        "status": "Stable", 
+        "time_options": [
+            "5m", 
+            "15m", 
+            "1h", 
+            "6h", 
+            "12h", 
+            "24h", 
+            "2d", 
+            "7d", 
+            "30d"
+        ], 
+        "type": "timepicker"
+    }, 
+    "timezone": "browser", 
+    "title": "MySQL Query Response Time | Percona App", 
+    "version": 0
+}

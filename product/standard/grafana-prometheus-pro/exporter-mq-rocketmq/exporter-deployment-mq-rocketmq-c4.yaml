@@ -1,0 +1,56 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: exporter-rocketmq-c4
+  namespace: monitor
+spec:
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: exporter-rocketmq-c4
+        #要使用正确的集群名字，方便直接定位问题
+        rocketClusterName: rocketmq-c4
+        #要使用正确的namesrvAddr，方便直接定位问题
+        namesrvAddr: rocketmq-c4-console-prod-server.inc_8080
+        exporter: rocketmq
+    spec:
+      containers:
+      - name: exporter-rocketmq-c4
+        #存到你公司自己的镜像仓库，不要用docker官方仓库
+        image: hpy253215039/hepengyuan-develop-rocketmq-exporter:1.0.0
+        env:
+        - name: ROCKETMQ_CONSOLE
+          value: rocketmq-c4-console-prod-server.inc:8080
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
+          limits:
+            cpu: 10m
+            memory: 100Mi
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 9104
+      #生产环境打开，用自己镜像仓库的secrets
+      #imagePullSecrets:
+      #  - name: inc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: exporter-rocketmq-c4
+  namespace: monitor
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9104"
+spec:
+  selector:
+    app: exporter-rocketmq-c4
+  ports:
+    - name: prom
+      port: 9104
+      targetPort: 9104
+      protocol: TCP

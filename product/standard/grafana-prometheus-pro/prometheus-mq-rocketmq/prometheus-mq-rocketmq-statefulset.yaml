@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prometheus-mq-rocketmq
+  namespace: monitor
+spec:
+  #headless service
+  serviceName: prometheus-mq-rocketmq
+  selector:
+    matchLabels:
+      app: prometheus-mq-rocketmq
+  template:
+    metadata:
+      labels:
+        app: prometheus-mq-rocketmq 
+    spec:
+      #暂时关闭容忍点和nodeSelector，量很小，而且用户基本只有我一个人，只是用来监控基础服务，同时nas和业务不在一个实例，生产环境最好给单独资源。
+      #设置了污点的Node将根据taint的effect：NoSchedule、PreferNoSchedule、NoExecute和Pod之间产生互斥的关系，Pod将在一定程度上不会被调度到Node上。 
+      #但我们可以在Pod上设置容忍(Toleration)，意思是设置了容忍的Pod将可以容忍污点的存在，可以被调度到存在污点的Node上。
+      #其中key, vaule, effect要与Node上设置的taint保持一致。
+      #tolerations:
+      #  - key: role
+      #    operator: Equal
+      #    value: monitor
+      #    effect: NoSchedule
+          #tolerationSeconds 是当 pod 需要被驱逐时，可以继续在 node 上运行的时间。
+          #tolerationSeconds: 6000
+      #nodeSelector:
+      #  node-role.kubernetes.io/monitor: 'true'
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: prometheus
+        #要存到你自己公司的镜像仓库，不要用docker官方仓库
+        image: prom/prometheus:v2.13.0
+        ports:
+        - containerPort: 9090
+          name: prom-graph
+        volumeMounts:
+        - name: pv-metrics-mq-rocketmq-promethues 
+          mountPath: /prometheus
+        - name: prometheus-config
+          mountPath: /etc/prometheus/prometheus.yml
+          subPath: prometheus.yml
+          readOnly: false
+        command: ["/bin/prometheus"]
+        #--config.file:指定prometheus配置文件位置
+        #--storage.tsdb.path:指定采集数据的存储位置
+        #--web.console.libraries:指定页面组件,Prometheus在console_libraries目录中已经内置了一些基本的界面组件，用户可以直接使用
+        #--web.console.templates:页面的存储路径
+        #--storage.tsdb.retention:采集数据保存时间
+        #--web.enable-lifecycle:开启prometheus热更新，不重启的前提下更新配置
+        #--web.enable-admin-api:默认情况下，管理时间序列的 API 是被禁用的，要启用它，我们需要在 Prometheus 的启动参数中添加--web.enable-admin-api这个参数,比如可以通过API删除过期数据
+        args: ["--config.file=/etc/prometheus/prometheus.yml",
+             "--storage.tsdb.path=/prometheus",
+             "--web.console.libraries=/etc/prometheus/console_libraries",
+             "--web.console.templates=/etc/prometheus/consoles",
+             "--storage.tsdb.retention=14d",
+             "--web.enable-lifecycle",
+             "--web.enable-admin-api"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1024Mi
+          limits:
+            cpu: 100m
+            memory: 1024Mi
+      #生产环境打开，用自己镜像仓库的secrets
+      #imagePullSecrets:
+      #  - name: inc
+      volumes:
+      - name: pv-metrics-mq-rocketmq-promethues 
+        persistentVolumeClaim:
+          claimName: pv-metrics-mq-rocketmq-promethues
+      - name: prometheus-config
+        configMap:
+          name: prometheus-mq-rocketmq
+          defaultMode: 511
+          items:
+            - key: prometheus.yml
+              path: prometheus.yml

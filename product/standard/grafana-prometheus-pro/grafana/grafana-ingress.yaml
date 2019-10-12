@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+  namespace: monitor
+spec:
+  rules:
+  - host: monitor-basicservice.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: 3000
+        path: /
+

@@ -1,0 +1,17 @@
+apiVersion: 1
+
+providers:
+ - name: 'storage-mysql'
+   orgId: 1
+   folder: 'storage-mysql'
+   folderUid: ''
+   type: file
+   options:
+     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/storage-mysql
+ - name: 'mq-rocketmq'
+   orgId: 1
+   folder: 'mq-rocketmq'
+   folderUid: 'mq-rocketmq'
+   type: file
+   options:
+     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/mq-rocketmq

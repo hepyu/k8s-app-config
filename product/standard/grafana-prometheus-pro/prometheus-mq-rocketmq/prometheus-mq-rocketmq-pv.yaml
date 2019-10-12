@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-metrics-mq-rocketmq-promethues 
+  namespace: monitor
+spec:
+  mountOptions:
+    - vers=4.0
+    #noresvport设置为非保密端口
+    - noresvport
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: "metrics-mq-rocketmq-promethues"
+  #nfs:
+  #  server: 你的存储地址
+  #  path: /pv-metrics-mq-rocketmq-promethues

@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-mq-rocketmq 
+  namespace: monitor
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: monitor
+roleRef:
+  kind: ClusterRole
+  name: admin
+  apiGroup: rbac.authorization.k8s.io

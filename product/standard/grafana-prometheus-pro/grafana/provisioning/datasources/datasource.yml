@@ -1,0 +1,18 @@
+apiVersion: 1
+
+#deleteDatasources是启动时候将会首先从数据库中删除的datasource的名称。通过provisioning加载datasource无法从页面进行删除，只能在deleteDatasources中进行删除。
+deleteDatasources:
+   - name: prometheus-basicservice
+     orgId: 1
+
+datasources:
+ - name: prometheus-mq-rocketmq
+   type: prometheus
+   access: proxy
+   orgId: 1
+   url: http://prometheus-mq-rocketmq:9090
+   isDefault: false
+   jsonData:
+      tlsAuth: false
+      tlsAuthWithCACert: false
+
