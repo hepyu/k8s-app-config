@@ -9,6 +9,21 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/pv-metrics-grafana
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
+  #生产环境使用云存储
   #nfs:
   #  server: 你的存储地址
   #  path: /pv-metrics-grafana
