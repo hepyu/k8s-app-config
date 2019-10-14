@@ -1,6 +1,6 @@
 ## 微信技术公众号：千里行走
 
-<img src="https://github.com/hepyu/k8s-app-config/blob/master/images/%E5%8D%83%E9%87%8C%E8%A1%8C%E8%B5%B0.jpg" width="100%">
+<img src="https://github.com/hepyu/k8s-app-config/blob/master/images/%E5%8D%83%E9%87%8C%E8%A1%8C%E8%B5%B0.jpg" width="25%">
 
 本例配置可以直接用于生产环境，configservice/adminservice/portal都是2副本，可以根据业务规模调整线上副本数;
 
