@@ -2,6 +2,10 @@
 
 <img src="https://github.com/hepyu/k8s-app-config/blob/master/images/%E5%8D%83%E9%87%8C%E8%A1%8C%E8%B5%B0.jpg" width="25%">
 
+## 实战交流群
+
+<img src="https://github.com/hepyu/saf/blob/master/images/k8s.png" width="25%">
+
 # (1).生产级实践
 
 可以直接用于生产，中间件版本可以根据各自情况更改。
@@ -68,7 +72,3 @@ resources:
 
 Message: The node was low on resource: ephemeral-storage. Container codis-proxy was using 10619440Ki, which exceeds its request of 0.
 ```
-
-## 实战交流群
-
-![image](https://github.com/hepyu/saf/blob/master/images/k8s.png)
