@@ -49,7 +49,22 @@
 
 # (4).如何使用
 
-顺次执行本目录下的yaml文件；注意pv存储，本例配置文件默认是本地pv存储，生产环境需要替换为云存储(提供样例配置)。
+
+顺次执行：
+```
+kubectl apply -f apollo-namespace.yaml
+
+cd apollo-configservice
+kubectl apply -f .
+
+cd apollo-adminservice
+kubectl apply -f .
+
+cd apollo-portal
+kubectl apply -f .
+```
+
+注意pv存储，本例配置文件默认是本地pv存储，生产环境需要替换为云存储(提供样例配置)。
 
 skywalking的关键配置位于config/admin/portal下的config.yaml文件，通过环境变量SKYWALKING_AGENT来配置是否开启skywalking-agent探针；当然也可以在这里调整JVM启动参数。
 
