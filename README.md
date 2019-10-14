@@ -1,5 +1,7 @@
 ## 微信技术公众号：千里行走
 
+<img src="https://github.com/hepyu/k8s-app-config/blob/master/images/%E5%8D%83%E9%87%8C%E8%A1%8C%E8%B5%B0.jpg" width="25%">
+
 # (1).生产级实践
 
 可以直接用于生产，中间件版本可以根据各自情况更改。
