@@ -1,6 +1,4 @@
-# 头条技术号：实战架构
-
-# 微信公众号：千里行走
+## 微信技术公众号：千里行走
 
 本例配置可以直接用于生产环境，configservice/adminservice/portal都是2副本，可以根据业务规模调整线上副本数;
 
@@ -13,6 +11,26 @@
 1.修改基础镜像为oracle-jdk，并增加redis-cli, telnet等常用工具包。
 
 2.基础镜像增加skywalking-agent的支持，通过configmap中的配置参数来决定在启动apollo服务的时候是否开启链路追踪。
+
+# 基础镜像
+
+1.oraclejdk-docker-image:
+
+第一层基础镜像。
+
+使用oraclejdk8制作的镜像，包含telnet, redis-cli, mysql-client等工具包。
+
+地址：  https://github.com/hepyu/oraclejdk-docker-image
+
+2.oraclejdk-skywalking-docker-image
+
+第二层镜像，基于oraclejdk-docker-image镜像。
+
+加入了skywalking-agent支持。
+
+地址：  https://github.com/hepyu/oraclejdk-skywalking-docker-image
+
+3.apollo-skywalking-pro镜像，是基于镜像制作oraclejdk-skywalking-docker-image。
 
 # (1).相关文章
 
