@@ -1,5 +1,11 @@
 ## 微信技术公众号：千里行走
 
+<img src="https://github.com/hepyu/k8s-app-config/blob/master/images/%E5%8D%83%E9%87%8C%E8%A1%8C%E8%B5%B0.jpg" width="25%">
+
+## 实战交流群
+
+<img src="https://github.com/hepyu/saf/blob/master/images/k8s.png" width="25%">
+
 # (1).生产级实践
 
 可以直接用于生产，中间件版本可以根据各自情况更改。
@@ -7,6 +13,7 @@
 |              目录               |                            地址                              |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
 | apollo配置中心                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-pro                                    | apollo1.4.0版本。 |
+| apollo配置中心，支持skywalking链路探针                      | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/apollo-skywalking-pro                                    | apollo1.4.0版本, skywalking6.4.0版本。 |
 | rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 | rocketmq4.3.2版本。 |
 | elasticsearch搜索中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/elasticsearch-pro | elasticsearch6.3.2版本。|
 | skywalking链路追踪中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/skywalking-pro                 | skywalking6.4.0版本。
@@ -66,7 +73,3 @@ resources:
 
 Message: The node was low on resource: ephemeral-storage. Container codis-proxy was using 10619440Ki, which exceeds its request of 0.
 ```
-
-## 实战交流群
-
-![image](https://github.com/hepyu/saf/blob/master/images/k8s.png)
