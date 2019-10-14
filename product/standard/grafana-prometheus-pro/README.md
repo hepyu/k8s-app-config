@@ -1,5 +1,11 @@
 ## 微信技术公众号：千里行走
 
+<img src="https://github.com/hepyu/k8s-app-config/blob/master/images/%E5%8D%83%E9%87%8C%E8%A1%8C%E8%B5%B0.jpg" width="25%">
+
+## 实战交流群
+
+<img src="https://github.com/hepyu/saf/blob/master/images/k8s.png" width="25%">
+
 ## 详述文章
 
 1.grafana&prometheus生产级容器化监控-1：生产级容器化
