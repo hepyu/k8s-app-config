@@ -13,16 +13,16 @@ spec:
         #要使用正确的集群名字，方便直接定位问题
         rocketClusterName: rocketmq-c4
         #要使用正确的namesrvAddr，方便直接定位问题
-        namesrvAddr: rocketmq-c4-console-prod-server.inc_8080
+        namesrvAddr: service-rocketmq-min-c0-console-ng-prod.rocketmq-min_8080
         exporter: rocketmq
     spec:
       containers:
       - name: exporter-rocketmq-c4
         #存到你公司自己的镜像仓库，不要用docker官方仓库
-        image: hpy253215039/hepengyuan-develop-rocketmq-exporter:1.0.0
+        image: hpy253215039/hpy-rocketmq-exporter:1.0.0
         env:
         - name: ROCKETMQ_CONSOLE
-          value: rocketmq-c4-console-prod-server.inc:8080
+          value: service-rocketmq-min-c0-console-ng-prod.rocketmq-min:8080
         resources:
           requests:
             cpu: 10m
@@ -30,7 +30,7 @@ spec:
           limits:
             cpu: 10m
             memory: 100Mi
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 9104
