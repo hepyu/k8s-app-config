@@ -22,10 +22,10 @@ spec:
         resources:
           requests:
             cpu: 10m
-            memory: 10Mi
+            memory: 100Mi
           limits:
             cpu: 10m
-            memory: 10Mi
+            memory: 100Mi
         ports:
         - name: http
           containerPort: 9104
