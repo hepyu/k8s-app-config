@@ -17,7 +17,8 @@
 | rocketmq消息队列中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/rocketmq-pro/rocketmq-ms-cluster-pro                 | rocketmq4.3.2版本。 |
 | elasticsearch搜索中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/elasticsearch-pro | elasticsearch6.3.2版本。|
 | skywalking链路追踪中间件                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/skywalking-pro                 | skywalking6.4.0版本。
-| grafana/prometheus监控                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/skywalking-pro                 | grafana6.4.2, prometheus2.13.0
+| grafana/prometheus监控                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/grafana-prometheus-pro                 | grafana6.4.2, prometheus2.13.0
+| rocketmq-exporter监控                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/grafana-prometheus-pro/exporter-mq-rocketmq                 | 使用python自己开发的exporter,主要监控消息堆积数，精确到进程粒度
 
 # (2).工程目的
 
