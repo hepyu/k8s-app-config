@@ -15,4 +15,12 @@ datasources:
    jsonData:
       tlsAuth: false
       tlsAuthWithCACert: false
-
+ - name: prometheus-storage-mysql
+   type: prometheus
+   access: proxy
+   orgId: 1
+   url: http://prometheus-storage-mysql:9090
+   isDefault: false
+   jsonData:
+      tlsAuth: false
+      tlsAuthWithCACert: false

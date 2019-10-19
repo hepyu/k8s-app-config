@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-storage-mysql
+  namespace: monitor
+  labels:
+    app: prometheus-storage-mysql
+data:
+  prometheus.yml: >
+    global:
+      scrape_interval:     60s
+      evaluation_interval: 60s
+
+    scrape_configs:
+
+      - job_name: 'mysql-monitor'
+        kubernetes_sd_configs:
+        - role: pod
+  
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_pod_label_exporter, __meta_kubernetes_namespace]
+          action: keep
+          regex: mysql;monitor

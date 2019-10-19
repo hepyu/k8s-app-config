@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-storage-mysql
+  namespace: monitor
+  labels:
+    app: prometheus-storage-mysql
+spec:
+  ports:
+  - port: 9090
+    name: prom-graph
+  type: NodePort
+  selector:
+    app: prometheus-storage-mysql

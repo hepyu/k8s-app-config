@@ -1,0 +1,51 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: exporter-mysql-apollo
+  namespace: monitor
+spec:
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: exporter-mysql-apollo
+        exporter: mysql
+    spec:
+      containers:
+      - name: exporter-mysql-apollo
+        #生产环境换成自己的镜像仓库
+        image: prom/mysqld-exporter:v0.11.0
+        env:
+        - name: DATA_SOURCE_NAME
+          value: "apollo:admin@(mysql-min.mysql-min:3306)/"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 10Mi
+          limits:
+            cpu: 10m
+            memory: 10Mi
+        ports:
+        - name: http
+          containerPort: 9104
+      #生产环境要打开，换成自己镜像私有仓库秘钥
+      #imagePullSecrets:
+      #  - name: coohua
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: exporter-mysql-apollo
+  namespace: monitor
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9104"
+spec:
+  selector:
+    app: exporter-mysql-apollo
+  ports:
+    - name: prom
+      port: 9104
+      targetPort: 9104
+      protocol: TCP
