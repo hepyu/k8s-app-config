@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 22,
-  "iteration": 1570848317895,
+  "id": 20,
+  "iteration": 1572689815404,
   "links": [],
   "panels": [
     {
@@ -60,7 +60,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "msg_diff_detail{job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\", topic=~\"$topic\", consumerGroup=~\"$consumerGroup\", broker=~\"$broker\", queueId=~\"$queueId\", consumerClientIP=~\"$consumerClientIP\", consumerClientPID=~\"$consumerClientPID\"}",
+          "expr": "rocketmq_msg_diff_detail{topic=~\"$topic\", consumerGroup=~\"$consumerGroup\", broker=~\"$broker\", queueId=~\"$queueId\", consumerClientIP=~\"$consumerClientIP\", consumerClientPID=~\"$consumerClientPID\", job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\"} > 1000",
+          "legendFormat": "{{topic}}::{{consumerGroup}}::{{broker}}::queue-{{queueId}}::{{consumerClientIP}}::{{consumerClientPID}}",
           "refId": "A"
         }
       ],
@@ -68,7 +69,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "消息堆积数（消费者进程粒度）；可用筛选条件：全部可用",
+      "title": "消息堆积数（消费者进程粒度）；可用筛选条件：全部可用；显示条件：堆积数>1000",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -147,7 +148,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "msg_diff_clientinfo{job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\", consumerClientIP=~\"$consumerClientIP\", consumerClientPID=~\"$consumerClientPID\"}",
+          "expr": "rocketmq_msg_diff_clientinfo{consumerClientIP=~\"$consumerClientIP\", consumerClientPID=~\"$consumerClientPID\", job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\"} > 1000",
+          "legendFormat": "{{consumerClientIP}}::{{consumerClientPID}}",
           "refId": "A"
         }
       ],
@@ -155,7 +157,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "消息堆积数（消费者进程粒度）；可用筛选条件：rocketmqClusterName,  namesrvAddr, consumerClientIP,  consumerClientPID",
+      "title": "消息堆积数（消费者进程粒度）；可用筛选条件：rocketmqClusterName,  namesrvAddr, consumerClientIP,  consumerClientPID；显示条件：堆积数>1000",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -233,7 +235,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "msg_diff_topic{job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\", topic=~\"$topic\"}",
+          "expr": "rocketmq_msg_diff_topic{topic=~\"$topic\", job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\"} > 1000",
+          "legendFormat": "{{topic}}",
           "refId": "A"
         }
       ],
@@ -241,7 +244,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "消息堆积数（topic粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, topic",
+      "title": "消息堆积数（topic粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, topic；显示条件：堆积数>1000",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -319,7 +322,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "msg_diff_consumergroup{job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\", consumerGroup=~\"$consumerGroup\"}",
+          "expr": "rocketmq_msg_diff_consumergroup{consumerGroup=~\"$consumerGroup\", job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\"}",
+          "legendFormat": "{{consumerGroup}}",
           "refId": "A"
         }
       ],
@@ -327,7 +331,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "消息堆积数（消费Group粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, consumerGroup",
+      "title": "消息堆积数（消费Group粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, consumerGroup；显示条件：堆积数>1000",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -405,7 +409,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "msg_diff_broker{job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\", broker=~\"$broker\"}",
+          "expr": "rocketmq_msg_diff_broker{broker=~\"$broker\", job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\"} > 1000",
+          "legendFormat": "{{broker}}",
           "refId": "A"
         }
       ],
@@ -413,7 +418,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "消息堆积数（broker粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, broker",
+      "title": "消息堆积数（broker粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, broker；显示条件：堆积数>1000",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -491,7 +496,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "msg_diff_queue{job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\", broker=~\"$broker\", queueId=~\"$queueId\"}",
+          "expr": "rocketmq_msg_diff_queue{broker=~\"$broker\", queueId=~\"$queueId\", job=\"rocketmq-monitor\", rocketmqClusterName=~\"$rocketmqClusterName\", namesrvAddr=~\"$namesrvAddr\"} > 1000",
+          "legendFormat": "{{broker}}::{{queueId}}",
           "refId": "A"
         }
       ],
@@ -499,7 +505,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "消息堆积数（queueId粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, broker, queueId",
+      "title": "消息堆积数（queueId粒度）；可用筛选条件：rocketmqClusterName, namesrvAddr, broker, queueId；显示条件：堆积数>1000",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -548,18 +554,20 @@
       {
         "allValue": null,
         "current": {
-          "text": "rocketmq-c4",
-          "value": "rocketmq-c4"
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "prometheus-mq-rocketmq",
-        "definition": "label_values(msg_diff_detail,rocketmqClusterName)",
+        "definition": "label_values(rocketmq_msg_diff_detail,rocketmqClusterName)",
         "hide": 0,
         "includeAll": true,
         "label": "rocketmqClusterName",
         "multi": true,
         "name": "rocketmqClusterName",
         "options": [],
-        "query": "label_values(msg_diff_detail,rocketmqClusterName)",
+        "query": "label_values(rocketmq_msg_diff_detail,rocketmqClusterName)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -574,17 +582,19 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "prometheus-mq-rocketmq",
-        "definition": "label_values(msg_diff_detail,namesrvAddr)",
+        "definition": "label_values(rocketmq_msg_diff_detail,namesrvAddr)",
         "hide": 0,
         "includeAll": true,
         "label": "namesrvAddr",
         "multi": true,
         "name": "namesrvAddr",
         "options": [],
-        "query": "label_values(msg_diff_detail,namesrvAddr)",
+        "query": "label_values(rocketmq_msg_diff_detail,namesrvAddr)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -599,7 +609,9 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "prometheus-mq-rocketmq",
         "definition": "",
@@ -609,7 +621,7 @@
         "multi": true,
         "name": "topic",
         "options": [],
-        "query": "label_values(msg_diff_detail, topic)",
+        "query": "label_values(rocketmq_msg_diff_detail, topic)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -624,7 +636,9 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "prometheus-mq-rocketmq",
         "definition": "",
@@ -634,7 +648,7 @@
         "multi": true,
         "name": "consumerGroup",
         "options": [],
-        "query": "label_values(msg_diff_detail,consumerGroup)",
+        "query": "label_values(rocketmq_msg_diff_detail,consumerGroup)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -661,7 +675,7 @@
         "multi": true,
         "name": "broker",
         "options": [],
-        "query": "label_values(msg_diff_detail,broker)",
+        "query": "label_values(rocketmq_msg_diff_detail,broker)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -675,6 +689,7 @@
       {
         "allValue": null,
         "current": {
+          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -688,7 +703,7 @@
         "multi": true,
         "name": "queueId",
         "options": [],
-        "query": "label_values(msg_diff_detail,queueId)",
+        "query": "label_values(rocketmq_msg_diff_detail,queueId)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -715,7 +730,7 @@
         "multi": true,
         "name": "consumerClientIP",
         "options": [],
-        "query": "label_values(msg_diff_detail,consumerClientIP)",
+        "query": "label_values(rocketmq_msg_diff_detail,consumerClientIP)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -735,14 +750,14 @@
           ]
         },
         "datasource": "prometheus-mq-rocketmq",
-        "definition": "label_values(msg_diff_detail, consumerClientPID)",
+        "definition": "label_values(rocketmq_msg_diff_detail, consumerClientPID)",
         "hide": 0,
         "includeAll": true,
         "label": "consumerClientPID",
         "multi": true,
         "name": "consumerClientPID",
         "options": [],
-        "query": "label_values(msg_diff_detail, consumerClientPID)",
+        "query": "label_values(rocketmq_msg_diff_detail, consumerClientPID)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -756,7 +771,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -787,5 +802,5 @@
   "timezone": "",
   "title": "消息堆积数",
   "uid": "2J19-M6mz",
-  "version": 70
+  "version": 3
 }
