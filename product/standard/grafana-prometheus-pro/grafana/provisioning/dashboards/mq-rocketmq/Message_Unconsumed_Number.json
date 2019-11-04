@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 20,
-  "iteration": 1572689815404,
+  "iteration": 1572835726612,
   "links": [],
   "panels": [
     {
@@ -689,7 +689,6 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "All",
           "value": [
             "$__all"
@@ -802,5 +801,5 @@
   "timezone": "",
   "title": "消息堆积数",
   "uid": "2J19-M6mz",
-  "version": 3
+  "version": 4
 }
