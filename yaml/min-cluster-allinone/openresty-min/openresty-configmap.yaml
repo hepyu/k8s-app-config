@@ -1,0 +1,49 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: openresty
+  namespace: openresty-min
+  labels:
+    inc-app: openresty
+data:
+  nginx.conf: |
+    user root;
+    worker_processes 4;
+    worker_cpu_affinity 0001 0010 0100 1000;
+    error_log /usr/local/openresty/nginx/logs/error.log error;
+    pid /usr/local/openresty/nginx/nginx.pid;
+    worker_rlimit_nofile 65535;
+    events
+    {
+        use epoll;
+        worker_connections 65535;
+    }
+    http
+    {
+        gzip on;
+        gzip_min_length 1k;
+        gzip_buffers 4 16k;
+        gzip_http_version 1.0;
+        gzip_comp_level 2;
+        gzip_types text/plain application/x-javascript text/css application/xml;
+        gzip_vary on;
+
+        underscores_in_headers on;
+        log_format main
+        '$remote_addr - $remote_user [$time_local] '
+        '$request_length '
+         '"$request" $status $bytes_sent $body_bytes_sent '
+        '"$http_referer" "$http_user_agent" '
+        '"$gzip_ratio" "$request_time" '
+        '"$upstream_addr" "$upstream_status" "$upstream_response_time"';
+        keepalive_timeout 0;
+
+
+        client_max_body_size 20m;
+
+        lua_package_path "/usr/local/openresty/lualib/lua-resty-kafka-master/lib/?.lua;;";
+        include /etc/nginx/conf.d/*.conf;
+        access_log off;
+    }
+
+    #include /app/3rd/nginx/openresty-1.11.2.3/nginx/conf/tcp.d/*.conf; 

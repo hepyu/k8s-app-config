@@ -8,7 +8,7 @@ metadata:
   labels:
     app: service-apollo-portal-server
   name: service-apollo-portal-server
-  namespace: apollo-min
+  namespace: inc
 spec:
   rules:
   - host: dev.apollo-portal.future.com

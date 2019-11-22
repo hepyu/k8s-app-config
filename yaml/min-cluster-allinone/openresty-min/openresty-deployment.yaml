@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: openresty-min
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: openresty-min
+  name: openresty
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+       app: openresty
+    spec:
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: openresty
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+        - name: lualib
+          persistentVolumeClaim:
+            claimName: openresty-lualib-pvc
+        - name: subconf
+          persistentVolumeClaim:
+            claimName: openresty-subconf-pvc
+      containers:
+      - name: openresty
+        image: openresty/openresty:1.15.8.1-centos # 替换为你自己的镜像
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: nginx-conf
+            mountPath: /usr/local/openresty/nginx/conf/nginx.conf
+            subPath: nginx.conf
+          - name: lualib
+            mountPath: /usr/local/openresty/lualib
+          - name: subconf
+            mountPath: /etc/nginx/conf.d
+            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: openresty-min
+  name: openresty-svc
+spec:
+  selector:
+    app: openresty
+  type: NodePort
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    nodePort: 30911

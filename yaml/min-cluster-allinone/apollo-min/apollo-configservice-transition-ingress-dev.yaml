@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pro-apollo-configservice001
+  namespace: inc
+  labels:
+    wayne-app: pro-apollo
+    wayne-ns: inc
+    app: pro-apollo-configservice001
+  #annotations:
+  #  kubernetes.io/ingress.class: inc
+spec:
+  tls: []
+  rules:
+    - host: dev-apollo-configservic
+      http:
+        paths:
+          - backend:
+              serviceName: dev-apollo-configservic
+              servicePort: 80
+            path: /

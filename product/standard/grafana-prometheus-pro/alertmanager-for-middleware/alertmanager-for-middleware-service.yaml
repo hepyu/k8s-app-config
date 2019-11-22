@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager-for-middleware 
+  namespace: monitoring 
+  labels:
+    app: alertmanager-for-middleware
+spec:
+  ports:
+  - port: 9093
+    name: http
+  type: NodePort
+  selector:
+    app: alertmanager-for-middleware

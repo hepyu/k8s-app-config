@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: alertmanager-for-middleware 
+  namespace: monitoring
+  labels:
+    app: alertmanager-for-middleware 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: alertmanager-for-middleware
+  template:
+    metadata:
+      annotations:
+        {}
+        
+      labels:
+        app: alertmanager-for-middleware
+
+    spec:
+      containers:
+        - name: alertmanager 
+          image: "prom/alertmanager:v0.17.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--config.file=/git/k8s-resource-monitoring/alertmanager-for-middleware/dingtalk.yml"
+          ports:
+            - name: alert-port
+              containerPort: 9093
+        - name: dingtalk
+          image: "timonwong/prometheus-webhook-dingtalk:v0.3.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--ding.profile=webhook1=https://oapi.dingtalk.com/robot/send?access_token=c0c9253c23be2314c27cf4de5ec19653ea0799594e18d22d8b601f552c94ebb8"
+#            - "--ding.profile=webhook1=https://oapi.dingtalk.com/robot/send?access_token=f81d81a55f416c4bd4737b5d063c134660164ee81b5089f9e4426b31ab7e5632" #test
+          ports:
+            - name: dingtalk-port
+              containerPort: 8060

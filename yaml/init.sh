@@ -42,3 +42,6 @@ mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-2
 mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-3
 mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-4
 mkdir -p /datavip/k8s-data/redis-cluster-min-pv-local-5
+
+mkdir -p /datavip/k8s-data/openresty-subconf-pv-local
+mkdir -p /datavip/k8s-data/openresty-lualib-pv-local

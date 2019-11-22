@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: openresty-lualib-pv-local
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "openresty-lualib-storageclass-local"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/openresty-lualib-pv-local
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是podé要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: openresty-subconf-pv-local
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "openresty-subconf-storageclass-local"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/openresty-subconf-pv-local
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod>能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是podé要分不到的主机名，这台主机上开启了local-pv资源。
+          - future

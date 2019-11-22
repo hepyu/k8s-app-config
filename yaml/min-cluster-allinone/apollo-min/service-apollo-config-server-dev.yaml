@@ -4,7 +4,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: configmap-apollo-config-server-dev
 data:
   application-github.properties: |
@@ -21,7 +21,7 @@ data:
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: service-apollo-meta-server-dev
   labels:
     app: service-apollo-meta-server-dev
@@ -40,7 +40,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: service-apollo-config-server-dev
   labels:
     app: service-apollo-config-server-dev
@@ -60,7 +60,7 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1beta2
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: statefulset-apollo-config-server-dev
   labels:
     app: statefulset-apollo-config-server-dev
@@ -115,7 +115,7 @@ spec:
           
           env:
             - name: APOLLO_CONFIG_SERVICE_NAME
-              value: "service-apollo-config-server-dev.apollo-min"
+              value: "service-apollo-config-server-dev.inc"
           
           readinessProbe:
             tcpSocket:

@@ -1,0 +1,19 @@
+---
+metadata:
+  name: dev-apollo-configservic
+  labels:
+    inc-app: dev-apollo-configservice
+  namespace: inc
+spec:
+  selector:
+    #inc-app: apollo-configservice
+    app: pod-apollo-config-server-dev
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 80
+      name: dev-apollo-configservice
+  type: ClusterIP
+  sessionAffinity: ClientIP
+apiVersion: v1
+kind: Service

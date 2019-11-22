@@ -4,7 +4,7 @@
 #kind: Service
 #apiVersion: v1
 #metadata:
-#  namespace: apollo-min
+#  namespace: inc
 #  name: service-mysql-for-portal-server
 #  labels:
 #    app: service-mysql-for-portal-server
@@ -19,7 +19,7 @@
 #kind: Endpoints
 #apiVersion: v1
 #metadata:
-#  namespace: apollo-min
+#  namespace: inc
 #  name: service-mysql-for-portal-server
 #subsets:
 #  - addresses:
@@ -34,7 +34,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: configmap-apollo-portal-server
 data:
   application-github.properties: |
@@ -45,7 +45,7 @@ data:
     spring.datasource.password = admin
     spring.jpa.database-platform = org.hibernate.dialect.MySQL5Dialect
   apollo-env.properties: |
-    dev.meta=http://service-apollo-config-server-dev.apollo-min:8080
+    dev.meta=http://service-apollo-config-server-dev.inc:8080
     #fat.meta=http://service-apollo-config-server-test-alpha.sre:8080
     #uat.meta=http://service-apollo-config-server-test-beta.sre:8080
     #pro.meta=http://service-apollo-config-server-prod.sre:8080
@@ -54,7 +54,7 @@ data:
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: service-apollo-portal-server
   labels:
     app: service-apollo-portal-server
@@ -74,7 +74,7 @@ spec:
 kind: Deployment
 apiVersion: apps/v1beta2
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: deployment-apollo-portal-server
   labels:
     app: deployment-apollo-portal-server
@@ -113,17 +113,17 @@ spec:
         # 确保 admin-service 正常提供服务
         - image: hpy253215039/alpine-bash:v3.8
           name: check-service-apollo-admin-server-dev
-          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-dev.apollo-min:8090"]
+          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-dev.inc:8090"]
         #不需要这么多次try
         #- image: hpy253215039/alpine-bash:v3.8
         #  name: check-service-apollo-admin-server-alpha
-        #  command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-test-alpha.apollo-min:8090"]
+        #  command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-test-alpha.inc:8090"]
         #- image: hpy253215039/alpine-bash:v3.8
         #  name: check-service-apollo-admin-server-beta
-        #  command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-test-beta.apollo-min:8090"]
+        #  command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-test-beta.inc:8090"]
         #- image: hpy253215039/alpine-bash:v3.8
         #  name: check-service-apollo-admin-server-prod
-        #  command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-prod.apollo-min:8090"]    
+        #  command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-admin-server-prod.inc:8090"]    
       
       containers:
         - image: hpy253215039/apollo-portal-server:v1.4.0    # 更改为你的 docker registry 下的 image
@@ -153,7 +153,7 @@ spec:
           
           env:
             - name: APOLLO_PORTAL_SERVICE_NAME
-              value: "service-apollo-portal-server.apollo-min"
+              value: "service-apollo-portal-server.inc"
           
           readinessProbe:
             tcpSocket:

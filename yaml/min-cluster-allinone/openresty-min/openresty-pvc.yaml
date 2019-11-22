@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  #当启用PVC 保护 alpha 功能时，如果用户删除了一个 pod 正在使用的 PVC，则该 PVC 不会被立即删除。PVC 的删除将被推迟，直到 PVC 不再被任何 pod 使用。
+  #可以看到，当 PVC 的状态为 Teminatiing 时，PVC 受到保护，Finalizers 列表中包含 kubernetes.io/pvc-protection：
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: openresty-min
+  name: openresty-lualib-pvc
+  namespace: openresty-min
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: openresty-lualib-storageclass-local
+  volumeMode: Filesystem
+  volumeName: openresty-lualib-pv-local
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  #当启用PVC 保护 alpha 功能时，如果用户删除了一个 pod 正在使用的 PVC，则该 PVC 不会被立即删除。PVC >的删除将被推迟，直到 PVC 不再被任何 pod 使用。
+  #可以看到，当 PVC 的状态为 Teminatiing 时，PVC 受到保护，Finalizers 列表中包含 kubernetes.io/pvc-protection：
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: openresty-min
+  name: openresty-subconf-pvc
+  namespace: openresty-min
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: openresty-subconf-storageclass-local
+  volumeMode: Filesystem
+  volumeName: openresty-subconf-pv-local

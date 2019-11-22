@@ -4,7 +4,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: configmap-apollo-admin-server-dev
 data:
   application-github.properties: |
@@ -21,7 +21,7 @@ data:
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: service-apollo-admin-server-dev
   labels:
     app: service-apollo-admin-server-dev
@@ -39,7 +39,7 @@ spec:
 kind: Deployment
 apiVersion: apps/v1beta2
 metadata:
-  namespace: apollo-min
+  namespace: inc
   name: deployment-apollo-admin-server-dev
   labels:
     app: deployment-apollo-admin-server-dev
@@ -74,7 +74,7 @@ spec:
       initContainers:
         - image: hpy253215039/alpine-bash:v3.8
           name: check-service-apollo-config-server-dev
-          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-config-server-dev.apollo-min:8080"]
+          command: ['bash', '-c', "curl --connect-timeout 2 --max-time 5 --retry 60 --retry-delay 1 --retry-max-time 120 service-apollo-config-server-dev.inc:8080"]
       
       containers:
         - image: hpy253215039/apollo-admin-server:v1.4.0
@@ -101,7 +101,7 @@ spec:
           
           env:
             - name: APOLLO_ADMIN_SERVICE_NAME
-              value: "service-apollo-admin-server-dev.apollo-min"
+              value: "service-apollo-admin-server-dev.inc"
           
           readinessProbe:
             tcpSocket:
