@@ -21,8 +21,13 @@
 | python-rocketmq-exporter监控, python版本                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/grafana-prometheus-pro/exporter-mq-rocketmq                 | 使用python开发的exporter,主要监控消息堆积数，精确到进程粒度。不建议使用，建议使用下方的go版本。|
 | go-rocketmq-exporter监控, go版本                        | https://github.com/hepyu/RocketmqExporter             | 使用go开发的exporter,主要监控消息堆积数，精确到进程粒度。|
 
+# (2).相对有价值的研究性实战
 
-# (2).工程目的
+|              目录               |                            地址                              |                       备注                       |
+| ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
+| redis-cluster容器化                      | https://github.com/hepyu/k8s-app-config/tree/master/yaml/min-cluster-allinone/redis-cluster-min                                    | redis5.0.x版本。 |
+
+# (3).工程目的
 
 提供生产级实践；
 
