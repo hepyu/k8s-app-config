@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pv-metrics-grafana
+  name: pv-metrics-saf-promethues
   namespace: monitoring
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: ""
+  storageClassName: "metrics-saf-promethues"
   resources:
     requests:
-      storage: 10Gi
-
+      storage: 100Gi

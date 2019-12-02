@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: prometheus-storage-mysql
-  namespace: monitor
+  namespace: monitoring
 spec:
   #headless service
   serviceName: prometheus-storage-mysql

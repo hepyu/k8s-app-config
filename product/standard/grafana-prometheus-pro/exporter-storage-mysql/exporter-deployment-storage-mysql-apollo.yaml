@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: exporter-mysql-apollo
-  namespace: monitor
+  namespace: monitoring
 spec:
   template:
     metadata:
@@ -37,7 +37,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: exporter-mysql-apollo
-  namespace: monitor
+  namespace: monitoring
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9104"

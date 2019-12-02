@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: prometheus-mq-rocketmq
+  name: prometheus-saf
   namespace: monitoring
 spec:
   #headless service
-  serviceName: prometheus-mq-rocketmq
+  serviceName: prometheus-saf
   selector:
     matchLabels:
-      app: prometheus-mq-rocketmq
+      app: prometheus-saf
   template:
     metadata:
       labels:
-        app: prometheus-mq-rocketmq 
+        app: prometheus-saf 
     spec:
       #暂时关闭容忍点和nodeSelector，量很小，而且用户基本只有我一个人，只是用来监控基础服务，同时nas和业务不在一个实例，生产环境最好给单独资源。
       #设置了污点的Node将根据taint的effect：NoSchedule、PreferNoSchedule、NoExecute和Pod之间产生互斥的关系，Pod将在一定程度上不会被调度到Node上。 
@@ -36,7 +36,7 @@ spec:
         - containerPort: 9090
           name: prom-graph
         volumeMounts:
-        - name: pv-metrics-mq-rocketmq-promethues 
+        - name: pv-metrics-saf-promethues 
           mountPath: /prometheus
         - name: prometheus-config
           mountPath: /etc/prometheus/prometheus.yml
@@ -68,12 +68,12 @@ spec:
       #imagePullSecrets:
       #  - name: inc
       volumes:
-      - name: pv-metrics-mq-rocketmq-promethues 
+      - name: pv-metrics-saf-promethues 
         persistentVolumeClaim:
-          claimName: pv-metrics-mq-rocketmq-promethues
+          claimName: pv-metrics-saf-promethues
       - name: prometheus-config
         configMap:
-          name: prometheus-mq-rocketmq
+          name: prometheus-saf
           defaultMode: 511
           items:
             - key: prometheus.yml

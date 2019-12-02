@@ -2,11 +2,11 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: prometheus-storage-mysql 
-  namespace: monitor
+  namespace: monitoring
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: monitor
+  namespace: monitoring
 roleRef:
   kind: ClusterRole
   name: admin

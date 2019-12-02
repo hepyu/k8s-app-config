@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-metrics-storage-mysql-promethues 
+  name: pv-metrics-saf-promethues 
   namespace: monitoring
 spec:
   mountOptions:
@@ -13,10 +13,10 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: "metrics-storage-mysql-promethues"
+  storageClassName: "metrics-saf-promethues"
   #表示使用本地存储
   local:
-    path: /datavip/k8s-data/pv-metrics-storage-mysql-promethues
+    path: /datavip/k8s-data/pv-metrics-saf-promethues
   #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
   #创建local PV之前，你需要先保证有对应的storageClass已经创建。
   nodeAffinity:
@@ -31,4 +31,4 @@ spec:
   #生产环境使用云存储
   #nfs:
   #  server: 你的存储地址
-  #  path: /pv-metrics-storage-mysql-promethues
+  #  path: /pv-metrics-saf-promethues

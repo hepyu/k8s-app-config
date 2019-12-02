@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pv-metrics-mq-rocketmq-promethues
-  namespace: monitor
+  namespace: monitoring
 spec:
   accessModes:
     - ReadWriteOnce
