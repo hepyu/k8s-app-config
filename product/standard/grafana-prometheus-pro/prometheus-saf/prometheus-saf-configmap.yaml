@@ -18,13 +18,27 @@ data:
         - role: pod
   
         relabel_configs:
-        - source_labels: [__meta_kubernetes_pod_label_exporter, __meta_kubernetes_namespace]
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_pod_label_ns, __meta_kubernetes_pod_label_framework]
           action: keep
-          regex: saf;monitor
-        - source_labels: [__meta_kubernetes_pod_label_rocketClusterName]
+          regex: saf;inc;inc
+        - source_labels: [__meta_kubernetes_pod_container_port_number]
+          action: keep          
+          regex: 9145
+        - source_labels: [__meta_kubernetes_pod_name]
+          separator: ;
+          regex: (.*)
+          target_label: pod
+          replacement: $1
           action: replace
-          target_label: safClusterName
-        - source_labels: [__meta_kubernetes_pod_label_namesrvAddr]
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          separator: ;
+          regex: (.*)
+          target_label: app
+          replacement: $1
           action: replace
-          target_label: namesrvAddr
-
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          separator: ;
+          regex: (.*)
+          target_label: appId
+          replacement: $1
+          action: replace 

@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: prometheus-saf
+  name: prometheus-saf
+  namespace: monitoring
+spec:
+  rules:
+  - host: prometheus-saf.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-saf
+          servicePort: 9090
+        path: /
+
