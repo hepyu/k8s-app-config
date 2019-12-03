@@ -56,5 +56,7 @@ mkdir -p /datavip/k8s-data/tidb-cluster-tikv-pv-local-2
 
 mkdir -p /datavip/k8s-data/pv-metrics-grafana
 mkdir -p /datavip/k8s-data/pv-metrics-saf-promethues
+mkdir -p /datavip/k8s-data/pv-metrics-mq-rocketmq-promethues
+mkdir -p /datavip/k8s-data/pv-metrics-storage-mysql-promethues
 
 chmod -R 777 /datavip/k8s-data
