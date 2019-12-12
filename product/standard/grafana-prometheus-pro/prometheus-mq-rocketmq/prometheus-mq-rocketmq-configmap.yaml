@@ -20,7 +20,7 @@ data:
         relabel_configs:
         - source_labels: [__meta_kubernetes_pod_label_exporter, __meta_kubernetes_namespace]
           action: keep
-          regex: rocketmq;monitor
+          regex: rocketmq;monitoring
         - source_labels: [__meta_kubernetes_pod_label_rocketClusterName]
           action: replace
           target_label: rocketmqClusterName

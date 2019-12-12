@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-metrics-redis-promethues
+  namespace: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "metrics-redis-promethues"
+  resources:
+    requests:
+      storage: 100Gi

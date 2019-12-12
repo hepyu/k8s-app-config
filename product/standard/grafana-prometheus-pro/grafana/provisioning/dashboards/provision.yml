@@ -22,3 +22,10 @@ providers:
    type: file
    options:
      path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/saf-app
+ - name: 'redis'
+   orgId: 1
+   folder: 'redis'
+   folderUid: 'redis'
+   type: file
+   options:
+     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/redis

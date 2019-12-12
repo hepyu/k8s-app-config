@@ -1,0 +1,55 @@
+#对应监控的redis-cluster位于：
+#https://github.com/hepyu/k8s-app-config/tree/master/yaml/min-cluster-allinone/redis-cluster-min
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: exporter-redis-cluster-min
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exporter-redis-cluster-min
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: exporter-redis-cluster-min
+        exporter: "redis"
+    spec:
+      containers:
+      - env:
+        - name: REDIS_ADDR
+          value: redis-hkc-0.redis-hkc.redis-cluster-min.svc.cluster.local:9720,redis-hkc-1.redis-hkc.redis-cluster-min.svc.cluster.local:9720,redis-hkc-2.redis-hkc.redis-cluster-min.svc.cluster.local:9720,redis-hkc-3.redis-hkc.redis-cluster-min.svc.cluster.local:9720,redis-hkc-4.redis-hkc.redis-cluster-min.svc.cluster.local:9720,redis-hkc-5.redis-hkc.redis-cluster-min.svc.cluster.local:9720
+        - name: REDIS_ALIAS
+          value: redis-cluster-min
+        image: oliver006/redis_exporter:v0.28.0
+        imagePullPolicy: IfNotPresent
+        name: exporter-redis-cluster-min
+        ports:
+        - containerPort: 9121
+          name: exporter-port
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 40m
+            memory: 10Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      #线上开启：线上一般会分配几个固定机器全部用于exporter
+      #nodeSelector:
+      #  node-role.kubernetes.io/monitor: "true"
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      #线上开启
+      #tolerations:
+      #- effect: NoSchedule
+      #  key: role
+      #  operator: Equal
+      #  value: monitor
