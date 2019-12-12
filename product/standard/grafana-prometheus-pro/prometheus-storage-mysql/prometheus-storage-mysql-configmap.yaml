@@ -20,4 +20,4 @@ data:
         relabel_configs:
         - source_labels: [__meta_kubernetes_pod_label_exporter, __meta_kubernetes_namespace]
           action: keep
-          regex: mysql;monitor
+          regex: mysql;monitoring

@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: prometheus-storage-mysql
+  name: prometheus-storage-mysql
+  namespace: monitoring
+spec:
+  rules:
+  - host: prometheus-storage-mysql.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-storage-mysql
+          servicePort: 9090
+        path: /
+
