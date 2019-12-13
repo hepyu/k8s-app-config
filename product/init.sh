@@ -59,5 +59,6 @@ mkdir -p /datavip/k8s-data/pv-metrics-saf-promethues
 mkdir -p /datavip/k8s-data/pv-metrics-mq-rocketmq-promethues
 mkdir -p /datavip/k8s-data/pv-metrics-storage-mysql-promethues
 mkdir -p /datavip/k8s-data/pv-metrics-redis-promethues
+mkdir -p /datavip/k8s-data/pv-metrics-pushgateway-aliyun-promethues
 
 chmod -R 777 /datavip/k8s-data

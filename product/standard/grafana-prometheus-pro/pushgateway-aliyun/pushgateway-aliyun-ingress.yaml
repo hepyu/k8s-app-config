@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pushgateway-aliyun
+  namespace: monitoring
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: pushgateway-aliyun.inc-inc.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: pushgateway-aliyun
+          servicePort: 9091

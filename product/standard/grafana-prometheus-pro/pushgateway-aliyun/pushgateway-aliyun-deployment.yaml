@@ -1,0 +1,50 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  namespace: monitoring
+  name:  pushgateway-aliyun
+  labels:
+    app:  pushgateway-aliyun
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app:  pushgateway-aliyun
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: "25%"
+      maxUnavailable: "25%"
+  template:
+    metadata:
+      name:  pushgateway-aliyun
+      labels:
+        app:  pushgateway-aliyun
+        pushgateway: pushgateway-aliyun
+    spec:
+      containers:
+        - name:  pushgateway-aliyun
+          image: prom/pushgateway:v1.0.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+            httpGet:
+              path: /
+              port: 9091
+          ports:
+            - name: "app-port"
+              containerPort: 9091
+          resources:
+            limits:
+              memory: "1000Mi"
+              cpu: 1
+            requests:
+              memory: "100Mi"
+              cpu: 0.1

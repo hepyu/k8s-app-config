@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: prometheus-pushgateway-aliyun
+  name: prometheus-pushgateway-aliyun
+  namespace: monitoring
+spec:
+  rules:
+  - host: prometheus-pushgateway-aliyun.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-pushgateway-aliyun
+          servicePort: 9090
+        path: /
+
