@@ -49,9 +49,13 @@ spec:
         env:	
         #开启percona的dashboards，用于mysql监控dashboard显示，关闭，我们通过provisioning方式实现dashboard导入.
         #- name: GF_INSTALL_PLUGINS
-        #  value: "percona-percona-app"
+        #  value: "percona-percona-app, grafana-piechart-panel"
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-piechart-panel"
         - name: GF_PATHS_PROVISIONING
           value: "/var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning"
+        #- name: GF_PATHS_PLUGINS
+        #  value: ""
       #生产环境打开，用自己镜像仓库的secrets
       #imagePullSecrets:
       #  - name: inc
