@@ -42,12 +42,3 @@ datasources:
    jsonData:
       tlsAuth: false
       tlsAuthWithCACert: false
- - name: prometheus-pushgateway-aliyun
-   type: prometheus
-   access: proxy
-   orgId: 1
-   url: http://prometheus-pushgateway-aliyun:9090
-   isDefault: false
-   jsonData:
-      tlsAuth: false
-      tlsAuthWithCACert: false 
