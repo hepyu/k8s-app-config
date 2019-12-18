@@ -1,0 +1,51 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: alertmanager
+  namespace: monitoring
+data:
+  #告警能力在Prometheus的架构中被划分成两个独立的部分。
+  #通过在Prometheus中定义AlertRule（告警规则），Prometheus会周期性的对告警规则进行计算，如果满足告警触发条件就会向Alertmanager发送告警信息。
+  dingtalk.yaml: |
+    global:
+      #该参数定义了当Alertmanager持续多长时间未接收到告警后标记告警状态为resolved（已解决）。该参数的定义可能会影响到告警恢复通知的接收时间，其默认值为5分钟。
+      resolve_timeout: 1m
+   
+    #Alertmanager的配置主要包含两个部分：路由(route)以及接收器(receivers)。所有的告警信息都会从配置中的顶级路由(route)进入路由树，根据路由规则将告警信息发送给相应的接收器。
+    #在Alertmanager中可以定义一组接收器，比如可以按照角色(比如系统运维，数据库管理员)来划分多个接收器。接收器可以关联邮件，Slack以及其它方式接收告警信息。
+    #本段节选自：https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/alert/install-alert-manager
+
+    #route定义告警的路由匹配规则，以及Alertmanager需要将匹配到的告警发送给哪一个receiver
+    route:
+      #分组用于将详细的告警信息合并成一个通知。
+      #比如由于系统宕机导致大量的告警被同时触发，在这种情况下分组机制可以将这些被触发的告警合并为一个告警通知，避免一次性接受大量的告警通知，而无法对问题进行快速定位。
+      #例如，当集群中有数百个正在运行的服务实例，并且为每一个实例设置了告警规则。假如此时发生了网络故障，可能导致大量的服务实例无法连接到数据库，结果就会有数百个告警被发送到Alertmanager。
+      #而作为用户，可能只希望能够在一个通知中中就能查看哪些服务实例收到影响。这时可以按照服务所在集群或者告警名称对告警进行分组，而将这些告警内聚在一起成为一个通知。
+      #本段话节选自：https://yunlzheng.gitbook.io/prometheus-book/parti-prometheus-ji-chu/alert/prometheus-alert-manager-overview
+      
+      #根据报警的名称分组
+      group_by: ['alertname']
+      #有的时候为了能够一次性收集和发送更多的相关信息时，可以通过group_wait参数设置等待时间，如果在等待时间内当前group接收到了新的告警，这些告警将会合并为一个通知向receiver发送。
+      group_wait: 5s
+      #用于定义相同的Group之间发送告警通知的时间间隔
+      group_interval: 10s
+      #未解决告警的重复提醒时间间隔
+      repeat_interval: 1m
+      #告警发送给哪一个receiver，告警默认通知到的目标地址
+      receiver: 'default-webhook'
+      #routes用来定义子路由，如果命中子路由的match，则将告警发现子路由中定义的目标地址
+      #routes:
+      #- match:
+      #    debug: true
+      #  receiver: dingtalk2
+      #  group_by: [fullurl, host]
+
+    receivers:
+    - name: 'default-webhook'
+      webhook_configs:
+        - send_resolved: false
+          url: http://localhost:8060/dingtalk/default-webhook/send #webhook1是启动钉钉的profile名,在alertmanager-deployment中的--ding-profile配置中
+    #- name: 'dingtalk2'
+      #webhook_configs:
+        #- send_resolved: false
+          #url: http://localhost:8061/dingtalk/webhook2/send #webhook1是启动钉钉的profile名

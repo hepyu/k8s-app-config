@@ -11,6 +11,16 @@ data:
       scrape_interval:     60s
       evaluation_interval: 60s
 
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+		  #定义报警地址
+          #- alertmanager:9093
+
+	rule_files:
+      #- "rocketmq-alert-rule.yaml"
+
     scrape_configs:
 
       - job_name: 'rocketmq-monitor'

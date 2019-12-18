@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: alertmanager 
+  namespace: monitoring
+  labels:
+    app: alertmanager 
+spec:
+  #replicas: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager
+  template:
+    metadata:
+      annotations:
+        {}
+      labels:
+        app: alertmanager
+    spec:
+      containers:
+        - name: alertmanager 
+          image: "prom/alertmanager:v0.17.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--config.file=/etc/dingtalk.yaml"
+          ports:
+            - name: alert-port
+              containerPort: 9093
+          volumeMounts:
+          - name: dingtalk-config
+            mountPath: /etc/dingtalk.yaml
+            subPath: dingtalk.yaml
+            readOnly: false
+        - name: dingtalk
+          image: "timonwong/prometheus-webhook-dingtalk:v0.3.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--ding.profile=default-webhook=https://oapi.dingtalk.com/robot/send?access_token=eb9f63bb28865126a7196b09e931507c2b9eefdd9c5431577028056e2dac9368"
+            #可以指定多个--ding.profile
+          ports:
+            - name: dingtalk-port
+              containerPort: 8060
+      #生产环境打开，用自己镜像仓库的secrets
+      #imagePullSecrets:
+      #  - name: inc
+      volumes:
+      - name: dingtalk-config
+        configMap:
+          name: alertmanager
+          defaultMode: 511
+          items:
+            - key: dingtalk.yaml
+              path: dingtalk.yaml
