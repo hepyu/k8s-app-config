@@ -68,7 +68,8 @@ spec:
       hostNetwork: true
       hostPID: true
       nodeSelector:
-        kubernetes.io/os: linux
+        node.type: monitoring
+        #kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

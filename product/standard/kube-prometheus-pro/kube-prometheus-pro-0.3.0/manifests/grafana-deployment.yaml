@@ -115,7 +115,8 @@ spec:
           name: grafana-dashboard-workload-total
           readOnly: false
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        node.type: monitoring
+        #beta.kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

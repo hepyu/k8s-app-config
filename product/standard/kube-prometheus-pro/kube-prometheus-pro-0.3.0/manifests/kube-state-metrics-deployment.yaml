@@ -65,7 +65,8 @@ spec:
             cpu: 100m
             memory: 150Mi
       nodeSelector:
-        kubernetes.io/os: linux
+        node.type: monitoring
+        #kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534

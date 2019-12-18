@@ -40,7 +40,8 @@ spec:
           name: config
           readOnly: false
       nodeSelector:
-        kubernetes.io/os: linux
+        node.type: monitoring
+        #kubernetes.io/os: linux
       serviceAccountName: prometheus-adapter
       volumes:
       - emptyDir: {}

@@ -62,5 +62,7 @@ mkdir -p /datavip/k8s-data/pv-metrics-redis-promethues
 mkdir -p /datavip/k8s-data/pv-metrics-pushgateway-aliyun-promethues
 mkdir -p /datavip/k8s-data/pv-metrics-alertmanager
 mkdir -p /datavip/k8s-data/pv-alertmanager
+mkdir -p /datavip/k8s-data/prometheus-k8s-0
+mkdir -p /datavip/k8s-data/prometheus-k8s-1
 
 chmod -R 777 /datavip/k8s-data

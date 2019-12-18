@@ -11,9 +11,17 @@ spec:
     - name: alertmanager-main
       namespace: monitoring
       port: web
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: prometheus-k8s
+        resources:
+          requests:
+            storage: 100Gi
   baseImage: quay.io/prometheus/prometheus
   nodeSelector:
-    kubernetes.io/os: linux
+    node.type: monitoring
+    #kubernetes.io/os: linux
   podMonitorSelector: {}
   replicas: 2
   resources:
