@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: grafana
+  name: grafana-basicservice
   namespace: monitoring
 spec:
-  serviceName: "grafana"
+  serviceName: "grafana-basicservice"
   selector:
     matchLabels:
-      app: grafana
+      app: grafana-basicservice
   template:
     metadata:
       labels:
-        app: grafana
+        app: grafana-basicservice
     spec:
       terminationGracePeriodSeconds: 10
       initContainers:
@@ -30,12 +30,12 @@ spec:
         - name: pv-metrics-grafana
           mountPath: /git
       containers:
-      - name: grafana
+      - name: grafana-basicservice
         #存到你公司自己的镜像仓库，不要用docker官方仓库
         image: grafana/grafana:6.4.2
         ports:
         - containerPort: 3000
-          name: grafana
+          name: grafana-basicservice
         resources:
           requests:
             cpu: 500m

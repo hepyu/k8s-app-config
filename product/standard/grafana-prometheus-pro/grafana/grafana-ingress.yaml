@@ -2,8 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   labels:
-    app: grafana
-  name: grafana
+    app: grafana-basicservice
+  name: grafana-basicservice
   namespace: monitoring
 spec:
   rules:
@@ -11,7 +11,7 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: grafana
+          serviceName: grafana-basicservice
           servicePort: 3000
         path: /
 
