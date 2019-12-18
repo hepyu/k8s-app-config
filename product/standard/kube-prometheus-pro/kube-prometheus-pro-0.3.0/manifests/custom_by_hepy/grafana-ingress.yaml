@@ -2,16 +2,16 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   labels:
-    app: grafana-biz
-  name: grafana-biz
+    app: grafana
+  name: grafana
   namespace: monitoring
 spec:
   rules:
-  - host: monitor-basicservice.inc-inc.com
+  - host: monitor-kubernetes.inc-inc.com
     http:
       paths:
       - backend:
-          serviceName: grafana-biz
+          serviceName: grafana
           servicePort: 3000
         path: /
 
