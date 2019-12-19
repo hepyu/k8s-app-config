@@ -47,25 +47,18 @@ ingress的亲和性配置参见文件：https://github.com/hepyu/k8s-app-config/
 
 # (5).相关文章
 
-1.官方地址容器化配置地址：
+1.[官方地址容器化配置地址](https://github.com/ctripcorp/apollo/tree/master/scripts/apollo-on-kubernetes/kubernetes)
 
-https://github.com/ctripcorp/apollo/tree/master/scripts/apollo-on-kubernetes/kubernetes
+2.[官方apollo容器化步骤(Step by Step)](https://github.com/ctripcorp/apollo/blob/master/scripts/apollo-on-kubernetes/README.md)
 
-2.官方apollo容器化步骤(Step by Step):
+3.[笔者apollo容器化步骤(Step by Step)](https://www.toutiao.com/i6698673592915198478/)
 
-https://github.com/ctripcorp/apollo/blob/master/scripts/apollo-on-kubernetes/README.md
-
-3.笔者apollo容器化步骤(Step by Step):
-
-https://www.toutiao.com/i6698673592915198478/
 
 相对于官方文档增加了镜像仓库推送/db初始化的更加详细的操作，根据笔者的习惯整理了步骤，作为笔者自己的笔记/备份
 
-4.笔者apollo容器化的生产级实践与总结：
+4.[笔者apollo容器化的生产级实践与总结](https://mp.weixin.qq.com/s?__biz=Mzg4MDEzMDM4MA==&mid=2247484149&idx=1&sn=6c2d50aeeadbb30f07de7f5c3d2ec545&chksm=cf78a2d6f80f2bc0319e55a16a8903ce9f2af2f0bb7a85d64bbcdb6ba0fb2c1654f87842ca8c&token=1699061844&lang=zh_CN#rd
+)
 
-阿里云&kubernetes&微服务生产实践-1：apollo架构-1
-
-https://mp.weixin.qq.com/s?__biz=Mzg4MDEzMDM4MA==&mid=2247484149&idx=1&sn=6c2d50aeeadbb30f07de7f5c3d2ec545&chksm=cf78a2d6f80f2bc0319e55a16a8903ce9f2af2f0bb7a85d64bbcdb6ba0fb2c1654f87842ca8c&token=1699061844&lang=zh_CN#rd
 
 # (6).apollo容器化混合架构
 
