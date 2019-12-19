@@ -32,6 +32,9 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+        env:
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-piechart-panel" 
         volumeMounts:
         - mountPath: /var/lib/grafana
           name: grafana-storage
