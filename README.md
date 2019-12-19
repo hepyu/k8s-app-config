@@ -20,6 +20,7 @@
 | grafana/prometheus监控                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/grafana-prometheus-pro                 | grafana6.4.2, prometheus2.13.0
 | python-rocketmq-exporter监控, python版本                        | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/grafana-prometheus-pro/exporter-mq-rocketmq                 | 使用python开发的exporter,主要监控消息堆积数，精确到进程粒度。不建议使用，建议使用下方的go版本。|
 | go-rocketmq-exporter监控, go版本                        | https://github.com/hepyu/RocketmqExporter             | 使用go开发的exporter,主要监控消息堆积数，精确到进程粒度。|
+| kube-prometheus | https://github.com/hepyu/k8s-app-config/tree/master/product/standard/kube-prometheus-pro/kube-prometheus-pro-0.3.0 | 做了一些生产级改造，版本为release-0.3.0|
 
 # (2).相对有价值的研究性实战
 
