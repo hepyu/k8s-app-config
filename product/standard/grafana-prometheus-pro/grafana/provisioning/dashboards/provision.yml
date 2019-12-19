@@ -1,6 +1,27 @@
 apiVersion: 1
 
 providers:
+ - name: 'saf-app'
+   orgId: 1
+   folder: 'saf-app'
+   folderUid: 'saf-app'
+   type: file
+   options:
+     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/saf-app
+ - name: 'kubernetes'
+   orgId: 1
+   folder: 'kubernetes'
+   folderUid: 'kubernetes'
+   type: file
+   options:
+     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/kubernetes
+ - name: 'redis'
+   orgId: 1
+   folder: 'redis'
+   folderUid: 'redis'
+   type: file
+   options:
+     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/redis
  - name: 'storage-mysql'
    orgId: 1
    folder: 'storage-mysql'
@@ -15,17 +36,3 @@ providers:
    type: file
    options:
      path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/mq-rocketmq
- - name: 'saf-app'
-   orgId: 1
-   folder: 'saf-app'
-   folderUid: 'saf-app'
-   type: file
-   options:
-     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/saf-app
- - name: 'redis'
-   orgId: 1
-   folder: 'redis'
-   folderUid: 'redis'
-   type: file
-   options:
-     path: /var/lib/grafana/k8s-app-config/product/standard/grafana-prometheus-pro/grafana/provisioning/dashboards/redis
