@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: kiali-istio-demo
+  name: kiali-istio-demo
+  namespace: istio-system
+spec:
+  rules:
+  - host: kiali-istio-demo.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: kiali
+          servicePort: 20001
+        path: /
+
