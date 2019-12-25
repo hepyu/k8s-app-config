@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traefik
+  namespace: ingress-traefik
+spec:
+  rules:
+  - host: traefik-web.inc-inc.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: traefik
+          servicePort: 8000
+  - host: traefik-admin.inc-inc.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: traefik
+          servicePort: 8080

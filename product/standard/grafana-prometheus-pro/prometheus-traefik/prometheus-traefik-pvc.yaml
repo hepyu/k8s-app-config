@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-metrics-traefik-promethues
+  namespace: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "metrics-traefik-promethues"
+  resources:
+    requests:
+      storage: 100Gi

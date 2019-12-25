@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: admin-auth
+spec:
+  basicAuth:
+    secret: authsecret
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: authsecret
+  namespace: traefik
+
+data:
+  users: |2
+    dGVzdDokYXByMSRINnVza2trVyRJZ1hMUDZld1RyU3VCa1RycUU4d2ovCnRlc3QyOiRhcHIxJGQ5
+    aHI5SEJCJDRIeHdnVWlyM0hQNEVzZ2dQL1FObzAK

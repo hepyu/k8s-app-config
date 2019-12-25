@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: prometheus-traefik
+  name: prometheus-traefik
+  namespace: monitoring
+spec:
+  rules:
+  - host: prometheus-traefik.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus-traefik
+          servicePort: 9090
+        path: /
+

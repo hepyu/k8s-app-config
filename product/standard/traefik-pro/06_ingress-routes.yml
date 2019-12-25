@@ -1,0 +1,59 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-admin
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+    kubernetes.io/tls-acme: "true"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`admin.example.com`) && PathPrefix(`/`)
+      kind: Rule
+      priority: 1
+      middlewares:
+        - name: admin-auth
+      services:
+        - name: traefik-admin
+          port: 8080
+  tls:
+    secretName: cert-yourdomain
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami
+  namespace: traefik
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`whoami.example.com`) && PathPrefix(`/notls`)
+      kind: Rule
+      services:
+        - name: whoami
+          port: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami-tls
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    cert-manager.io/cluster-issuer: "letsencrypt-cluster-issuer"
+    kubernetes.io/tls-acme: "true"
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`whoami.example.com`) && PathPrefix(`/tls`)
+      kind: Rule
+      services:
+        - name: whoami
+          port: 80
+  tls:
+    secretName: cert-yourdomain

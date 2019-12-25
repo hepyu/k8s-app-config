@@ -52,3 +52,13 @@ datasources:
    jsonData:
       tlsAuth: false
       tlsAuthWithCACert: false 
+ - name: prometheus-traefik
+   type: prometheus
+   access: proxy
+   editable: false
+   orgId: 1
+   url: http://prometheus-traefik:9090
+   isDefault: false
+   jsonData:
+      tlsAuth: false
+      tlsAuthWithCACert: false

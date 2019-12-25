@@ -1,0 +1,262 @@
+# define Traefik configuration
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: traefik-config
+  namespace: traefik
+data:
+  traefik.toml: |
+    # [global]
+    #   checkNewVersion = true
+    #   sendAnonymousUsage = true
+
+    # [serversTransport]
+    #   insecureSkipVerify = true
+    #   rootCAs = ["foobar", "foobar"]
+    #   maxIdleConnsPerHost = 42
+    #   [serversTransport.forwardingTimeouts]
+    #     dialTimeout = 42
+    #     responseHeaderTimeout = 42
+    #     idleConnTimeout = 42
+
+    [entryPoints]
+      [entryPoints.websecure]
+        address = ":443"
+        # [entryPoints.secure.transport]
+        #   [entryPoints.EntryPoint0.transport.lifeCycle]
+        #     requestAcceptGraceTimeout = 42
+        #     graceTimeOut = 42
+        #   [entryPoints.secure.transport.respondingTimeouts]
+        #     readTimeout = 42
+        #     writeTimeout = 42
+        #     idleTimeout = 42
+        # [entryPoints.secure.proxyProtocol]
+        #   insecure = true
+        #   trustedIPs = ["foobar", "foobar"]
+        # [entryPoints.secure.forwardedHeaders]
+        #   insecure = true
+        #   trustedIPs = ["foobar", "foobar"]
+      [entryPoints.web]
+        address = ":80"
+        # [entryPoints.web.transport]
+        #   [entryPoints.EntryPoint0.transport.lifeCycle]
+        #     requestAcceptGraceTimeout = 42
+        #     graceTimeOut = 42
+        #   [entryPoints.web.transport.respondingTimeouts]
+        #     readTimeout = 42
+        #     writeTimeout = 42
+        #     idleTimeout = 42
+        # [entryPoints.web.proxyProtocol]
+        #   insecure = true
+        #   trustedIPs = ["foobar", "foobar"]
+        # [entryPoints.web.forwardedHeaders]
+        #   insecure = true
+        #   trustedIPs = ["foobar", "foobar"]
+
+    [providers]
+    #   providersThrottleDuration = 42
+    #   [providers.docker]
+    #     constraints = "foobar"
+    #     watch = true
+    #     endpoint = "foobar"
+    #     defaultRule = "foobar"
+    #     exposedByDefault = true
+    #     useBindPortIP = true
+    #     swarmMode = true
+    #     network = "foobar"
+    #     swarmModeRefreshSeconds = 42
+    #     [providers.docker.tls]
+    #       ca = "foobar"
+    #       caOptional = true
+    #       cert = "foobar"
+    #       key = "foobar"
+    #       insecureSkipVerify = true
+    #   [providers.file]
+    #     directory = "foobar"
+    #     watch = true
+    #     filename = "foobar"
+    #     debugLogGeneratedTemplate = true
+    #   [providers.marathon]
+    #     constraints = "foobar"
+    #     trace = true
+    #     watch = true
+    #     endpoint = "foobar"
+    #     defaultRule = "foobar"
+    #     exposedByDefault = true
+    #     dcosToken = "foobar"
+    #     dialerTimeout = 42
+    #     responseHeaderTimeout = 42
+    #     tlsHandshakeTimeout = 42
+    #     keepAlive = 42
+    #     forceTaskHostname = true
+    #     respectReadinessChecks = true
+    #     [providers.marathon.tls]
+    #       ca = "foobar"
+    #       caOptional = true
+    #       cert = "foobar"
+    #       key = "foobar"
+    #       insecureSkipVerify = true
+    #     [providers.marathon.basic]
+    #       httpBasicAuthUser = "foobar"
+    #       httpBasicPassword = "foobar"
+      [providers.kubernetesIngress]
+    #     endpoint = "foobar"
+    #     token = "foobar"
+    #     certAuthFilePath = "foobar"
+    #     disablePassHostHeaders = true
+        namespaces = ["default", "development", "production"]
+    #     labelSelector = "foobar"
+    #     ingressClass = "foobar"
+    #     throttleDuration = "10s"
+    #     [providers.kubernetesIngress.ingressEndpoint]
+    #       ip = "foobar"
+    #       hostname = "foobar"
+    #       publishedService = "foobar"
+      [providers.kubernetesCRD]
+        # endpoint = "foobar"
+        # token = "foobar"
+        # certAuthFilePath = "foobar"
+        # disablePassHostHeaders = true
+        namespaces = ["default", "development", "production"]
+        # labelSelector = "foobar"
+        # ingressClass = "foobar"
+        # throttleDuration = "10s"
+    #   [providers.rest]
+    #     insecure = true
+    #   [providers.rancher]
+    #     constraints = "foobar"
+    #     watch = true
+    #     defaultRule = "foobar"
+    #     exposedByDefault = true
+    #     enableServiceHealthFilter = true
+    #     refreshSeconds = 42
+    #     intervalPoll = true
+    #     prefix = "foobar"
+
+    [api]
+      insecure = true
+      dashboard = true
+      debug = true
+
+    [metrics]
+      [metrics.prometheus]
+      #buckets = [42.0, 42.0]
+      #addEntryPointsLabels = true
+      #addServicesLabels = true
+      #entryPoint = "foobar"
+    #   [metrics.datadog]
+    #     address = "foobar"
+    #     pushInterval = "10s"
+    #     addEntryPointsLabels = true
+    #     addServicesLabels = true
+    #   [metrics.statsD]
+    #     address = "foobar"
+    #     pushInterval = "10s"
+    #     addEntryPointsLabels = true
+    #     addServicesLabels = true
+    #   [metrics.influxDB]
+    #     address = "foobar"
+    #     protocol = "foobar"
+    #     pushInterval = "10s"
+    #     database = "foobar"
+    #     retentionPolicy = "foobar"
+    #     username = "foobar"
+    #     password = "foobar"
+    #     addEntryPointsLabels = true
+    #     addServicesLabels = true
+
+    [ping]
+      # entryPoint = "foobar"
+
+    [log]
+      # level = "debug"
+      # filePath = "foobar"
+      # format = "foobar"
+
+    [accessLog]
+      # filePath = "foobar"
+      # format = "foobar"
+      # bufferingSize = 42
+      # [accessLog.filters]
+      #   statusCodes = ["foobar", "foobar"]
+      #   retryAttempts = true
+      #   minDuration = 42
+      # [accessLog.fields]
+      #   defaultMode = "foobar"
+      #   [accessLog.fields.names]
+      #     name0 = "foobar"
+      #     name1 = "foobar"
+      #   [accessLog.fields.headers]
+      #     defaultMode = "foobar"
+      #     [accessLog.fields.headers.names]
+      #       name0 = "foobar"
+      #       name1 = "foobar"
+
+    # [tracing]
+    #   serviceName = "foobar"
+    #   spanNameLimit = 42
+    #   [tracing.jaeger]
+    #     samplingServerURL = "foobar"
+    #     samplingType = "foobar"
+    #     samplingParam = 42.0
+    #     localAgentHostPort = "foobar"
+    #     gen128Bit = true
+    #     propagation = "foobar"
+    #     traceContextHeaderName = "foobar"
+    #     [tracing.jaeger.collector]
+    #       endpoint = "foobar"
+    #       user = "foobar"
+    #       password = "foobar"
+    #   [tracing.zipkin]
+    #     httpEndpoint = "foobar"
+    #     sameSpan = true
+    #     id128Bit = true
+    #     sampleRate = 42.0
+    #   [tracing.datadog]
+    #     localAgentHostPort = "foobar"
+    #     globalTag = "foobar"
+    #     debug = true
+    #     prioritySampling = true
+    #     traceIDHeaderName = "foobar"
+    #     parentIDHeaderName = "foobar"
+    #     samplingPriorityHeaderName = "foobar"
+    #     bagagePrefixHeaderName = "foobar"
+    #   [tracing.instana]
+    #     localAgentHost = "foobar"
+    #     localAgentPort = 42
+    #     logLevel = "foobar"
+    #   [tracing.haystack]
+    #     localAgentHost = "foobar"
+    #     localAgentPort = 42
+    #     globalTag = "foobar"
+    #     traceIDHeaderName = "foobar"
+    #     parentIDHeaderName = "foobar"
+    #     spanIDHeaderName = "foobar"
+    #     baggagePrefixHeaderName = "foobar"
+
+    # [hostResolver]
+    #   cnameFlattening = true
+    #   resolvConfig = "foobar"
+    #   resolvDepth = 42
+
+    [certificatesResolvers]
+      [certificatesResolvers.default]
+        [certificatesResolvers.default.acme]
+          email = "email@example.com"
+          storage = "acme/acme.json"
+          [certificatesResolvers.default.acme.tlsChallenge]
+
+      # [certificatesResolvers.CertificateResolver1]
+      #   [certificatesResolvers.CertificateResolver1.acme]
+      #     email = "foobar"
+      #     caServer = "foobar"
+      #     storage = "foobar"
+      #     keyType = "foobar"
+      #     [certificatesResolvers.CertificateResolver1.acme.dnsChallenge]
+      #       provider = "foobar"
+      #       delayBeforeCheck = 42
+      #       resolvers = ["foobar", "foobar"]
+      #       disablePropagationCheck = true
+      #     [certificatesResolvers.CertificateResolver1.acme.httpChallenge]
+      #       entryPoint = "foobar"
+      #     [certificatesResolvers.CertificateResolver1.acme.tlsChallenge]

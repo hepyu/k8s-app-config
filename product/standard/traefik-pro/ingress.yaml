@@ -1,0 +1,15 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: traefik-web-ui-v2.1
+ namespace: traefik
+spec:
+ rules:
+ - host: traefik-v2.1-admin.inc-inc.com
+   http:
+     paths:
+     - path: /
+       backend:
+         serviceName: traefik-admin
+         servicePort: 8080
