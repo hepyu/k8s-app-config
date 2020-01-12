@@ -41,7 +41,7 @@ namespace需要统一改为自己合适的，存储空间适自己情况更改�
 
 本例默认配置是测试资源级别的配置，同时提供生产环境的资源配置，只不过生产环境的资源配置默认是注释掉的(笔者阿里云机器资源有限)。
 
-测试与生茶的配置主要差异：
+测试与生产的配置主要差异：
 
 replicas, pod亲和，镜像仓库秘钥，pv存储大小，cpu/memory大小，ingress是否挂载云厂商的SLB等。
 
@@ -58,7 +58,9 @@ replicas, pod亲和，镜像仓库秘钥，pv存储大小，cpu/memory大小，i
 
 # (4).skywalking容器化注意事项
 
-参见：https://mp.weixin.qq.com/s/7rutKiv_RkV5UJKD4aD8PA
+参见：
+
+[阿里云&kubernetes&微服务生产实践-6：skywalking-6.4.0生产级别容器化](https://mp.weixin.qq.com/s?__biz=Mzg4MDEzMDM4MA==&mid=2247484282&idx=1&sn=eb1697c87e9b6208ca1f7361ee04599a&chksm=cf78a359f80f2a4ffcb49018150ed22399ffc8c693efa20993569dd4cbeffdba098d79a7f8b1&token=2071926671&lang=zh_CN#rd)
 
 # (5).相关资源
 
