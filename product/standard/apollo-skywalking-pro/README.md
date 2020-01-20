@@ -38,6 +38,8 @@
 
 3.apollo-skywalking-pro镜像，是基于镜像制作oraclejdk-skywalking-docker-image。
 
+镜像制作位于：https://github.com/hepyu/apollo-docker-image
+
 # (3).本例配置文件说明
 
 |              Directory               |                             Description                             |                       备注                       |
