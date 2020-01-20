@@ -6,18 +6,8 @@ metadata:
   labels:
     inc-app: sentinel-dashboard
 data:
-  SERVICE_NAME: sentinel-dashboard-1.7.1
-  LOG_DIR: /data/logs
-  SERVER_PORT: '8080'
-  TIME_ZONE: Asia/Shanghai
-  #SKYWALKING_AGENT: '-javaagent:/app/3rd/skywalking-agent/skywalking-agent.jar=agent.service_name=sentinel-dashboard-k8s,collector.backend_service=skywalking-c0-oap.skywalking:11800'
-  SKYWALKING_AGENT: ''
   JAVA_OPTS: >-
-    -Xms1024m -Xmx1024m -Xss256k -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=256m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:SurvivorRatio=8
-    -server -XX:-ReduceInitialCardMarks
-    -XX:ParallelGCThreads=4 -XX:MaxTenuringThreshold=9 -XX:+DisableExplicitGC -XX:+ScavengeBeforeFullGC -XX:SoftRefLRUPolicyMSPerMB=0 
-    -XX:+ExplicitGCInvokesConcurrent -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow 
-    -Duser.timezone=$TIME_ZONE -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8 
+    -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -Djava.security.egd=file:/dev/./urandom -Dcsp.sentinel.api.port=8719
+    -Duser.timezone=Asia/Shanghai -Dclient.encoding.override=UTF-8 -Dfile.encoding=UTF-8 
     -Djava.security.egd=file:/dev/./urandom
-    -Dserver.port=$SERVER_PORT -Dlogging.file=$LOG_DIR/$SERVICE_NAME.log -XX:HeapDumpPath=$LOG_DIR/
-    $SKYWALKING_AGENT
+    -Dlogging.file=/data/logs/sentinel-dashboard-1.7.1.log -XX:HeapDumpPath=/data/logs/

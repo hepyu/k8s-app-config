@@ -32,7 +32,7 @@ spec:
                     inc-app: sentinel-dashboard
       containers:
         - name: sentinel-dashboard
-          image: hpy253215039/sentinel-dashboard-skywalking-agent:1.7.1
+          image: hpy253215039/sentinel-dashboard:1.7.1
           securityContext:
             privileged: false
           imagePullPolicy: IfNotPresent
@@ -58,11 +58,11 @@ spec:
                 name: sentinel-dashboard
           resources:
             limits:
-              memory: 2Gi
+              memory: 1Gi
               cpu: '1'
             requests:
               cpu: '0.1'
-              memory: 1Gi
+              memory: 100Mi
       #生产配置
       #imagePullSecrets:
       #  - name: inc

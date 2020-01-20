@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    inc-app: sentinel-dashboard
+  name: sentinel-dashboard
+  namespace: sentinel
+spec:
+  rules:
+  - host: sentinel-dashboard.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: sentinel-dashboard
+          servicePort: 80
+        path: /
