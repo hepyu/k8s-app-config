@@ -13,7 +13,7 @@ spec:
   #生产配置,>=3
   #replicas: 3
   #测试配置
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: es-c0-data-prod
@@ -66,7 +66,7 @@ spec:
             #- name: ES_JAVA_OPTS
             #  value: '-Xmx6g -Xms6g'
             - name: ES_JAVA_OPTS
-              value: '-Xmx1g -Xms1g'
+              value: '-Xmx6g -Xms6g'
             - name: node.master
               value: 'false'
             - name: node.data
@@ -136,10 +136,10 @@ spec:
             #测试用配置
             limits:
               cpu: '1'
-              memory: 2Gi
+              memory: 8Gi
             requests:
               cpu: '0.1'
-              memory: 2Gi
+              memory: 8Gi
           volumeMounts:
             - mountPath: /usr/share/elasticsearch/data
               name: es-c0-data

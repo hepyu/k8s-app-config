@@ -13,7 +13,7 @@ spec:
   #生产配置>=3
   #replicas: 3
   #测试配置
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
   selector:

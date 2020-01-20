@@ -1,0 +1,86 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+  namespace: kube-system
+spec:
+  redirectScheme:
+    scheme: https
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: svc-rancher-headers
+  namespace: cattle-system
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: "https"
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-webui
+  namespace: kube-system
+spec:
+  entryPoints:
+  - admin
+  routes:
+  - match: Host(`traefik-cicd.test.cn`)
+    kind: Rule
+    services:
+    - name: api@internal
+      kind: TraefikService
+      namespaces: kube-system
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rancher
+  namespace: cattle-system
+spec:
+  entryPoints:
+  - http
+  routes:
+  - match: Host(`rancher-cicd.test.cn`)
+    kind: Rule
+    services:
+    - name: rancher-traefikservice
+      kind: TraefikService
+      namespaces: cattle-system
+      port: 80
+    middlewares:
+    - name: redirect-https
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rancher-tls
+  namespace: cattle-system
+spec:
+  entryPoints:
+  - https
+  routes:
+  - match: Host(`rancher-cicd.test.cn`)
+    kind: Rule
+    services:
+    - name: rancher-traefikservice
+      kind: TraefikService
+      namespaces: cattle-system
+      port: 443
+    middlewares:
+    - name: svc-rancher-headers
+  tls:
+    secretName: tls-rancher-ingress
+    options:
+      name: mytlsoption
+      namespaces: cattle-system
+    stores:
+      default:
+        defaultCertificate:
+          certFile: "/ssl/tls.crt"
+          keyFile: "/ssl/tls.key"

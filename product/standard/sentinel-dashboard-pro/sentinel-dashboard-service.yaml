@@ -1,0 +1,17 @@
+metadata:
+  name: sentinel-dashboard
+  labels:
+    inc-app: sentinel-dashboard
+  namespace: sentinel
+spec:
+  selector:
+    inc-app: sentinel-dashboard
+  ports:
+    - protocol: TCP
+      targetPort: 8080
+      port: 80
+      name: sentinel-dashboard-80
+  type: ClusterIP
+  sessionAffinity: ClientIP
+apiVersion: v1
+kind: Service

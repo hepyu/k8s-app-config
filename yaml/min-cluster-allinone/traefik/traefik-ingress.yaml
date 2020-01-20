@@ -1,22 +1,20 @@
----
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: traefik
-  namespace: ingress-traefik
+  annotations:
+    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # kubernetes.io/ingress.class: biz
+  #labels:
+    #app: kibana
+  name: traefik-admin
+  namespace: kube-system
 spec:
   rules:
-  - host: traefik-web.inc-inc.com
+  - host: traefik-admin.future.com
     http:
       paths:
-      - path: /
-        backend:
-          serviceName: traefik
-          servicePort: 8000
-  - host: traefik-admin.inc-inc.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: traefik
+      - backend:
+          serviceName: traefik-ingress-service
           servicePort: 8080
+        path: /

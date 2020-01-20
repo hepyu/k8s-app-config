@@ -1,0 +1,68 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: sentinel-dashboard
+  namespace: sentinel
+  labels:
+    inc-app: sentinel-dashboard
+spec:
+  serviceName: sentinel-dashboard
+  #生产配置 >=3
+  #replicas: 3
+  #测试配置
+  replicas: 1
+  selector:
+    matchLabels:
+      inc-app: sentinel-dashboard
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        inc-app: sentinel-dashboard
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    inc-app: sentinel-dashboard
+      containers:
+        - name: sentinel-dashboard
+          image: hpy253215039/sentinel-dashboard-skywalking-agent:1.7.1
+          securityContext:
+            privileged: false
+          imagePullPolicy: IfNotPresent
+          ports:
+            - protocol: TCP
+              containerPort: 8080
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 10
+          envFrom:
+            - configMapRef:
+                name: sentinel-dashboard
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: '1'
+            requests:
+              cpu: '0.1'
+              memory: 1Gi
+      #生产配置
+      #imagePullSecrets:
+      #  - name: inc

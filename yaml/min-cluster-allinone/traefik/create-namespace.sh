@@ -1,1 +1,1 @@
-kubectl create namespace ingress-traefik
+kubectl create namespace cattle-system
