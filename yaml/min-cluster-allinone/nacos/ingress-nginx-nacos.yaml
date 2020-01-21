@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: nacos-headless
+  name: nacos
+  namespace: nacos
+spec:
+  rules:
+  - host: nacos.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: nacos-headless
+          servicePort: 8848
+        path: /
