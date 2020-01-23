@@ -30,30 +30,10 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+      nodePort: 30080
   selector:
     app: pod-apollo-config-server-dev
-  type: ClusterIP
-  clusterIP: None
-  sessionAffinity: ClientIP
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  namespace: inc
-  name: service-apollo-config-server-dev
-  labels:
-    app: service-apollo-config-server-dev
-spec:
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-      #nodePort: 30002
-  selector:
-    app: pod-apollo-config-server-dev 
-  #type: NodePort
-  type: ClusterIP
+  type: NodePort
   sessionAffinity: ClientIP
 
 ---
