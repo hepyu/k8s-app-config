@@ -14,22 +14,25 @@ metadata:
   labels:
     app: zk
 spec:
+  type: NodePort
   ports:
   #集群内机器通讯使用（Leader监听此端口）
   - port: 2888
     protocol: TCP
     targetPort: 2888
+    nodePort: 30030
     name: server
   #选举leader使用
   - port: 3888
     protocol: TCP
     targetPort: 3888
+    nodePort: 30031
     name: leader-election
   - port: 2181
     protocol: TCP
     targetPort: 2181
+    nodePort: 30032
     name: client
-  clusterIP: None
   selector:
     app: zk
 
