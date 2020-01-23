@@ -1,6 +1,6 @@
 ---
 metadata:
-  name: dev-apollo-configservic
+  name: dev-apollo-configservice
   labels:
     inc-app: dev-apollo-configservice
   namespace: inc

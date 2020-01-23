@@ -22,9 +22,9 @@ kind: Service
 apiVersion: v1
 metadata:
   namespace: inc
-  name: service-apollo-meta-server-dev
+  name: service-apollo-config-server-dev
   labels:
-    app: service-apollo-meta-server-dev
+    app: service-apollo-config-server-dev
 spec:
   ports:
     - protocol: TCP

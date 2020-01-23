@@ -12,10 +12,10 @@ metadata:
 spec:
   tls: []
   rules:
-    - host: dev-apollo-configservic
+    - host: dev-apollo-configservice
       http:
         paths:
           - backend:
-              serviceName: dev-apollo-configservic
+              serviceName: dev-apollo-configservice
               servicePort: 80
             path: /
