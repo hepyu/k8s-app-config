@@ -15,10 +15,10 @@ data:
       alertmanagers:
       - static_configs:
         - targets:
-		  #定义报警地址
+          #定义报警地址
           - alertmanager:9093
 
-	rule_files:
+    rule_files:
       #- "rocketmq-alert-rule.yaml"
 
     scrape_configs:
