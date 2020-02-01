@@ -1,0 +1,29 @@
+kind: List
+apiVersion: v1
+items:
+- apiVersion: apps/v1beta1
+  kind: Deployment
+  metadata:
+    name: dubbo-admin
+    namespace: dubbo
+  spec:
+    replicas: 1
+    template:
+      metadata:
+        name: dubbo-admin
+        labels:
+          app: dubbo-admin
+      spec:
+        containers:
+        - image: apache/dubbo-admin
+          name: dubbo-admin
+          env:
+          - name: admin.registry.address
+            value: "zookeeper://zk-hs.zookeeper-min:2181"
+          - name: admin.config-center
+            value: "zookeeper://zk-hs.zookeeper-min:2181"
+          - name: admin.metadata-report.address
+            value: "zookeeper://zk-hs.zookeeper-min:2181"
+          ports:
+          - name: http
+            containerPort: 8080

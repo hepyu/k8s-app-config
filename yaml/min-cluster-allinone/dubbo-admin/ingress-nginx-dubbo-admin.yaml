@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # kubernetes.io/ingress.class: biz
+  labels:
+    app: dubbo-admin
+  name: dubbo-admin
+  namespace: dubbo
+spec:
+  rules:
+  - host: dubbo-admin.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: dubbo-admin
+          servicePort: 8080
+        path: /

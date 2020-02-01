@@ -1,0 +1,16 @@
+kind: List
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: dubbo-admin
+    namespace: dubbo
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      targetPort: 8080 
+    selector:
+      app: dubbo-admin  
+    type: ClusterIP
