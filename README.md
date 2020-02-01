@@ -27,6 +27,7 @@
 |              目录               |                            地址                              |                       备注                       |
 | ------------------------------------ | ------------------------------------------------------------------- | --------------------------------------------------- |
 | redis-cluster容器化                      | https://github.com/hepyu/k8s-app-config/tree/master/yaml/min-cluster-allinone/redis-cluster-min                                    | redis5.0.x版本。 |
+| dubbo-admin容器化 | https://github.com/hepyu/k8s-app-config/tree/master/yaml/min-cluster-allinone/dubbo-admin ||
 
 # (3).工程目的
 
