@@ -60,7 +60,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "http_bio_client_outgoing_blocking_queue_used_capacity{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\"}",
+          "expr": "apache_httpcomponents_bio_client_outgoing_blocking_queue_used_capacity{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\"}",
           "legendFormat": "{{pod}} :: {{httppool}}",
           "refId": "A"
         }
@@ -147,7 +147,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "http_bio_client_outgoing_blocking_queue_used_capacity_percentage{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\"}",
+          "expr": "apache_httpcomponents_bio_client_outgoing_blocking_queue_used_capacity_percentage{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\"}",
           "legendFormat": "{{pod}} :: {{httppool}}",
           "refId": "A"
         }
@@ -269,7 +269,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(host) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[3m]))",
+          "expr": "sum by(host) (rate(apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[3m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{host}}",
@@ -375,7 +375,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_bio_client_outgoing_connection{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\", state!~\"Max|Pending\"}) by (host)",
+          "expr": "sum(apache_httpcomponents_bio_client_outgoing_connection{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\", state!~\"Max|Pending\"}) by (host)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -482,7 +482,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_bio_client_outgoing_request_concurrent_gauge{app=~\"$app\",pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}) by (host)",
+          "expr": "sum(apache_httpcomponents_bio_client_outgoing_request_concurrent_gauge{app=~\"$app\",pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}) by (host)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -589,7 +589,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "((sum\n  by(host) (increase(http_bio_client_outgoing_request_err_counter{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[10m]))\n  / sum by(host) (increase(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[10m]))) * 100)",
+          "expr": "((sum\n  by(host) (increase(apache_httpcomponents_bio_client_outgoing_request_err_counter{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[10m]))\n  / sum by(host) (increase(apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[10m]))) * 100)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -692,7 +692,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum by(pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[3m]))) > 0",
+          "expr": "histogram_quantile(0.99, sum by(pod, le) (rate(apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[3m]))) > 0",
           "format": "time_series",
           "hide": false,
           "interval": "1m",
@@ -796,7 +796,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum by(pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[3m]))) > 0",
+          "expr": "histogram_quantile(0.99, sum by(pod, le) (rate(apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", pod=~\"$pod\", httppool=~\"$httppool\", host=~\"$host\"}[3m]))) > 0",
           "format": "time_series",
           "hide": false,
           "interval": "1m",
@@ -856,18 +856,18 @@
       {
         "allValue": null,
         "current": {
-          "text": "http_bio_client_outgoing_request_latency_seconds_histogram_count",
-          "value": "http_bio_client_outgoing_request_latency_seconds_histogram_count"
+          "text": "apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_count",
+          "value": "apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_count"
         },
         "datasource": "prometheus-saf",
-        "definition": "metrics(http_bio_client_outgoing_request_latency_seconds_histogram_count*)",
+        "definition": "metrics(apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_count*)",
         "hide": 2,
         "includeAll": false,
         "label": "metrics",
         "multi": true,
         "name": "metrics",
         "options": [],
-        "query": "metrics(http_bio_client_outgoing_request_latency_seconds_histogram_count*)",
+        "query": "metrics(apache_httpcomponents_bio_client_outgoing_request_latency_seconds_histogram_count*)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,

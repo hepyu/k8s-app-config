@@ -67,7 +67,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(url,method) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m])) >0",
+          "expr": "sum by(url,method) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m])) >0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{url}} :: {{method}}",
@@ -162,7 +162,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99,\n  sum by(url, le) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m])))",
+          "expr": "histogram_quantile(0.99,\n  sum by(url, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m])))",
           "format": "time_series",
           "hide": false,
           "interval": "1m",
@@ -263,7 +263,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (http_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\"} offset 1m ) by (url)",
+          "expr": "sum (apache_httpcomponents_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\"} offset 1m ) by (url)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -363,7 +363,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (url) (increase(http_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", status!~\"2..\"}[1m]))",
+          "expr": "sum by (url) (increase(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", status!~\"2..\"}[1m]))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -463,7 +463,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(pod) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m])) >0",
+          "expr": "sum by(pod) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m])) >0",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -563,7 +563,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99,\n  sum by(pod, le) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m])))",
+          "expr": "histogram_quantile(0.99,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m])))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -663,7 +663,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_bio_client_ingoing_request_concurrent_gauge{appId=~\"$app\"} offset 1m ) by (pod)",
+          "expr": "sum(apache_httpcomponents_bio_client_ingoing_request_concurrent_gauge{appId=~\"$app\"} offset 1m ) by (pod)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 2,
@@ -763,7 +763,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (pod) (increase(http_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", status!~\"2..\"}[1m]))",
+          "expr": "sum by (pod) (increase(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", status!~\"2..\"}[1m]))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -946,7 +946,7 @@
       ],
       "targets": [
         {
-          "expr": "sum by(url) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m])) > 0",
+          "expr": "sum by(url) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m])) > 0",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -954,7 +954,7 @@
           "refId": "A"
         },
         {
-          "expr": "((sum\n  by(url) (increase(http_bio_client_ingoing_request_err_counter{app=~\"$app\"}[10m]))\n  / sum by(url) (increase(http_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[10m]))) * 100) > 0",
+          "expr": "((sum\n  by(url) (increase(apache_httpcomponents_bio_client_ingoing_request_err_counter{app=~\"$app\"}[10m]))\n  / sum by(url) (increase(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\"}[10m]))) * 100) > 0",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -962,7 +962,7 @@
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.99,\n  sum by(url, le) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m]))) > 0",
+          "expr": "histogram_quantile(0.99,\n  sum by(url, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m]))) > 0",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -970,7 +970,7 @@
           "refId": "C"
         },
         {
-          "expr": "histogram_quantile(0.999,\n  sum by(url, le) (rate(http_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m]))) > 0",
+          "expr": "histogram_quantile(0.999,\n  sum by(url, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\"}[3m]))) > 0",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -978,7 +978,7 @@
           "refId": "D"
         },
         {
-          "expr": "sum (http_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\"} offset 1m ) by (url)>0",
+          "expr": "sum (apache_httpcomponents_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\"} offset 1m ) by (url)>0",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,

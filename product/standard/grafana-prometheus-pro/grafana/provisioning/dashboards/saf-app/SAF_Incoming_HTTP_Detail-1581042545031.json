@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 83,
-  "iteration": 1581042560258,
+  "id": 84,
+  "iteration": 1581042540810,
   "links": [],
   "panels": [
     {
@@ -28,9 +28,17 @@
         "x": 0,
         "y": 0
       },
-      "id": 2,
+      "id": 14,
       "panels": [],
-      "title": "概览",
+      "repeat": "url",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
+      "title": "http-$url",
       "type": "row"
     },
     {
@@ -43,23 +51,19 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 5,
+        "w": 6,
         "x": 0,
         "y": 1
       },
       "hiddenSeries": false,
-      "id": 4,
-      "interval": "30s",
+      "id": 2,
       "legend": {
         "alignAsTable": true,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": true,
-        "sort": "avg",
-        "sortDesc": true,
         "total": false,
         "values": false
       },
@@ -70,20 +74,27 @@
       "options": {
         "dataLinks": []
       },
-      "percentage": true,
-      "pointradius": 5,
+      "percentage": false,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(host) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))",
+          "expr": "sum (apache_httpcomponents_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\", url=~\"$url\", pod=~\"$pod\"} offset 1m ) by (pod)",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{host}}",
+          "legendFormat": "{{pod}}",
           "refId": "A"
         }
       ],
@@ -91,10 +102,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "QPS by host",
+      "title": "并发",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -112,7 +123,7 @@
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": null,
+          "min": "0",
           "show": true
         },
         {
@@ -139,105 +150,8 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 5,
-        "x": 5,
-        "y": 1
-      },
-      "hiddenSeries": false,
-      "id": 6,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.99, sum by(host, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", host=~\"$host\"}[3m]))) > 0",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{host}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "P99 by host",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 10,
+        "w": 6,
+        "x": 6,
         "y": 1
       },
       "hiddenSeries": false,
@@ -245,19 +159,14 @@
       "interval": "30s",
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": false,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": false,
         "show": true,
-        "sideWidth": null,
-        "sort": "max",
-        "sortDesc": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -270,17 +179,26 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
+      "repeatDirection": "h",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_bio_client_outgoing_request_concurrent_gauge{app=~\"$app\", host=~\"$host\"}) by (host)",
+          "expr": "apache_httpcomponents_bio_client_ingoing_request_max_gauge{app=\"$app\", url=\"$url\", pod=~\"$pod\"}",
           "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{host}} ",
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
           "refId": "A"
         }
       ],
@@ -288,10 +206,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "并发数 by host",
+      "title": "MAX - $url",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -304,12 +222,12 @@
       },
       "yaxes": [
         {
-          "decimals": -1,
-          "format": "short",
+          "decimals": 2,
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
+          "min": null,
           "show": true
         },
         {
@@ -335,9 +253,9 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 15,
+        "h": 10,
+        "w": 6,
+        "x": 12,
         "y": 1
       },
       "hiddenSeries": false,
@@ -345,19 +263,14 @@
       "interval": "30s",
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": false,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": false,
         "show": true,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -370,111 +283,25 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
+      "repeat": "motan",
+      "repeatDirection": "h",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "((sum\n  by(host) (increase(http_bio_client_outgoing_request_err_counter{app=~\"$app\", host=~\"$host\"}[10m]))\n  / sum by(host) (increase(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[10m]))) * 100)",
+          "expr": "histogram_quantile(0.99,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\", url=\"$url\", pod=~\"$pod\"}[3m])))",
           "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{host}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "错误率 by host",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 3,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 0,
-        "y": 6
-      },
-      "hiddenSeries": false,
-      "id": 12,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sort": "avg",
-        "sortDesc": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": true,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum by(pod) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))",
-          "format": "time_series",
+          "hide": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{pod}}",
           "refId": "A"
@@ -484,10 +311,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "QPS by instance",
+      "title": "P99 - $url",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -500,8 +327,8 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
-          "format": "short",
+          "decimals": 2,
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -531,24 +358,24 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 5,
-        "y": 6
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 1
       },
       "hiddenSeries": false,
-      "id": 14,
+      "id": 12,
       "interval": "30s",
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": false,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -562,29 +389,35 @@
       "points": false,
       "renderer": "flot",
       "repeatDirection": "h",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum by(pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", host=~\"$host\"}[3m]))) > 0",
+          "expr": "histogram_quantile(0.999,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\", url=\"$url\", pod=~\"$pod\"}[3m])))",
           "format": "time_series",
-          "hide": false,
           "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{pod}}",
-          "refId": "A"
+          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "P99 by instance",
+      "title": "P999 - $url",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -629,26 +462,18 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 5,
-        "x": 10,
+        "w": 6,
+        "x": 0,
         "y": 6
       },
       "hiddenSeries": false,
-      "id": 16,
-      "interval": "30s",
+      "id": 4,
       "legend": {
-        "alignAsTable": true,
         "avg": false,
         "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
         "max": false,
         "min": false,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": null,
-        "sort": "max",
-        "sortDesc": true,
+        "show": false,
         "total": false,
         "values": false
       },
@@ -660,20 +485,26 @@
         "dataLinks": []
       },
       "percentage": false,
-      "pointradius": 5,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_bio_client_outgoing_request_concurrent_gauge{app=~\"$app\", host=~\"$host\"}) by (pod)",
+          "expr": "sum by(pod) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", url=~\"$url\", pod=~\"$pod\"}[3m])) > 0",
           "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{pod}} ",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
           "refId": "A"
         }
       ],
@@ -681,10 +512,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "并发数 by Instance",
+      "title": "QPS",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -697,7 +528,237 @@
       },
       "yaxes": [
         {
-          "decimals": -1,
+          "decimals": 3,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 6
+      },
+      "hiddenSeries": false,
+      "id": 6,
+      "interval": "30s",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/health/",
+          "value": "/actuator/health/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "apache_httpcomponents_bio_client_ingoing_request_ftl_gauge{app=\"$app\", url=\"$url\", pod=~\"$pod\"}",
+          "format": "time_series",
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "FTL - $url",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "ms",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 15,
+      "panels": [],
+      "repeat": null,
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 14,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
+      "title": "http-$url",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 12
+      },
+      "hiddenSeries": false,
+      "id": 16,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 2,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum (apache_httpcomponents_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\", url=~\"$url\", pod=~\"$pod\"} offset 1m ) by (pod)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "并发",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -729,9 +790,116 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 15,
-        "y": 6
+        "w": 6,
+        "x": 6,
+        "y": 12
+      },
+      "hiddenSeries": false,
+      "id": 17,
+      "interval": "30s",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 8,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "apache_httpcomponents_bio_client_ingoing_request_max_gauge{app=\"$app\", url=\"$url\", pod=~\"$pod\"}",
+          "format": "time_series",
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "MAX - $url",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 12
       },
       "hiddenSeries": false,
       "id": 18,
@@ -739,16 +907,11 @@
       "legend": {
         "alignAsTable": true,
         "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
+        "current": false,
         "max": true,
         "min": false,
-        "rightSide": true,
-        "show": false,
-        "sideWidth": null,
-        "sort": "max",
-        "sortDesc": true,
+        "rightSide": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -763,17 +926,30 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
+      "repeat": "motan",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 10,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(http_bio_client_outgoing_connection{app=\"$app\", host=~\"$host\", state!~\"Max|Available\"}) by (pod,state)",
+          "expr": "histogram_quantile(0.99,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\", url=\"$url\", pod=~\"$pod\"}[3m])))",
           "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{pod}}  - {{state}}",
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
           "refId": "A"
         }
       ],
@@ -781,10 +957,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Pending + Leased",
+      "title": "P99 - $url",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -797,7 +973,447 @@
       },
       "yaxes": [
         {
-          "decimals": -1,
+          "decimals": 2,
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 12
+      },
+      "hiddenSeries": false,
+      "id": 19,
+      "interval": "30s",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 12,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.999,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\", url=\"$url\", pod=~\"$pod\"}[3m])))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "P999 - $url",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 20,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 4,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by(pod) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", url=~\"$url\", pod=~\"$pod\"}[3m])) > 0",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "QPS",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 3,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 17
+      },
+      "hiddenSeries": false,
+      "id": 21,
+      "interval": "30s",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 6,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/actuator/prometheus/",
+          "value": "/actuator/prometheus/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "apache_httpcomponents_bio_client_ingoing_request_ftl_gauge{app=\"$app\", url=\"$url\", pod=~\"$pod\"}",
+          "format": "time_series",
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "FTL - $url",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "ms",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 22,
+      "panels": [],
+      "repeat": null,
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 14,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
+        }
+      },
+      "title": "http-$url",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 23
+      },
+      "hiddenSeries": false,
+      "id": 23,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 2,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum (apache_httpcomponents_bio_client_ingoing_request_concurrent_gauge{app=~\"$app\", url=~\"$url\", pod=~\"$pod\"} offset 1m ) by (pod)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "并发",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -829,28 +1445,23 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 5,
-        "w": 5,
-        "x": 19,
-        "y": 6
+        "w": 6,
+        "x": 6,
+        "y": 23
       },
       "hiddenSeries": false,
-      "id": 22,
+      "id": 24,
       "interval": "30s",
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": false,
-        "hideEmpty": false,
-        "hideZero": false,
-        "max": false,
+        "max": true,
         "min": false,
         "rightSide": false,
         "show": true,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -863,16 +1474,28 @@
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 8,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
+        }
+      },
       "seriesOverrides": [],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "((sum\n  by(pod) (increase(http_bio_client_outgoing_request_err_counter{app=~\"$app\", host=~\"$host\"}[3m]))\n  / sum by(pod) (increase(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))) * 100)",
+          "expr": "apache_httpcomponents_bio_client_ingoing_request_max_gauge{app=\"$app\", url=\"$url\", pod=~\"$pod\"}",
           "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -881,10 +1504,325 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "错误率 by Instance",
+      "title": "MAX - $url",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 12,
+        "y": 23
+      },
+      "hiddenSeries": false,
+      "id": 25,
+      "interval": "30s",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeat": "motan",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 10,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\", url=\"$url\", pod=~\"$pod\"}[3m])))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "P99 - $url",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 6,
+        "x": 18,
+        "y": 23
+      },
+      "hiddenSeries": false,
+      "id": 26,
+      "interval": "30s",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": false,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 12,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.999,\n  sum by(pod, le) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_bucket{app=\"$app\", url=\"$url\", pod=~\"$pod\"}[3m])))",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "P999 - $url",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 2,
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "prometheus-saf",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 28
+      },
+      "hiddenSeries": false,
+      "id": 27,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 4,
+      "repeatedByRow": true,
+      "scopedVars": {
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
+        }
+      },
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by(pod) (rate(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=~\"$app\", url=~\"$url\", pod=~\"$pod\"}[3m])) > 0",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "QPS",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -898,417 +1836,11 @@
       "yaxes": [
         {
           "decimals": 3,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
           "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "columns": [],
-      "datasource": "prometheus-saf",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 11
-      },
-      "id": 20,
-      "links": [],
-      "options": {},
-      "pageSize": 5,
-      "scroll": false,
-      "showHeader": true,
-      "sort": {
-        "col": 3,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": true,
-          "linkTooltip": "Drill down ${__cell_1}",
-          "linkUrl": "d/l0uqRT8Zk/saf-outgoing-http-httpbioclient-detail?orgId=1&var-host=${__cell}",
-          "mappingType": 1,
-          "pattern": "host",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "QPS",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #A",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "并发",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #B",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "错误率",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": false,
-          "linkTargetBlank": true,
-          "linkTooltip": "",
-          "linkUrl": "",
-          "mappingType": 1,
-          "pattern": "Value #C",
-          "preserveFormat": false,
-          "sanitize": false,
-          "thresholds": [],
-          "type": "number",
-          "unit": "percent",
-          "valueMaps": []
-        },
-        {
-          "alias": "Conn Leased",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": -1,
-          "mappingType": 1,
-          "pattern": "Value #D",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "Conn Available",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": -1,
-          "mappingType": 1,
-          "pattern": "Value #E",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "Conn Pending",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": -1,
-          "mappingType": 1,
-          "pattern": "Value #F",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "P99",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #G",
-          "thresholds": [],
-          "type": "number",
-          "unit": "s"
-        },
-        {
-          "alias": "p999",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #H",
-          "thresholds": [],
-          "type": "number",
-          "unit": "s"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "sum by(host) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\"}[3m]))",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "refId": "A"
-        },
-        {
-          "expr": "sum(http_bio_client_outgoing_request_concurrent_gauge{app=~\"$app\"}) by (host)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "refId": "B"
-        },
-        {
-          "expr": "((sum\n  by(host) (increase(http_bio_client_outgoing_request_err_counter{app=~\"$app\"}[10m]))\n  / sum by(host) (increase(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\"}[10m]))) * 100)",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "C"
-        },
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=\"$app\", state=~\"Leased\"}) by (host)",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "D"
-        },
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=\"$app\", state=~\"Available\"}) by (host)",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "E"
-        },
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=\"$app\", state=~\"Pending\"}) by (host)",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "F"
-        },
-        {
-          "expr": "histogram_quantile(0.99, sum by(host, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\"}[3m]))) > 0",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "G"
-        },
-        {
-          "expr": "histogram_quantile(0.999, sum by(host, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\"}[3m]))) > 0",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "H"
-        }
-      ],
-      "title": "请点击服务名进入详情",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 18
-      },
-      "id": 24,
-      "panels": [],
-      "repeat": "host",
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
-        }
-      },
-      "title": "$host",
-      "type": "row"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 19
-      },
-      "hiddenSeries": false,
-      "id": 27,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeat": null,
-      "repeatDirection": "h",
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=~\"$app\", host=~\"$host\", state=~\"Pending\"}) by (instance)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{host}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Conn Stats Pending",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": -1,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
           "show": true
         },
         {
@@ -1334,34 +1866,28 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 4,
-        "y": 19
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 28
       },
       "hiddenSeries": false,
-      "id": 31,
+      "id": 28,
       "interval": "30s",
       "legend": {
         "alignAsTable": true,
         "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
+        "current": false,
         "max": true,
         "min": false,
         "rightSide": false,
         "show": true,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
         "total": false,
         "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "maxPerRow": 6,
       "nullPointMode": "null",
       "options": {
         "dataLinks": []
@@ -1371,11 +1897,14 @@
       "points": false,
       "renderer": "flot",
       "repeatDirection": "h",
+      "repeatIteration": 1581042540810,
+      "repeatPanelId": 6,
+      "repeatedByRow": true,
       "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
+        "url": {
+          "selected": true,
+          "text": "/user/getUser/",
+          "value": "/user/getUser/"
         }
       },
       "seriesOverrides": [],
@@ -1384,8 +1913,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "((sum\n  by(pod) (increase(http_bio_client_outgoing_request_err_counter{app=~\"$app\", host=~\"$host\"}[3m]))\n  / sum by(pod) (increase(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))) * 100)",
+          "expr": "apache_httpcomponents_bio_client_ingoing_request_ftl_gauge{app=\"$app\", url=\"$url\", pod=~\"$pod\"}",
           "format": "time_series",
+          "hide": false,
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{pod}}",
           "refId": "B"
@@ -1395,215 +1926,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "错误率",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": -1,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 8,
-        "y": 19
-      },
-      "hiddenSeries": false,
-      "id": 33,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum by(host, pod) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "QPS",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 12,
-        "y": 19
-      },
-      "hiddenSeries": false,
-      "id": 40,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.99, sum by(host, pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", host=~\"$host\"}[3m]))) > 0",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "P99",
+      "title": "FTL - $url",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1620,905 +1943,11 @@
       "yaxes": [
         {
           "decimals": 2,
-          "format": "s",
+          "format": "ms",
           "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 19
-      },
-      "hiddenSeries": false,
-      "id": 48,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.999, sum by(host, pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", host=~\"$host\"}[3m]))) > 0",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}} :: {{host}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "P999",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 22
-      },
-      "hiddenSeries": false,
-      "id": 29,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
-          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=~\"$app\", host=~\"$host\", state!~\"Max\"}) by (pod)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Conn Stats",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": -1,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 25
-      },
-      "id": 49,
-      "panels": [],
-      "repeat": null,
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 24,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "title": "$host",
-      "type": "row"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 26
-      },
-      "hiddenSeries": false,
-      "id": 50,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeat": null,
-      "repeatDirection": "h",
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 27,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=~\"$app\", host=~\"$host\", state=~\"Pending\"}) by (instance)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{host}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Conn Stats Pending",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": -1,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 4,
-        "y": 26
-      },
-      "hiddenSeries": false,
-      "id": 51,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 31,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "((sum\n  by(pod) (increase(http_bio_client_outgoing_request_err_counter{app=~\"$app\", host=~\"$host\"}[3m]))\n  / sum by(pod) (increase(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))) * 100)",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}}",
-          "refId": "B"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "错误率",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": -1,
-          "format": "percent",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 8,
-        "y": 26
-      },
-      "hiddenSeries": false,
-      "id": 52,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 33,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum by(host, pod) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_count{app=~\"$app\", host=~\"$host\"}[3m]))",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "QPS",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "none",
-          "label": "",
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 12,
-        "y": 26
-      },
-      "hiddenSeries": false,
-      "id": 53,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 40,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.99, sum by(host, pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", host=~\"$host\"}[3m]))) > 0",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "P99",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 26
-      },
-      "hiddenSeries": false,
-      "id": 54,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 48,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.999, sum by(host, pod, le) (rate(http_bio_client_outgoing_request_latency_seconds_histogram_bucket{app=~\"$app\", host=~\"$host\"}[3m]))) > 0",
-          "format": "time_series",
-          "hide": false,
-          "interval": "1m",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}} :: {{host}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "P999",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 2,
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "prometheus-saf",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 29
-      },
-      "hiddenSeries": false,
-      "id": 55,
-      "interval": "30s",
-      "legend": {
-        "alignAsTable": false,
-        "avg": true,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": true,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "sideWidth": null,
-        "sort": "avg",
-        "sortDesc": false,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "maxPerRow": 6,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "repeatDirection": "h",
-      "repeatIteration": 1581042560258,
-      "repeatPanelId": 29,
-      "repeatedByRow": true,
-      "scopedVars": {
-        "host": {
-          "selected": false,
-          "text": "www.baidu.com",
-          "value": "www.baidu.com"
-        }
-      },
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(http_bio_client_outgoing_connection{app=~\"$app\", host=~\"$host\", state!~\"Max\"}) by (pod)",
-          "format": "time_series",
-          "instant": false,
-          "intervalFactor": 2,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Conn Stats",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": -1,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": "0",
           "show": true
         },
         {
@@ -2544,18 +1973,18 @@
       {
         "allValue": null,
         "current": {
-          "text": "http_bio_client_outgoing_request_latency_seconds_histogram_count",
-          "value": "http_bio_client_outgoing_request_latency_seconds_histogram_count"
+          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod",
+          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod"
         },
         "datasource": "prometheus-saf",
-        "definition": "metrics(http_bio_client_outgoing_request_latency_seconds_histogram_count*)",
-        "hide": 2,
+        "definition": "label_values(up, app)",
+        "hide": 0,
         "includeAll": false,
-        "label": "metrics",
+        "label": "app",
         "multi": true,
-        "name": "metrics",
+        "name": "app",
         "options": [],
-        "query": "metrics(http_bio_client_outgoing_request_latency_seconds_histogram_count*)",
+        "query": "label_values(up, app)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2569,34 +1998,39 @@
       {
         "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "tags": [],
+          "text": "/actuator/health/ + /actuator/prometheus/ + /user/getUser/",
+          "value": [
+            "/actuator/health/",
+            "/actuator/prometheus/",
+            "/user/getUser/"
+          ]
         },
         "datasource": "prometheus-saf",
-        "definition": "label_values($metrics, httppool)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "httppool",
+        "definition": "label_values(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=\"$app\"}, url)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "url",
         "multi": true,
-        "name": "httppool",
+        "name": "url",
         "options": [
           {
             "selected": true,
-            "text": "All",
-            "value": "$__all"
+            "text": "/actuator/health/",
+            "value": "/actuator/health/"
           },
           {
-            "selected": false,
-            "text": "demo_web_receive",
-            "value": "demo_web_receive"
+            "selected": true,
+            "text": "/actuator/prometheus/",
+            "value": "/actuator/prometheus/"
           },
           {
-            "selected": false,
-            "text": "internet",
-            "value": "internet"
+            "selected": true,
+            "text": "/user/getUser/",
+            "value": "/user/getUser/"
           }
         ],
-        "query": "label_values($metrics, httppool)",
+        "query": "label_values(apache_httpcomponents_bio_client_ingoing_request_latency_seconds_histogram_count{app=\"$app\"}, url)",
         "refresh": 0,
         "regex": "",
         "skipUrlSync": false,
@@ -2610,43 +2044,18 @@
       {
         "allValue": null,
         "current": {
-          "text": "All",
-          "value": "$__all"
+          "text": "saf-sample-http-apache-httpcomponents-web-receive-prod-66cbjklv",
+          "value": "saf-sample-http-apache-httpcomponents-web-receive-prod-66cbjklv"
         },
         "datasource": "prometheus-saf",
-        "definition": "label_values($metrics, app)",
+        "definition": "label_values(apache_httpcomponents_bio_client_ingoing_request_max_gauge{app=\"$app\"}, pod)",
         "hide": 0,
-        "includeAll": true,
-        "label": "app",
+        "includeAll": false,
+        "label": "pod",
         "multi": true,
-        "name": "app",
+        "name": "pod",
         "options": [],
-        "query": "label_values($metrics, app)",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": null,
-        "current": {
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "prometheus-saf",
-        "definition": "label_values($metrics, host)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "host",
-        "multi": true,
-        "name": "host",
-        "options": [],
-        "query": "label_values($metrics, host)",
+        "query": "label_values(apache_httpcomponents_bio_client_ingoing_request_max_gauge{app=\"$app\"}, pod)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2678,7 +2087,7 @@
     ]
   },
   "timezone": "",
-  "title": "SAF Outgoing / HTTP / HTTPBioClient",
-  "uid": "ms14op8Wz",
-  "version": 152
+  "title": "SAF Incoming / HTTP /Detail",
+  "uid": "Uaq1rh8Zk",
+  "version": 27
 }
