@@ -10,6 +10,11 @@ spec:
     - protocol: TCP
       targetPort: 8080
       port: 80
+      name: dashboard
+    - protocol: TCP
+      targetPort: 8719
+      port: 8719
+      name: api
   type: ClusterIP
   sessionAffinity: ClientIP
 apiVersion: v1
