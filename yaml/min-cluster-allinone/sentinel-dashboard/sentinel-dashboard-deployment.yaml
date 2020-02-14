@@ -1,0 +1,44 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: sentinel-dashboard
+  namespace: sentinel
+  labels:
+    app: sentinel-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sentinel-dashboard
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sentinel-dashboard
+    spec:
+      containers:
+        - name: sentinel-dashboard
+          image: hpy253215039/sentinel-dashboard:1.7.1
+          securityContext:
+            privileged: false
+          ports:
+            - protocol: TCP
+              containerPort: 8080
+            - protocol: TCP
+              containerPort: 8719
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 10
+          env:
+            - name: TZ
+              value: "Asia/Shanghai"
+            - name: JAVA_OPTS
+              value: "-Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -Djava.security.egd=file:/dev/./urandom -Dcsp.sentinel.api.port=8719"
