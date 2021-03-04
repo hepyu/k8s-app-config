@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: jaeger-istio-demo
+  name: jaeger-istio-demo
+  namespace: istio-system
+spec:
+  rules:
+  - host: jaeger-istio-demo.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: jaeger-query
+          servicePort: 16686
+        path: /
+

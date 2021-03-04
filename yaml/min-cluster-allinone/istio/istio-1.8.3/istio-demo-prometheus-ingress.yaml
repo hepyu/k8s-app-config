@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: prometheus-istio-demo
+  name: prometheus-istio-demo
+  namespace: istio-system
+spec:
+  rules:
+  - host: prometheus-istio-demo.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: prometheus
+          servicePort: 9090
+        path: /
+

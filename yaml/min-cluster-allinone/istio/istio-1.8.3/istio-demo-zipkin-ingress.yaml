@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: zipkin-istio-demo
+  name: zipkin-istio-demo
+  namespace: istio-system
+spec:
+  rules:
+  - host: zipkin-istio-demo.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: zipkin
+          servicePort: 9411
+        path: /
+

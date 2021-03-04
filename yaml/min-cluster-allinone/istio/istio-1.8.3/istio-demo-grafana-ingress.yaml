@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: grafana-istio-demo
+  name: grafana-istio-demo
+  namespace: istio-system
+spec:
+  rules:
+  - host: grafana-istio-demo.inc-inc.com
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: 3000
+        path: /
+
