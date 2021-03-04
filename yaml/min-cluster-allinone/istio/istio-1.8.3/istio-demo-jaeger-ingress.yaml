@@ -11,7 +11,7 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: jaeger-query
+          serviceName: tracing
           servicePort: 16686
         path: /
 
