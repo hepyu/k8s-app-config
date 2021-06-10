@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+#apiVersion: v1
+kind: Ingress
+metadata:
+  annotations:
+    #nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    #nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: jenkins
+  name: jenkins
+  namespace: abcdocker
+spec:
+  rules:
+  - host: jenkins.future.com
+    http:
+      paths:
+      - backend:
+          serviceName: jenkins
+          servicePort: 8080
+        path: /

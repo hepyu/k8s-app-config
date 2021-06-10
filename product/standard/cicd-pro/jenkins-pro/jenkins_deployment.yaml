@@ -1,0 +1,69 @@
+#apiVersion: extensions/v1beta1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins            #deployment名称
+  namespace: abcdocker         #命名空间
+spec:
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      terminationGracePeriodSeconds: 10        #优雅停止pod
+      serviceAccount: jenkins                #后面还需要创建服务账户
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts                 #镜像版本
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080                 #外部访问端口
+          name: web
+          protocol: TCP
+        - containerPort: 50000                #jenkins save发现端口
+          name: agent
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 60          #容器初始化完成后，等待60秒进行探针检查
+          timeoutSeconds: 5
+          failureThreshold: 12            #当Pod成功启动且检查失败时，Kubernetes将在放弃之前尝试failureThreshold次。放弃生存检查意味着重新启动Pod。而放弃就绪检查，Pod将被标记为未就绪。默认为3.最小值为1
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          failureThreshold: 12
+        volumeMounts:                        #需要将jenkins_home目录挂载出来
+        - name: jenkinshome
+          subPath: jenkins
+          mountPath: /var/jenkins_home
+        env:
+        - name: LIMITS_MEMORY
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.memory
+              divisor: 1Mi
+        - name: JAVA_OPTS
+          value: -Xmx$(LIMITS_MEMORY)m -XshowSettings:vm -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85 -Duser.timezone=Asia/Shanghai
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: jenkinshome
+        persistentVolumeClaim:
+          claimName: opspvc                #这里将上面创建的pv关联到pvc上
+
+#这里不进行创建

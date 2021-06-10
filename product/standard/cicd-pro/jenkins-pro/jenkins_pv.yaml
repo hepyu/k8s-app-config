@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: opspv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  nfs:
+    server: 172.26.237.196
+    path: /data1/k8s-vloume
+
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: opspvc
+  namespace: abcdocker
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+
+#注意修改NFS挂载目录以及NFS Server
+##nfs后面的目录是nfs挂载的目录，因为pod会执行mount -t ip:/data1/所以后面是nfs挂载目录，而并非是宿主机的目录
