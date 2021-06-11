@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis
+  namespace: gitlab
+spec:
+  replicas: 1
+  selector:
+    name: redis
+  template:
+    metadata:
+      name: redis
+      labels:
+        name: redis
+    spec:
+      containers:
+      - name: redis
+        image: sameersbn/redis
+        ports:
+        - name: redis
+          containerPort: 6379
+        volumeMounts:
+        - mountPath: /var/lib/redis
+          name: data
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+      volumes:
+      - name: data
+        #emptyDir: {}
+        persistentVolumeClaim:
+          claimName: redis-data-claim
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-data-claim
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "redis-storageclass-local"
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      release:  redis-data-pv-local
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: redis-data-pv-local
+    labels:
+      release:  redis-data-pv-local
+    namespace: gitlab
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "redis-storageclass-local"
+  persistentVolumeReclaimPolicy: Retain
+  #表示使用本地存储
+  local:
+    path: /datavip/k8s-data/redis-pv-local
+  #使用local pv时必须定义nodeAffinity，Kubernetes Scheduler需要使用PV的nodeAffinity描述信息来保证Pod能够调度到有对应local volume的Node上。
+  #创建local PV之前，你需要先保证有对应的storageClass已经创建。
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          #future是pod需要分不到的主机名，这台主机上开启了local-pv资源。
+          - future
