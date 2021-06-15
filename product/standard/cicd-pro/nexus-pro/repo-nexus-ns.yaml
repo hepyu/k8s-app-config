@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+   name: repo-nexus
+   labels:
+     name: repo-nexus
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: repo-nexus
+  name: repo-nexus
+  namespace: repo-nexus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: repo-nexus
+  template:
+    metadata:
+      labels:
+        app: repo-nexus
+    spec:
+      containers:
+        - name: repo-nexus
+          #image: registry.docker-cn.com/sonatype/nexus3:latest
+          image: sonatype/nexus3:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              cpu: '0.1'
+              memory: 2Gi
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          volumeMounts:
+          - name: repo-nexus-data
+            mountPath: /nexus-data
+      volumes:
+        - name: repo-nexus-data
+          persistentVolumeClaim:
+            claimName: repo-nexus-pvc
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: repo-nexus
+  name: repo-nexus
+  namespace: repo-nexus
+spec:
+  ports:
+    - port: 8081
+      targetPort: 8081
+  selector:
+    app: repo-nexus
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  name: repo-nexus-pvc
+  namespace: repo-nexus
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: repo-nexus-pv-local
+  volumeMode: Filesystem
+  volumeName: repo-nexus-pv-local
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: repo-nexus-pv-local
+  namespace: repo-nexus
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "repo-nexus-pv-local"
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /datavip/k8s-data/repo-nexus-pv-local
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - future
